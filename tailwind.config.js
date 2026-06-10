@@ -9,14 +9,17 @@ export default {
     extend: {
       colors: {
         ucak: {
-          green: '#008A45', // Vert UCAK
-          blue: '#003366',  // Bleu UCAK (utilisé pour le texte en mode clair)
-          gold: '#D4AF37',  // Doré Excellence
-          light: '#F8FAFC', // Fond clair
-          // NOUVELLES COULEURS POUR LE MODE SOMBRE PROFOND
-          dark: '#0A0F1C',       // Bleu nuit très profond (presque noir) pour le fond
-          'dark-card': '#111827', // Bleu nuit légèrement plus clair pour les cartes
-          'dark-hover': '#1F2937' // Pour les survols
+          // Nouvelles couleurs modernes et vibrantes
+          purple: '#7C3AED',      // Primaire - Élégant et premium
+          cyan: '#06B6D4',        // Secondaire - Technologie et innovation
+          lime: '#84CC16',        // Accent - Énergie et dynamique
+          blue: '#3B82F6',        // Bleu (mis à jour pour meilleur contraste)
+          green: '#10B981',       // Vert (mis à jour)
+          gold: '#FBBF24',        // Or (mis à jour pour meilleur contraste)
+          light: '#F8FAFC',       // Fond clair
+          dark: '#0F172A',        // Slate-950 - Fond dark mode
+          'dark-card': '#1E293B', // Slate-800 - Cartes dark mode
+          'dark-hover': '#334155' // Slate-700 - Survols dark mode
         },
       },
       fontFamily: {

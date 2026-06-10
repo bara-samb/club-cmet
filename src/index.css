@@ -1,44 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* === CUSTOM SCROLLBAR (Pour Webkit/Chrome) === */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent; 
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1; 
-  border-radius: 4px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155; 
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; 
+/* ── Design System Tokens ─────────────────────────────── */
+:root {
+  --color-navy:    #0f213a;
+  --color-navy-2:  #1a3356;
+  --color-green:   #22c55e;
+  --color-green-2: #16a34a;
+
+  /* Elevation shadows — précises, nettes, pas de halo */
+  --shadow-xs:  0 1px 2px 0 rgba(15,33,58,0.06);
+  --shadow-sm:  0 1px 3px 0 rgba(15,33,58,0.08), 0 1px 2px -1px rgba(15,33,58,0.06);
+  --shadow-md:  0 4px 6px -1px rgba(15,33,58,0.08), 0 2px 4px -2px rgba(15,33,58,0.06);
+  --shadow-lg:  0 10px 15px -3px rgba(15,33,58,0.08), 0 4px 6px -4px rgba(15,33,58,0.05);
+  --shadow-xl:  0 20px 25px -5px rgba(15,33,58,0.08), 0 8px 10px -6px rgba(15,33,58,0.04);
+
+  --transition-fast:   150ms cubic-bezier(0.4,0,0.2,1);
+  --transition-base:   200ms cubic-bezier(0.4,0,0.2,1);
+  --transition-smooth: 300ms cubic-bezier(0.4,0,0.2,1);
 }
 
-/* === UTILITY: HIDE SCROLLBAR (Pour les filtres horizontaux) === */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+/* ── Base Typography ─────────────────────────────────── */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: #1e293b;
+    background: #f8fafc;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    letter-spacing: -0.02em;
+  }
 }
 
-/* === IOS SAFE AREA (Pour ne pas coller au "Home Indicator" sur iPhone) === */
-.pb-safe {
-  padding-bottom: env(safe-area-inset-bottom);
+/* ── Utility Components ──────────────────────────────── */
+@layer components {
+
+  /* Bouton primaire */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-[#22c55e] text-white font-semibold text-sm
+           px-5 py-2.5 rounded-xl
+           transition-all duration-150 ease-out
+           hover:-translate-y-px hover:bg-[#16a34a]
+           active:translate-y-0 active:scale-[0.98]
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c55e]/40 focus-visible:ring-offset-2;
+    box-shadow: 0 1px 3px rgba(34,197,94,0.25), 0 1px 2px rgba(34,197,94,0.15);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(34,197,94,0.30), 0 2px 4px rgba(34,197,94,0.15);
+  }
+
+  /* Bouton secondaire */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white text-[#0f213a] font-semibold text-sm
+           px-5 py-2.5 rounded-xl border border-slate-200
+           transition-all duration-150 ease-out
+           hover:-translate-y-px hover:border-slate-300 hover:bg-slate-50
+           active:translate-y-0 active:scale-[0.98];
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Card premium */
+  .card {
+    @apply bg-white rounded-2xl border border-slate-100;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  /* Input professionnel */
+  .input-field {
+    @apply w-full bg-white border border-slate-200 rounded-xl
+           px-4 py-3 text-sm text-slate-800 placeholder-slate-400
+           transition-all duration-150
+           focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e]/15;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1.5 text-[11px] font-semibold
+           uppercase tracking-widest px-3 py-1 rounded-full;
+  }
+  .badge-green {
+    @apply badge bg-[#22c55e]/10 text-[#16a34a] border border-[#22c55e]/20;
+  }
+  .badge-navy {
+    @apply badge bg-[#0f213a]/8 text-[#0f213a] border border-[#0f213a]/10;
+  }
+  .badge-blue {
+    @apply badge bg-blue-50 text-blue-700 border border-blue-100;
+  }
 }
 
-/* === BACKGROUND ANIMATION (Optionnel mais stylé) === */
-body {
-  @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+/* ── Animations Professionnelles ─────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
-.dark body {
-  @apply bg-[#0b0f19] text-gray-100;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+.anim-fade-up   { animation: fade-up  0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-in   { animation: fade-in  0.4s ease both; }
+.anim-slide-in  { animation: slide-in-left 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* Délais d'animation en cascade */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ── Scrollbar Raffinée ───────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Focus visible accessible ────────────────────────── */
+:focus-visible {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+}
+
+/* ── Rotation lente pour le logo (conservée) ─────────── */
+@keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.anim-logo { animation: spin-slow 18s linear infinite; }
+.anim-logo:hover { animation-play-state: paused; }

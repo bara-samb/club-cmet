@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, GraduationCap, Video, ArrowRight, FolderOpen, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { db } from '../firebase'; 
-import { collection, getDocs } from 'firebase/firestore'; 
+import { supabase } from '../config/supabaseClient'; 
 
 export default function Knowledge() {
   const [courses, setCourses] = useState([]);
@@ -14,9 +13,9 @@ export default function Knowledge() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "courses"));
-        const coursesList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setCourses(coursesList);
+        const { data, error } = await supabase.from("courses").select("*");
+        if (error) throw error;
+        setCourses(data || []);
       } catch (error) { console.error(error); } finally { setLoading(false); }
     };
     fetchCourses();

@@ -26,10 +26,10 @@ export default function VerifyStudent() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0b0f19] flex flex-col items-center justify-center p-6 font-sans">
-      <div className="mb-8 text-center"><img src={logoUcak} alt="UCAK" className="w-16 h-16 mx-auto mb-4 grayscale" /><h1 className="text-xl font-black text-ucak-blue dark:text-white mt-1">Authentification Étudiant</h1></div>
+      <div className="mb-8 text-center"><img src={logoUcak} alt="UCAK" className="w-16 h-16 mx-auto mb-4 grayscale" /><h1 className="text-xl font-black text-ucak-purple dark:text-white mt-1">Authentification Étudiant</h1></div>
       
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md bg-white dark:bg-[#151b2b] rounded-[2rem] shadow-2xl overflow-hidden">
-        {status === 'loading' && <div className="p-12 text-center"><ShieldCheck className="mx-auto text-ucak-blue animate-pulse mb-4" size={48} /><h2 className="font-bold">Analyse en cours...</h2></div>}
+        {status === 'loading' && <div className="p-12 text-center"><ShieldCheck className="mx-auto text-ucak-purple animate-pulse mb-4" size={48} /><h2 className="font-bold">Analyse en cours...</h2></div>}
         
         {status === 'valid' && data && (
           <div>
@@ -43,7 +43,7 @@ export default function VerifyStudent() {
 
         {status === 'invalid' && <div className="p-8 text-center"><XCircle size={48} className="mx-auto text-red-500 mb-4" /><h2 className="text-xl font-black uppercase">Document Invalide</h2><p className="text-gray-500 mt-2">QR Code non reconnu par la base UCAK.</p></div>}
       </motion.div>
-      <div className="mt-8 text-center"><Link to="/" className="text-xs font-bold text-ucak-blue hover:underline">Retour à l'accueil</Link></div>
+      <div className="mt-8 text-center"><Link to="/" className="text-xs font-bold text-ucak-purple hover:underline">Retour à l'accueil</Link></div>
     </div>
   );
 }

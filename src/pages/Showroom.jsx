@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db } from '../firebase'; 
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { supabase } from '../config/supabaseClient'; 
 import { useUser } from '../context/UserContext'; 
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -29,13 +28,12 @@ export default function Showroom() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const projectsData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setProjects(projectsData);
+        const { data, error } = await supabase
+          .from("projects")
+          .select("*")
+          .order("createdAt", { ascending: false });
+        if (error) throw error;
+        setProjects(data || []);
       } catch (error) {
         console.error("Erreur chargement projets:", error);
       } finally {
@@ -53,19 +51,23 @@ export default function Showroom() {
     if (!user) return alert("Accès refusé. Veuillez vous connecter.");
 
     try {
-      await addDoc(collection(db, "projects"), {
-        ...formData,
+      const { error } = await supabase.from("projects").insert({
+        title: formData.title,
+        description: formData.description,
+        techStack: formData.techStack,
+        githubUrl: formData.githubUrl,
+        demoUrl: formData.demoUrl,
         authorName: user.full_name || "Étudiant Club MET",
-        authorId: user.uid, // On lie le projet à l'ID unique de l'étudiant
-        tags: formData.techStack.split(',').map(tag => tag.trim()), 
-        createdAt: serverTimestamp()
+        authorId: user.uid || user.id,
+        tags: formData.techStack.split(',').map(tag => tag.trim())
       });
+      if (error) throw error;
       
       setIsFormOpen(false);
       setFormData({ title: '', description: '', techStack: '', githubUrl: '', demoUrl: '' });
     } catch (error) {
       console.error("Erreur envoi:", error);
-      alert("Erreur lors de la publication.");
+      alert("Erreur lors de la publication : " + error.message);
     }
   };
 

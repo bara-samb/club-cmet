@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { db } from '../firebase'; 
-import { doc, getDoc } from 'firebase/firestore'; 
+import { supabase } from '../config/supabaseClient'; 
 import { ChevronLeft, Menu, X, FileText } from 'lucide-react';
 
 export default function CoursePlayer() {
@@ -14,9 +13,13 @@ export default function CoursePlayer() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const docRef = doc(db, "courses", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) setCourseData(docSnap.data());
+        const { data, error } = await supabase
+          .from("courses")
+          .select("*")
+          .eq("id", id)
+          .single();
+        if (error) throw error;
+        if (data) setCourseData(data);
       } catch (error) {
         console.error("Erreur:", error);
       } finally {

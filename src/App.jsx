@@ -1,106 +1,83 @@
-import { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import { UserProvider } from './context/UserContext';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { supabase } from './config/supabaseClient';
 
-// Composants Fixes
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-import Loading from './components/Loading'; 
-import PageWrapper from './components/PageWrapper';
-import ProtectedRoute from './components/ProtectedRoute';
-import AdminRoute from './components/AdminRoute';
+// Layouts
+import AdminLayout from './components/layout/AdminLayout';
+import StudentLayout from './components/layout/StudentLayout';
 
-// --- PAGES ---
-const Home = lazy(() => import('./pages/Home')); 
-const Login = lazy(() => import('./pages/Login'));
-const ITCurriculum = lazy(() => import('./components/ITCurriculum'));
-const HECCurriculum = lazy(() => import('./components/HECCurriculum'));
-const News = lazy(() => import('./pages/News'));
-const Showroom = lazy(() => import('./pages/Showroom'));
-const ProjectDetails = lazy(() => import('./pages/ProjectDetails'));
-const VerifyStudent = lazy(() => import('./pages/VerifyStudent'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+// Pages
+import Home from './pages/public/Home';
+import Login from './pages/public/Login';
+import Register from './pages/public/Register';
+import Dashboard from './pages/student/Dashboard';
+import Library from './pages/student/Library';
+import Profile from './pages/student/Profile';
+import TutoratHub from './pages/student/TutoratHub';
+import AdminPanel from './pages/admin/AdminPanel';
+import ManageUsers from './pages/admin/ManageUsers';
+import ManageDocs from './pages/admin/ManageDocs';
 
-// Pages Étudiant
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Knowledge = lazy(() => import('./pages/Knowledge'));
-const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
-const CareerCenter = lazy(() => import('./pages/CareerCenter'));
-const CVGenerator = lazy(() => import('./pages/CVGenerator'));
-const Challenges = lazy(() => import('./pages/Challenges'));
-const Networking = lazy(() => import('./pages/Networking'));
-const Elections = lazy(() => import('./pages/Elections'));
+/* ── Guards de protection ── */
 
-// Pages Admin
-const AdminCourses = lazy(() => import('./pages/admin/AdminCourses'));
-const AdminStudents = lazy(() => import('./pages/admin/AdminStudents'));
-const AdminElections = lazy(() => import('./pages/admin/AdminElections'));
-const AdminNews = lazy(() => import('./pages/admin/AdminNews'));
+function RequireAuth({ children }) {
+    const [state, setState] = useState('loading');
+    useEffect(() => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+            setState(session ? 'ok' : 'denied');
+        });
+        return () => subscription.unsubscribe();
+    }, []);
+    if (state === 'loading') return <div>Chargement...</div>;
+    return state === 'ok' ? children : <Navigate to="/login" replace />;
+}
 
-function AnimatedRoutes() {
-  const location = useLocation();
-  const isImmersiveMode = location.pathname.startsWith('/course/') || location.pathname.startsWith('/verify/');
+function RequireAdmin({ children }) {
+    const [state, setState] = useState('loading');
 
-  return (
-    <>
-      <ScrollToTop />
-      {!isImmersiveMode && <Navbar />}
-      
-      <main className="flex-1 relative min-h-screen">
-        <Suspense fallback={<Loading />}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              
-              {/* === VISITEUR & TOUT PUBLIC === */}
-              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
-              <Route path="/formation/informatique" element={<PageWrapper><ITCurriculum /></PageWrapper>} />
-              <Route path="/formation/hec" element={<PageWrapper><HECCurriculum /></PageWrapper>} />
-              <Route path="/news" element={<PageWrapper><News /></PageWrapper>} />
-              <Route path="/showroom" element={<PageWrapper><Showroom /></PageWrapper>} />
-              <Route path="/project/:id" element={<PageWrapper><ProjectDetails /></PageWrapper>} />
-              <Route path="/verify/student/:token" element={<PageWrapper><VerifyStudent /></PageWrapper>} />
+    useEffect(() => {
+        const checkAdmin = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { setState('denied'); return; }
 
-              {/* === ÉTUDIANT (Protégé) === */}
-              <Route path="/dashboard" element={<ProtectedRoute><PageWrapper><Dashboard /></PageWrapper></ProtectedRoute>} />
-              <Route path="/knowledge" element={<ProtectedRoute><PageWrapper><Knowledge /></PageWrapper></ProtectedRoute>} />
-              <Route path="/course/:id" element={<ProtectedRoute><CoursePlayer /></ProtectedRoute>} />
-              <Route path="/career" element={<ProtectedRoute><PageWrapper><CareerCenter /></PageWrapper></ProtectedRoute>} />
-              <Route path="/cv-builder" element={<ProtectedRoute><PageWrapper><CVGenerator /></PageWrapper></ProtectedRoute>} />
-              <Route path="/quizz" element={<ProtectedRoute><PageWrapper><Challenges /></PageWrapper></ProtectedRoute>} />
-              <Route path="/network" element={<ProtectedRoute><PageWrapper><Networking /></PageWrapper></ProtectedRoute>} />
-              <Route path="/elections" element={<ProtectedRoute><PageWrapper><Elections /></PageWrapper></ProtectedRoute>} />
+            const { data } = await supabase.from('users').select('role').eq('id', session.user.id).single();
+            setState(data?.role === 'admin' ? 'ok' : 'denied');
+        };
+        checkAdmin();
+    }, []);
 
-              {/* === ADMIN === */}
-              <Route path="/admin/courses" element={<AdminRoute><PageWrapper><AdminCourses /></PageWrapper></AdminRoute>} />
-              <Route path="/admin/students" element={<AdminRoute><PageWrapper><AdminStudents /></PageWrapper></AdminRoute>} />
-              <Route path="/admin/elections" element={<AdminRoute><PageWrapper><AdminElections /></PageWrapper></AdminRoute>} />
-              <Route path="/admin/news" element={<AdminRoute><PageWrapper><AdminNews /></PageWrapper></AdminRoute>} />
-              
-              <Route path="*" element={<NotFound />} />
+    if (state === 'loading') return <div>Vérification...</div>;
+    return state === 'ok' ? children : <Navigate to="/" replace />;
+}
 
+/* ── App Principal ── */
+
+export default function App() {
+    return (
+        <Router>
+            <Routes>
+                {/* Routes Publiques */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
+                {/* Routes Étudiant */}
+                <Route path="/student" element={<RequireAuth><StudentLayout /></RequireAuth>}>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="library" element={<Library />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="tutorat" element={<TutoratHub />} />
+                </Route>
+
+                {/* Routes Admin */}
+                <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
+                    <Route path="panel" element={<AdminPanel />} />
+                    <Route path="manage-users" element={<ManageUsers />} />
+                    <Route path="manage-docs" element={<ManageDocs />} />
+                </Route>
+
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </AnimatePresence>
-        </Suspense>
-      </main>
-
-      {!isImmersiveMode && <Footer />}
-    </>
-  );
+        </Router>
+    );
 }
-
-function App() {
-  return (
-    <UserProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col font-sans bg-gray-50 dark:bg-ucak-dark text-gray-900 dark:text-white transition-colors duration-300">
-          <AnimatedRoutes />
-        </div>
-      </Router>
-    </UserProvider>
-  );
-}
-
-export default App;

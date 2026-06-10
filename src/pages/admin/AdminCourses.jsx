@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { db } from '../../firebase'; // On importe la connexion créée juste avant
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; 
+import { supabase } from '../../config/supabaseClient';
 import { Plus, Trash2, Video, FileText, Save, LayoutList, ShieldAlert } from 'lucide-react';
 
 export default function AdminCourses() {
@@ -27,17 +26,21 @@ export default function AdminCourses() {
     e.preventDefault();
     setStatus('loading');
     try {
-      // ENVOI VERS FIREBASE (Collection "courses")
-      await addDoc(collection(db, "courses"), {
-        ...courseData,
-        createdAt: serverTimestamp()
+      const { error } = await supabase.from("courses").insert({
+        title: courseData.title,
+        instructor_name: courseData.instructor_name,
+        filiere_tag: courseData.filiere_tag,
+        level: courseData.level,
+        description: courseData.description,
+        modules: courseData.modules
       });
+      if (error) throw error;
       
       setStatus('success');
       setCourseData({ title: '', instructor_name: '', description: '', filiere_tag: 'Informatique', level: 'L1', modules: [] });
       setTimeout(() => setStatus(null), 3000);
     } catch (error) {
-      console.error("Erreur Firebase : ", error);
+      console.error("Erreur Supabase : ", error);
       setStatus('error');
     }
   };
