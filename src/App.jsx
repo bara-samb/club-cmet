@@ -19,6 +19,8 @@ import AdminPanel from './pages/admin/AdminPanel';
 import ManageUsers from './pages/admin/ManageUsers';
 import ManageDocs from './pages/admin/ManageDocs';
 import ManageMessages from './pages/admin/ManageMessages';
+import ManageEvents from './pages/admin/ManageEvents';
+import ManageMedia from './pages/admin/ManageMedia';
 
 /* ── Guards de protection ── */
 
@@ -78,6 +80,8 @@ export default function App() {
                     <Route path="manage-users" element={<ManageUsers />} />
                     <Route path="manage-docs" element={<ManageDocs />} />
                     <Route path="manage-messages" element={<ManageMessages />} />
+                    <Route path="/admin/events" element={<ManageEvents />} />
+                    <Route path="/admin/media" element={<ManageMedia />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />
