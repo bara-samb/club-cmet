@@ -6,17 +6,17 @@
 
 /* ── Design System Tokens ─────────────────────────────── */
 :root {
-  --color-navy:    #0f213a;
+  --color-navy:    #003058;
   --color-navy-2:  #1a3356;
-  --color-green:   #22c55e;
-  --color-green-2: #16a34a;
+  --color-green:   #187840;
+  --color-green-2: #125e31;
 
   /* Elevation shadows — précises, nettes, pas de halo */
-  --shadow-xs:  0 1px 2px 0 rgba(15,33,58,0.06);
-  --shadow-sm:  0 1px 3px 0 rgba(15,33,58,0.08), 0 1px 2px -1px rgba(15,33,58,0.06);
-  --shadow-md:  0 4px 6px -1px rgba(15,33,58,0.08), 0 2px 4px -2px rgba(15,33,58,0.06);
-  --shadow-lg:  0 10px 15px -3px rgba(15,33,58,0.08), 0 4px 6px -4px rgba(15,33,58,0.05);
-  --shadow-xl:  0 20px 25px -5px rgba(15,33,58,0.08), 0 8px 10px -6px rgba(15,33,58,0.04);
+  --shadow-xs:  0 1px 2px 0 rgba(0,48,88,0.06);
+  --shadow-sm:  0 1px 3px 0 rgba(0,48,88,0.08), 0 1px 2px -1px rgba(0,48,88,0.06);
+  --shadow-md:  0 4px 6px -1px rgba(0,48,88,0.08), 0 2px 4px -2px rgba(0,48,88,0.06);
+  --shadow-lg:  0 10px 15px -3px rgba(0,48,88,0.08), 0 4px 6px -4px rgba(0,48,88,0.05);
+  --shadow-xl:  0 20px 25px -5px rgba(0,48,88,0.08), 0 8px 10px -6px rgba(0,48,88,0.04);
 
   --transition-fast:   150ms cubic-bezier(0.4,0,0.2,1);
   --transition-base:   200ms cubic-bezier(0.4,0,0.2,1);
@@ -50,25 +50,25 @@
   /* Bouton primaire */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-[#22c55e] text-white font-semibold text-sm
+           bg-[#187840] text-white font-semibold text-sm
            px-5 py-2.5 rounded-xl
            transition-all duration-150 ease-out
-           hover:-translate-y-px hover:bg-[#16a34a]
+           hover:-translate-y-px hover:bg-[#125e31]
            active:translate-y-0 active:scale-[0.98]
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c55e]/40 focus-visible:ring-offset-2;
-    box-shadow: 0 1px 3px rgba(34,197,94,0.25), 0 1px 2px rgba(34,197,94,0.15);
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#187840]/40 focus-visible:ring-offset-2;
+    box-shadow: 0 1px 3px rgba(24,120,64,0.25), 0 1px 2px rgba(24,120,64,0.15);
   }
   .btn-primary:hover {
-    box-shadow: 0 4px 12px rgba(34,197,94,0.30), 0 2px 4px rgba(34,197,94,0.15);
+    box-shadow: 0 4px 12px rgba(24,120,64,0.30), 0 2px 4px rgba(24,120,64,0.15);
   }
 
   /* Bouton secondaire */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
-           bg-white text-[#0f213a] font-semibold text-sm
-           px-5 py-2.5 rounded-xl border border-slate-200
+           bg-white text-[#003058] font-semibold text-sm
+           px-5 py-2.5 rounded-xl border border-[#C8C8C8]
            transition-all duration-150 ease-out
-           hover:-translate-y-px hover:border-slate-300 hover:bg-slate-50
+           hover:-translate-y-px hover:border-slate-300 hover:bg-[#F8F0F0]
            active:translate-y-0 active:scale-[0.98];
     box-shadow: var(--shadow-sm);
   }
@@ -86,10 +86,10 @@
 
   /* Input professionnel */
   .input-field {
-    @apply w-full bg-white border border-slate-200 rounded-xl
+    @apply w-full bg-white border border-[#C8C8C8] rounded-xl
            px-4 py-3 text-sm text-slate-800 placeholder-slate-400
            transition-all duration-150
-           focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e]/15;
+           focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15;
   }
 
   /* Badge */
@@ -98,10 +98,10 @@
            uppercase tracking-widest px-3 py-1 rounded-full;
   }
   .badge-green {
-    @apply badge bg-[#22c55e]/10 text-[#16a34a] border border-[#22c55e]/20;
+    @apply badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20;
   }
   .badge-navy {
-    @apply badge bg-[#0f213a]/8 text-[#0f213a] border border-[#0f213a]/10;
+    @apply badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10;
   }
   .badge-blue {
     @apply badge bg-blue-50 text-blue-700 border border-blue-100;
@@ -141,7 +141,7 @@
 
 /* ── Focus visible accessible ────────────────────────── */
 :focus-visible {
-  outline: 2px solid #22c55e;
+  outline: 2px solid #187840;
   outline-offset: 2px;
 }
 

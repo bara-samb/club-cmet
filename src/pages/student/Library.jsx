@@ -1,75 +1,92 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { Search, X, Loader2, FileX, FileText, Eye, Download } from 'lucide-react';
+import { Search, X, Loader2, FileX, FileText, Eye, Download, BookOpen, Filter, ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CATEGORIES = [
-    { id: 'all',           label: 'Tous' },
-    { id: 'reglement',     label: 'Règlement Intérieur' },
-    { id: 'rapports',      label: 'Rapports Mensuels' },
-    { id: 'comptes_rendus',label: 'Comptes Rendus' },
-    { id: 'maquette',      label: 'Maquettes' },
+    { id: 'all',           label: 'Toutes les catégories' },
+    { id: 'cours',         label: 'Cours & Supports' },
+    { id: 'td',            label: 'TD & Exercices' },
+    { id: 'examens',       label: 'Examens & Corrigés' },
+    { id: 'projets',       label: 'Projets & Mémoires' },
+    { id: 'autres',        label: 'Autres documents' },
+];
+
+const NIVEAUX = ['Tous', 'L1', 'L2', 'L3', 'M1', 'M2', 'Commun'];
+
+const LEVELS_ORDER = [
+    { id: 'Commun', label: 'Tronc Commun & Général', color: '#003058' },
+    { id: 'L1', label: 'Licence 1', color: '#187840' },
+    { id: 'L2', label: 'Licence 2', color: '#187840' },
+    { id: 'L3', label: 'Licence 3', color: '#187840' },
+    { id: 'M1', label: 'Master 1', color: '#003058' },
+    { id: 'M2', label: 'Master 2', color: '#003058' },
 ];
 
 export default function Library() {
-    const [ressources, setRessources] = useState([]);
-    const [maquettes,  setMaquettes]  = useState([]);
-    const [filtre,     setFiltre]     = useState('all');
+    const [bibliotheque, setBibliotheque] = useState([]);
+    const [filtreCat,  setFiltreCat]  = useState('all');
+    const [filtreNiveau, setFiltreNiveau] = useState('Tous');
     const [recherche,  setRecherche]  = useState('');
     const [loading,    setLoading]    = useState(true);
+    
+    // Niveaux dépliés par défaut
+    const [expandedLevels, setExpandedLevels] = useState({
+        Commun: true, L1: true, L2: true, L3: true, M1: true, M2: true
+    });
 
     useEffect(() => {
         let active = true;
-        let channels = [];
+        let channel;
 
-        const fetchRessources = async () => {
-            const { data } = await supabase.from('ressources').select('*');
+        const fetchBib = async () => {
+            const { data } = await supabase.from('bibliotheque').select('*');
             if (data && active) {
-                setRessources(data.map(d => ({ ...d, _source: 'ressources' })));
-            }
-            if (active) setLoading(false);
-        };
-
-        const fetchMaquettes = async () => {
-            const { data } = await supabase.from('maquettes').select('*');
-            if (data && active) {
-                setMaquettes(data.map(d => ({ ...d, categorie: 'maquette', _source: 'maquettes' })));
+                setBibliotheque(data);
+                setLoading(false);
             }
         };
 
-        const init = async () => {
-            await Promise.all([fetchRessources(), fetchMaquettes()]);
+        fetchBib();
 
-            if (!active) return;
-
-            const c1 = supabase.channel('ressources-library')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'ressources' }, () => { fetchRessources(); })
-                .subscribe();
-            const c2 = supabase.channel('maquettes-library')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, () => { fetchMaquettes(); })
-                .subscribe();
-
-            channels.push(c1, c2);
-        };
-
-        init();
+        channel = supabase.channel('library-realtime')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bibliotheque' }, fetchBib)
+            .subscribe();
 
         return () => {
             active = false;
-            channels.forEach(c => supabase.removeChannel(c));
+            if (channel) supabase.removeChannel(channel);
         };
     }, []);
 
-    // Tous les documents fusionnés
-    const tousLesDocuments = [...ressources, ...maquettes];
+    const toggleLevelExpand = (lvlId) => {
+        setExpandedLevels(prev => ({ ...prev, [lvlId]: !prev[lvlId] }));
+    };
 
-    // Filtrage
-    const documentsFiltrés = tousLesDocuments.filter(doc => {
-        const matchCat     = filtre === 'all' || doc.categorie === filtre;
-        const matchRecherche = doc.nom?.toLowerCase().includes(recherche.toLowerCase())
-            || doc.typeDoc?.toLowerCase().includes(recherche.toLowerCase())
-            || doc.date?.toLowerCase().includes(recherche.toLowerCase());
-        return matchCat && matchRecherche;
+    // Filtrage des documents
+    const documentsFiltrés = bibliotheque.filter(doc => {
+        // Filtre Catégorie
+        const matchCat = filtreCat === 'all' || doc.categorie === filtreCat;
+        
+        // Filtre Niveau
+        const docNiveau = doc.niveau || 'Commun';
+        const matchNiv = filtreNiveau === 'Tous' || docNiveau === filtreNiveau;
+        
+        // Recherche textuelle
+        const term = recherche.toLowerCase();
+        const matchRecherche = !recherche || 
+            doc.nom?.toLowerCase().includes(term) ||
+            doc.typeDoc?.toLowerCase().includes(term) ||
+            doc.description?.toLowerCase().includes(term);
+            
+        return matchCat && matchNiv && matchRecherche;
     });
+
+    // Groupement par niveau
+    const levelsGrouped = LEVELS_ORDER.map(level => {
+        const docs = documentsFiltrés.filter(d => (d.niveau || 'Commun') === level.id);
+        return { ...level, docs };
+    }).filter(group => group.docs.length > 0 || (filtreNiveau !== 'Tous' && group.id === filtreNiveau));
 
     const ouvrirFichier = (url, nom) => {
         if (!url) { alert(`Fichier non disponible : ${nom}`); return; }
@@ -79,150 +96,217 @@ export default function Library() {
     const télécharger = (url, nom) => {
         if (!url) { alert(`Fichier non disponible : ${nom}`); return; }
         const a = document.createElement('a');
-        a.href = url; a.download = nom;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        a.href = url;
+        a.download = nom;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     };
 
     const badgeColor = (cat) => {
         const colors = {
-            reglement:     'bg-blue-50 text-blue-600 border-blue-200',
-            rapports:      'bg-green-50 text-green-600 border-green-200',
-            comptes_rendus:'bg-purple-50 text-purple-600 border-purple-200',
-            maquette:      'bg-amber-50 text-amber-600 border-amber-200',
+            cours:         'bg-blue-50 text-blue-700 border-blue-200',
+            td:            'bg-orange-50 text-orange-700 border-orange-200',
+            examens:       'bg-red-50 text-red-700 border-red-200',
+            projets:       'bg-indigo-50 text-indigo-700 border-indigo-200',
+            autres:        'bg-slate-50 text-slate-700 border-slate-200',
         };
-        return colors[cat] || 'bg-slate-50 text-slate-500 border-slate-200';
+        return colors[cat] || 'bg-slate-50 text-slate-700 border-slate-200';
     };
 
     const badgeLabel = (cat) => {
         const labels = {
-            reglement:     'Règlement',
-            rapports:      'Rapport',
-            comptes_rendus:'Compte Rendu',
-            maquette:      'Maquette',
+            cours:         'Cours',
+            td:            'TD & Exercice',
+            examens:       'Examen & Corrigé',
+            projets:       'Projet & Mémoire',
+            autres:        'Autre',
         };
         return labels[cat] || cat;
     };
 
     return (
-        <div className="p-6 max-w-5xl mx-auto animate-in fade-in duration-500">
-
+        <div className="p-6 max-w-6xl mx-auto animate-in fade-in duration-500">
             {/* Titre */}
-            <div className="mb-6">
-                <h1 className="text-xl font-extrabold text-[#0f213a]">Bibliothèque</h1>
-                <p className="text-xs text-slate-500 mt-1">
-                    {tousLesDocuments.length} document(s) disponible(s) — mis à jour en temps réel
-                </p>
+            <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-black text-[#003058] flex items-center gap-3">
+                        <BookOpen className="text-[#187840] w-8 h-8" /> Bibliothèque Académique
+                    </h1>
+                    <p className="text-sm text-slate-500 mt-2">
+                        Retrouvez vos cours, TD et examens classés par niveau pour vos filières.
+                    </p>
+                </div>
+                
+                {/* Barre de recherche */}
+                <div className="relative w-full md:w-96 shrink-0">
+                    <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                        type="text"
+                        value={recherche}
+                        onChange={e => setRecherche(e.target.value)}
+                        placeholder="Rechercher un document..."
+                        className="w-full pl-12 pr-4 py-3 bg-white border border-[#C8C8C8] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium"
+                    />
+                    {recherche && (
+                        <button onClick={() => setRecherche('')}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <X size={16} />
+                        </button>
+                    )}
+                </div>
             </div>
 
-            {/* Barre de recherche */}
-            <div className="relative mb-5">
-                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                    type="text"
-                    value={recherche}
-                    onChange={e => setRecherche(e.target.value)}
-                    placeholder="Rechercher un document..."
-                    className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#22c55e] focus:ring-1 focus:ring-[#22c55e]/30 shadow-sm"
-                />
-                {recherche && (
-                    <button onClick={() => setRecherche('')}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                        <X size={16} />
-                    </button>
-                )}
-            </div>
+            {/* Barre de Filtres */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/60 shadow-sm mb-8 space-y-4">
+                <div className="flex items-center gap-2 text-[#003058] font-bold text-sm mb-1">
+                    <Filter size={16} className="text-[#187840]" /> Filtrer la bibliothèque
+                </div>
+                
+                {/* Ligne Niveau */}
+                <div className="flex items-center gap-4 flex-wrap">
+                    <span className="text-xs font-bold text-slate-400 w-20">Niveau :</span>
+                    <div className="flex gap-2 flex-wrap">
+                        {NIVEAUX.map(niv => (
+                            <button key={niv} onClick={() => setFiltreNiveau(niv)}
+                                className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all
+                                ${filtreNiveau === niv
+                                    ? 'bg-[#187840] text-white border-[#187840] shadow-sm'
+                                    : 'bg-[#F8F0F0] text-slate-600 border-[#C8C8C8]/50 hover:border-[#187840] hover:text-[#187840]'
+                                }`}>
+                                {niv === 'Tous' ? 'Tous les niveaux' : niv}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
-            {/* Filtres par catégorie */}
-            <div className="flex gap-2 flex-wrap mb-6">
-                {CATEGORIES.map(cat => (
-                    <button key={cat.id} onClick={() => setFiltre(cat.id)}
-                            className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-all
-              ${filtre === cat.id
-                                ? 'bg-[#0f213a] text-white border-[#0f213a] shadow-sm'
-                                : 'bg-white text-slate-600 border-gray-200 hover:border-[#0f213a] hover:text-[#0f213a]'
-                            }`}>
-                        {cat.label}
-                        {cat.id !== 'all' && (
-                            <span className={`ml-1.5 text-[9px] px-1.5 py-0.5 rounded-full ${filtre === cat.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                {cat.id === 'maquette'
-                    ? maquettes.length
-                    : ressources.filter(r => r.categorie === cat.id).length
-                }
-              </span>
-                        )}
-                    </button>
-                ))}
+                {/* Ligne Catégorie */}
+                <div className="flex items-start gap-4 flex-wrap">
+                    <span className="text-xs font-bold text-slate-400 w-20 pt-2">Catégorie :</span>
+                    <div className="flex gap-2 flex-wrap flex-1">
+                        {CATEGORIES.map(cat => (
+                            <button key={cat.id} onClick={() => setFiltreCat(cat.id)}
+                                    className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all
+                                ${filtreCat === cat.id
+                                        ? 'bg-[#003058] text-white border-[#003058] shadow-sm'
+                                        : 'bg-[#F8F0F0] text-slate-600 border-[#C8C8C8]/50 hover:border-[#003058] hover:text-[#003058]'
+                                    }`}>
+                                {cat.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {/* Résultats */}
             {loading ? (
                 <div className="flex items-center justify-center py-20">
                     <div className="flex flex-col items-center gap-3">
-                        <Loader2 className="animate-spin w-8 h-8 text-[#22c55e]" />
-                        <p className="text-xs text-slate-400">Chargement des documents...</p>
+                        <Loader2 className="animate-spin w-8 h-8 text-[#187840]" />
+                        <p className="text-xs text-slate-400">Chargement de la bibliothèque...</p>
                     </div>
                 </div>
             ) : documentsFiltrés.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-                    <FileX className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-                    <p className="text-sm font-semibold text-slate-400">Aucun document trouvé</p>
-                    <p className="text-xs text-slate-300 mt-1">Essayez un autre filtre ou une autre recherche</p>
+                <div className="text-center py-20 bg-white rounded-3xl border border-gray-200/60 shadow-sm">
+                    <FileX className="w-16 h-16 text-slate-200 mx-auto mb-4" />
+                    <p className="text-base font-bold text-slate-400">Aucun document trouvé</p>
+                    <p className="text-sm text-slate-300 mt-2">Aucun cours ne correspond à ces critères de recherche.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {documentsFiltrés.map(doc => (
-                        <div key={doc.id}
-                             className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#22c55e]/30 transition-all group">
-
-                            {/* Header carte */}
-                            <div className="flex items-start gap-3 mb-4">
-                                <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-red-100 transition-colors">
-                                    <FileText size={20} className="text-red-400" />
+                <div className="space-y-8">
+                    {levelsGrouped.map(group => (
+                        <div key={group.id} className="bg-white/40 rounded-3xl border border-gray-200/50 overflow-hidden shadow-sm">
+                            
+                            {/* En-tête du niveau */}
+                            <button 
+                                onClick={() => toggleLevelExpand(group.id)}
+                                className="w-full bg-white px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition-colors border-b border-gray-100">
+                                <div className="flex items-center gap-3">
+                                    <span className="w-2.5 h-6 rounded-full" style={{ backgroundColor: group.color }} />
+                                    <h2 className="text-sm font-extrabold text-[#003058] tracking-wide uppercase">{group.label} ({group.docs.length})</h2>
                                 </div>
-                                <div className="flex-grow min-w-0">
-                                    <h3 className="text-xs font-bold text-[#0f213a] leading-tight mb-1 truncate" title={doc.nom}>
-                                        {doc.nom}
-                                    </h3>
-                                    <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${badgeColor(doc.categorie)}`}>
-                      {badgeLabel(doc.categorie)}
-                    </span>
-                                        {doc.date && (
-                                            <span className="text-[9px] text-slate-400 font-medium">📅 {doc.date}</span>
-                                        )}
-                                        {doc.filiere && (
-                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${doc.filiere === 'IT' ? 'bg-[#0f213a] text-white border-[#0f213a]' : 'bg-amber-600 text-white border-amber-600'}`}>
-                        {doc.filiere}
-                      </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                                <span className="text-slate-400 p-1">
+                                    {expandedLevels[group.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                                </span>
+                            </button>
 
-                            {/* Infos */}
-                            {doc.typeDoc && (
-                                <p className="text-[10px] text-slate-400 mb-4 pl-1 border-l-2 border-slate-100">
-                                    {doc.typeDoc}
-                                </p>
-                            )}
+                            {/* Contenu (cartes des documents) */}
+                            <AnimatePresence initial={false}>
+                                {expandedLevels[group.id] && (
+                                    <motion.div 
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="overflow-hidden bg-[#F8F0F0]/20">
+                                        
+                                        {group.docs.length === 0 ? (
+                                            <div className="p-6 text-center text-xs text-slate-400 italic">
+                                                Aucun document disponible pour ce niveau avec les filtres actuels.
+                                            </div>
+                                        ) : (
+                                            <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                                {group.docs.map(doc => (
+                                                    <div key={doc.id}
+                                                         className="bg-white border border-[#C8C8C8]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+                                                        <div>
+                                                            <div className="flex items-start gap-3 mb-3">
+                                                                <div className="w-10 h-10 bg-[#F8F0F0] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                                                    <FileText size={20} className="text-[#003058]" />
+                                                                </div>
+                                                                <div className="flex-grow min-w-0">
+                                                                    <h3 className="text-xs font-bold text-[#003058] leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
+                                                                        {doc.nom}
+                                                                    </h3>
+                                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border uppercase tracking-wider ${badgeColor(doc.categorie)}`}>
+                                                                            {badgeLabel(doc.categorie)}
+                                                                        </span>
+                                                                        {doc.filiere && (
+                                                                            <span className="text-[9px] font-black text-[#187840] bg-[#187840]/10 border border-[#187840]/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                                                                {doc.filiere}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-                            {/* Actions */}
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => ouvrirFichier(doc.url, doc.nom)}
-                                    disabled={!doc.url}
-                                    className="flex-1 flex items-center justify-center gap-1.5 bg-[#0f213a] hover:bg-[#1e3a5f] disabled:opacity-40 text-white py-2 rounded-xl text-[10px] font-bold transition-colors shadow-sm">
-                                    <Eye size={14} />
-                                    Consulter
-                                </button>
-                                <button
-                                    onClick={() => télécharger(doc.url, doc.nom)}
-                                    disabled={!doc.url}
-                                    className="flex items-center justify-center gap-1.5 bg-[#22c55e]/10 hover:bg-[#22c55e]/20 disabled:opacity-40 text-[#22c55e] border border-[#22c55e]/20 px-4 py-2 rounded-xl text-[10px] font-bold transition-colors">
-                                    <Download size={14} />
-                                    Télécharger
-                                </button>
-                            </div>
+                                                            {/* Infos complémentaires */}
+                                                            <div className="flex gap-2 flex-wrap mb-4 pl-1 border-l-2 border-[#187840]/30 text-[10px] text-slate-400 font-semibold">
+                                                                {doc.date && <span>📅 {doc.date}</span>}
+                                                                {doc.typeDoc && <span>📄 {doc.typeDoc}</span>}
+                                                            </div>
+
+                                                            {doc.description && (
+                                                                <p className="text-[11px] text-slate-500 mb-4 line-clamp-2 italic font-medium">
+                                                                    "{doc.description}"
+                                                                </p>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Actions */}
+                                                        <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50">
+                                                            <button
+                                                                onClick={() => ouvrirFichier(doc.url, doc.nom)}
+                                                                disabled={!doc.url}
+                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-[#003058] hover:bg-[#002850] disabled:opacity-40 text-white py-2 rounded-lg text-[10px] font-extrabold transition-colors shadow-sm">
+                                                                <Eye size={12} />
+                                                                Consulter
+                                                            </button>
+                                                            <button
+                                                                onClick={() => télécharger(doc.url, doc.nom)}
+                                                                disabled={!doc.url}
+                                                                className="flex items-center justify-center gap-1.5 bg-[#187840]/10 hover:bg-[#187840]/25 disabled:opacity-40 text-[#187840] border border-[#187840]/20 w-9 h-9 rounded-lg transition-colors">
+                                                                <Download size={13} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     ))}
                 </div>

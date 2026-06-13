@@ -65,20 +65,20 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f213a] flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-[#003058] flex items-center justify-center px-4 py-10">
             <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
 
                 {/* Header */}
-                <div className="bg-[#0f213a] px-8 py-7 text-center border-b border-slate-700">
+                <div className="bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
                     <img src="/images/logo-CMET.jpeg" alt="Club-MET"
-                         className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-[#22c55e]/50 object-cover" />
+                         className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-[#187840]/50 object-cover" />
                     <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
                     <p className="text-slate-400 text-[11px] mt-0.5">UFR Métiers & Technologies · UCAK</p>
                 </div>
 
                 {/* Body */}
                 <div className="px-8 py-8">
-                    <h2 className="text-[#0f213a] font-bold text-lg mb-1">Créer un compte</h2>
+                    <h2 className="text-[#003058] font-bold text-lg mb-1">Créer un compte</h2>
                     <p className="text-slate-400 text-xs mb-6">Rejoins la communauté Club-MET.</p>
 
                     {error && (
@@ -95,25 +95,25 @@ export default function Register() {
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Prénom *</label>
                                 <input type="text" required {...F("prenom")} placeholder="Mamadou"
-                                       className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                       className="input-field" />
                             </div>
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Nom *</label>
                                 <input type="text" required {...F("nom")} placeholder="Diop"
-                                       className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                       className="input-field" />
                             </div>
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Email *</label>
                             <input type="email" required {...F("email")} placeholder="prenom.nom@ucak.edu.sn"
-                                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                   className="input-field" />
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Niveau / Classe *</label>
                             <select required value={form.niveau} onChange={e => setForm({ ...form, niveau: e.target.value })}
-                                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e] bg-white">
+                                    className="input-field bg-white">
                                 <option value="">— Sélectionner votre niveau —</option>
                                 {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
@@ -122,17 +122,17 @@ export default function Register() {
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Mot de passe *</label>
                             <input type="password" required {...F("password")} placeholder="Min. 6 caractères"
-                                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                   className="input-field" />
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Confirmer le mot de passe *</label>
                             <input type="password" required {...F("confirm")} placeholder="••••••••"
-                                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                   className="input-field" />
                         </div>
 
                         <button type="submit" disabled={loading}
-                                className="w-full bg-[#22c55e] hover:bg-green-600 text-white py-3 rounded-xl text-xs font-bold shadow-sm disabled:opacity-60 transition-colors flex items-center justify-center gap-2 mt-2">
+                                className="btn-primary w-full mt-2 disabled:opacity-60">
                             {loading ? (
                                 <>
                                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@ export default function Register() {
 
                     <p className="text-center text-xs text-slate-400 mt-6">
                         Déjà inscrit ?{" "}
-                        <Link to="/login" className="text-[#22c55e] font-bold hover:underline">Se connecter</Link>
+                        <Link to="/login" className="text-[#187840] font-bold hover:underline">Se connecter</Link>
                     </p>
                     <div className="text-center mt-3">
                         <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">← Retour à l'accueil</Link>

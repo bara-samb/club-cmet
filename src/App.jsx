@@ -12,11 +12,13 @@ import Login from './pages/public/Login';
 import Register from './pages/public/Register';
 import Dashboard from './pages/student/Dashboard';
 import Library from './pages/student/Library';
+import Resources from './pages/student/Resources';
 import Profile from './pages/student/Profile';
 import TutoratHub from './pages/student/TutoratHub';
 import AdminPanel from './pages/admin/AdminPanel';
 import ManageUsers from './pages/admin/ManageUsers';
 import ManageDocs from './pages/admin/ManageDocs';
+import ManageMessages from './pages/admin/ManageMessages';
 
 /* ── Guards de protection ── */
 
@@ -65,6 +67,7 @@ export default function App() {
                 <Route path="/student" element={<RequireAuth><StudentLayout /></RequireAuth>}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="library" element={<Library />} />
+                    <Route path="resources" element={<Resources />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="tutorat" element={<TutoratHub />} />
                 </Route>
@@ -74,6 +77,7 @@ export default function App() {
                     <Route path="panel" element={<AdminPanel />} />
                     <Route path="manage-users" element={<ManageUsers />} />
                     <Route path="manage-docs" element={<ManageDocs />} />
+                    <Route path="manage-messages" element={<ManageMessages />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

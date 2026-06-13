@@ -82,7 +82,7 @@ export default function Profile() {
     if (!user) {
         return (
             <div className="flex items-center justify-center p-10">
-                <Loader2 className="w-8 h-8 text-[#22c55e] animate-spin" />
+                <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
             </div>
         );
     }
@@ -93,7 +93,7 @@ export default function Profile() {
         <div className="p-6 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
             {/* Titre de la page */}
             <div>
-                <h1 className="text-2xl font-black text-[#0f213a] tracking-tight">Paramètres du profil</h1>
+                <h1 className="text-2xl font-black text-[#003058] tracking-tight">Paramètres du profil</h1>
                 <p className="text-sm text-slate-500 mt-1">Gérez vos informations personnelles et votre apparence.</p>
             </div>
 
@@ -103,16 +103,15 @@ export default function Profile() {
                 <div className="md:col-span-1 space-y-6">
                     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm text-center">
                         <div className="relative inline-block mb-4">
-                            <div className="w-28 h-28 mx-auto rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-50 flex items-center justify-center relative group">
+                            <div className="w-28 h-28 mx-auto rounded-full border-4 border-white shadow-lg overflow-hidden bg-[#F8F0F0] flex items-center justify-center relative group">
                                 {user.profilePic ? (
                                     <img src={user.profilePic} alt="Profil" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-3xl font-black text-[#22c55e]/50">{initiales}</span>
+                                    <span className="text-3xl font-black text-[#187840]/50">{initiales}</span>
                                 )}
                                 
-                                {/* Overlay Upload */}
                                 <div 
-                                    className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                                    className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer"
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     {uploading ? (
@@ -135,10 +134,10 @@ export default function Profile() {
                             />
                         </div>
                         
-                        <h2 className="text-lg font-bold text-[#0f213a]">{user.prenom} {user.nom}</h2>
+                        <h2 className="text-lg font-bold text-[#003058]">{user.prenom} {user.nom}</h2>
                         <p className="text-xs text-slate-400 font-medium">{user.role === 'admin' ? 'Administrateur' : 'Étudiant'}</p>
                         
-                        <div className="mt-6 flex flex-col gap-3 text-left bg-slate-50 p-4 rounded-2xl">
+                        <div className="mt-6 flex flex-col gap-3 text-left bg-[#F8F0F0] p-4 rounded-2xl">
                             <div className="flex items-center gap-3 text-xs text-slate-600">
                                 <Mail size={16} className="text-slate-400 shrink-0" />
                                 <span className="truncate">{user.email}</span>
@@ -154,8 +153,8 @@ export default function Profile() {
                 {/* Colonne Droite: Formulaire */}
                 <div className="md:col-span-2">
                     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
-                        <h3 className="text-base font-bold text-[#0f213a] mb-6 flex items-center gap-2">
-                            <UserIcon size={18} className="text-[#22c55e]" />
+                        <h3 className="text-base font-bold text-[#003058] mb-6 flex items-center gap-2">
+                            <UserIcon size={18} className="text-[#187840]" />
                             Informations Personnelles
                         </h3>
                         
@@ -167,7 +166,7 @@ export default function Profile() {
                                         type="text" 
                                         value={prenom}
                                         onChange={(e) => setPrenom(e.target.value)} 
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl px-4 py-3 outline-none focus:border-[#22c55e] focus:bg-white transition-colors"
+                                        className="input-field"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
@@ -176,7 +175,7 @@ export default function Profile() {
                                         type="text" 
                                         value={nom}
                                         onChange={(e) => setNom(e.target.value)} 
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl px-4 py-3 outline-none focus:border-[#22c55e] focus:bg-white transition-colors"
+                                        className="input-field"
                                     />
                                 </div>
                             </div>
@@ -186,7 +185,7 @@ export default function Profile() {
                                 <button 
                                     onClick={handleUpdate} 
                                     disabled={saving || (!prenom && !nom)}
-                                    className="bg-[#0f213a] hover:bg-[#1e3a5f] text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50"
+                                    className="btn-primary"
                                 >
                                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                     Enregistrer les modifications

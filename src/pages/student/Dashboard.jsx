@@ -66,7 +66,7 @@ export default function Dashboard() {
         {
             label: 'Documents', value: ressources.length,
             Icon: FileText,
-            accent: '#22c55e', accentBg: 'rgba(34,197,94,0.08)',
+            accent: '#187840', accentBg: 'rgba(24,120,64,0.08)',
         },
         {
             label: 'Maquettes', value: maquettes.length,
@@ -91,14 +91,14 @@ export default function Dashboard() {
             desc: 'Accéder aux ressources pédagogiques',
             path: '/student/library',
             Icon: BookOpen,
-            color: '#22c55e',
+            color: '#187840',
         },
         {
             label: 'Tutorat',
             desc: 'Sessions d\'entraide entre étudiants',
             path: '/student/tutorat',
             Icon: Users,
-            color: '#0f213a',
+            color: '#003058',
         },
         {
             label: 'Mon Profil',
@@ -113,8 +113,8 @@ export default function Dashboard() {
         <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
 
             {/* ── Bannière de bienvenue ── */}
-            <div className="anim-fade-up relative bg-[#0f213a] rounded-2xl p-6 md:p-8 overflow-hidden"
-                style={{ boxShadow: '0 8px 24px -4px rgba(15,33,58,0.25)' }}>
+            <div className="anim-fade-up relative bg-[#003058] rounded-2xl p-6 md:p-8 overflow-hidden"
+                style={{ boxShadow: '0 8px 24px -4px rgba(0,48,88,0.25)' }}>
                 {/* Motif géométrique sobre */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04]">
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -130,10 +130,10 @@ export default function Dashboard() {
                 <div className="relative z-10">
                     <p className="text-slate-400 text-xs font-medium mb-1 tracking-wide">{salutation}</p>
                     <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                        {user?.prenom} <span className="text-[#22c55e]">{user?.nom}</span>
+                        {user?.prenom} <span className="text-[#187840]">{user?.nom}</span>
                     </h1>
                     <div className="flex flex-wrap items-center gap-2 mt-3">
-                        <span className="inline-flex items-center text-[11px] font-semibold bg-[#22c55e]/15 text-[#22c55e] px-3 py-1 rounded-full border border-[#22c55e]/25">
+                        <span className="inline-flex items-center text-[11px] font-semibold bg-[#187840]/15 text-[#187840] px-3 py-1 rounded-full border border-[#187840]/25">
                             {user?.niveau ?? '—'}
                         </span>
                         <span className="text-[11px] text-slate-500">{user?.email}</span>
@@ -150,7 +150,7 @@ export default function Dashboard() {
                             style={{ backgroundColor: s.accentBg }}>
                             <s.Icon size={18} style={{ color: s.accent }} />
                         </div>
-                        <p className="text-2xl font-bold text-[#0f213a] tracking-tight">{s.value}</p>
+                        <p className="text-2xl font-bold text-[#003058] tracking-tight">{s.value}</p>
                         <p className="text-xs text-slate-500 mt-0.5 font-medium">{s.label}</p>
                     </div>
                 ))}
@@ -185,7 +185,7 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-sm font-semibold text-slate-800 tracking-tight">Derniers documents</h2>
                     <button onClick={() => navigate('/student/library')}
-                        className="text-xs font-semibold text-[#22c55e] hover:text-[#16a34a] transition-colors flex items-center gap-1">
+                        className="text-xs font-semibold text-[#187840] hover:text-[#125e31] transition-colors flex items-center gap-1">
                         Voir tout
                         <ChevronRight size={14} strokeWidth={2.5} />
                     </button>
@@ -198,7 +198,7 @@ export default function Dashboard() {
                     <div className="card divide-y divide-slate-50 overflow-hidden">
                         {ressources.slice(0, 5).map((r, i) => (
                             <div key={r.id}
-                                className="flex items-center gap-3 px-4 md:px-5 py-3.5 hover:bg-slate-50 transition-colors duration-150">
+                                className="flex items-center gap-3 px-4 md:px-5 py-3.5 hover:bg-[#F8F0F0] transition-colors duration-150">
                                 <div className="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center shrink-0 border border-red-100">
                                     <FileText size={16} className="text-red-400" />
                                 </div>
@@ -208,7 +208,7 @@ export default function Dashboard() {
                                 </div>
                                 {r.url && (
                                     <a href={r.url} target="_blank" rel="noopener noreferrer"
-                                        className="shrink-0 text-[11px] font-semibold text-[#22c55e] hover:text-[#16a34a] border border-[#22c55e]/25 hover:border-[#22c55e]/50 px-3 py-1 rounded-lg transition-all duration-150">
+                                        className="shrink-0 text-[11px] font-semibold text-[#187840] hover:text-[#125e31] border border-[#187840]/25 hover:border-[#187840]/50 px-3 py-1 rounded-lg transition-all duration-150">
                                         Ouvrir
                                     </a>
                                 )}
@@ -233,12 +233,12 @@ export default function Dashboard() {
                                 <div className="w-14 h-14 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-100">
                                     {m.imageUrl
                                         ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
-                                        : <div className="w-full h-full bg-[#0f213a] flex items-center justify-center text-[#22c55e] text-base font-bold">{m.nom?.[0]}</div>
+                                        : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-base font-bold">{m.nom?.[0]}</div>
                                     }
                                 </div>
-                                <p className="font-semibold text-xs text-[#0f213a] truncate leading-tight">{m.nom}</p>
-                                <p className="text-[10px] text-[#22c55e] font-semibold mt-1 leading-tight">{m.poste}</p>
-                                <div className="mt-2 text-[9px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100 uppercase tracking-wide font-medium">
+                                <p className="font-semibold text-xs text-[#003058] truncate leading-tight">{m.nom}</p>
+                                <p className="text-[10px] text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
+                                <div className="mt-2 text-[9px] text-slate-400 bg-[#F8F0F0] px-2 py-0.5 rounded-md border border-slate-100 uppercase tracking-wide font-medium">
                                     {m.classe}
                                 </div>
                             </div>

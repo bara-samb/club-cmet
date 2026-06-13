@@ -31,12 +31,12 @@ export default function Tutoring() {
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
                         <div>
-                            <h1 className="text-2xl font-black text-[#0f213a]">Demander une assistance</h1>
+                            <h1 className="text-2xl font-black text-[#003058]">Demander une assistance</h1>
                             <p className="text-slate-500 text-xs sm:text-sm mt-1">Vous rencontrez des difficultés sur un module ou un TP ? Décrivez votre besoin et nous vous affecterons un tuteur.</p>
                         </div>
 
                         {submitted && (
-                            <div className="bg-[#22c55e]/10 text-[#22c55e] p-4 rounded-xl border border-[#22c55e]/20 flex items-start gap-3 text-sm font-semibold">
+                            <div className="bg-[#187840]/10 text-[#187840] p-4 rounded-xl border border-[#187840]/20 flex items-start gap-3 text-sm font-semibold">
                                 <CheckCircle2 className="shrink-0 mt-0.5" size={18} />
                                 <span>Votre demande de tutorat a bien été enregistrée ! Le responsable de la commission vous contactera sous peu.</span>
                             </div>
@@ -51,7 +51,7 @@ export default function Tutoring() {
                                     placeholder="Ex: Systèmes d'exploitation, Microéconomie, Java..."
                                     value={subject}
                                     onChange={(e) => setSubject(e.target.value)}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:outline-none focus:border-[#22c55e] focus:ring-1 focus:ring-[#22c55e]/30 transition-all"
+                                    className="input-field"
                                 />
                             </div>
 
@@ -63,11 +63,11 @@ export default function Tutoring() {
                                     placeholder="Expliquez brièvement ce que vous aimeriez revoir..."
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white focus:outline-none focus:border-[#22c55e] focus:ring-1 focus:ring-[#22c55e]/30 transition-all"
+                                    className="input-field"
                                 ></textarea>
                             </div>
 
-                            <button type="submit" className="w-full sm:w-auto px-6 py-3 bg-[#0f213a] hover:bg-[#1e3a5f] text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-colors">
+                            <button type="submit" className="w-full sm:w-auto px-6 py-3 bg-[#003058] hover:bg-[#002850] text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-colors">
                                 <Send size={16} />
                                 <span>Envoyer ma demande</span>
                             </button>
@@ -78,18 +78,18 @@ export default function Tutoring() {
                 {/* SUIVIS DES DEMANDES (1 TIER) */}
                 <div className="space-y-6">
                     <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm overflow-hidden sticky top-6">
-                        <div className="flex items-center gap-2 font-bold text-[#0f213a] border-b border-slate-100 pb-4 mb-4">
-                            <ListFilter size={18} className="text-[#22c55e]" />
+                        <div className="flex items-center gap-2 font-bold text-[#003058] border-b border-slate-100 pb-4 mb-4">
+                            <ListFilter size={18} className="text-[#187840]" />
                             <h2>Suivi de mes demandes</h2>
                         </div>
 
                         <div className="space-y-4">
                             {myRequests.map((req) => (
-                                <div key={req.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 text-xs space-y-2 hover:border-[#22c55e]/30 transition-colors">
+                                <div key={req.id} className="p-4 rounded-xl border border-slate-100 bg-[#F8F0F0] text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
                                     <div className="flex justify-between items-start gap-2">
-                                        <h3 className="font-bold text-[#0f213a] text-sm leading-tight">{req.subject}</h3>
+                                        <h3 className="font-bold text-[#003058] text-sm leading-tight">{req.subject}</h3>
                                         <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] shrink-0 border ${
-                                            req.status === 'Validé' ? 'bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e]/20' : 'bg-amber-50 text-amber-600 border-amber-200'
+                                            req.status === 'Validé' ? 'bg-[#187840]/10 text-[#187840] border-[#187840]/20' : 'bg-amber-50 text-amber-600 border-amber-200'
                                         }`}>
                                             {req.status}
                                         </span>

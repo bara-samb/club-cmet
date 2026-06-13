@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Users as UsersIcon, Camera, X, Check, Award, ArrowRight, ExternalLink, Shield, Loader2 } from 'lucide-react';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (
@@ -35,8 +37,23 @@ const déclencherTéléchargement = (url, nom) => {
 /* ── Catégories statiques (structure dossiers) ── */
 const CATEGORIES_STATIQUES = [
     { id: 'reglement', nomDossier: 'Règlement Intérieur' },
-    { id: 'rapports', nomDossier: 'Rapports Mensuels' },
-    { id: 'comptes_rendus', nomDossier: 'Comptes Rendus' },
+];
+
+const ACTIVITES = [
+    { id: 1, titre: 'Hackathon UCAK 2026', date: '12 Mars 2026', type: 'Hackathon', desc: '48h de développement intensif pour créer des solutions numériques innovantes répondant aux défis locaux.', img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=600', places: 12 },
+    { id: 2, titre: 'Atelier IoT & Robotique', date: '28 Février 2026', type: 'Workshop', desc: 'Conception pratique de systèmes connectés avec ESP32, capteurs et IoT cloud.', img: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=600', places: 5 },
+    { id: 3, titre: 'Conférence Cybersécurité', date: '15 Février 2026', type: 'Conférence', desc: 'Démonstrations de hacking éthique et sensibilisation aux bonnes pratiques de sécurité des systèmes.', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600', places: 0 },
+    { id: 4, titre: 'Bootcamp Web & Mobile', date: '05 Janvier 2026', type: 'Formation', desc: 'Apprentissage intensif de React, TailwindCSS et Node.js pour concevoir des applications web complètes.', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600', places: 8 },
+    { id: 5, titre: 'CMET Tech Talk', date: '20 Décembre 2025', type: 'Conférence', desc: 'Échanges ouverts avec des ingénieurs diplômés sur les métiers de la tech et les opportunités de carrière.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600', places: 0 },
+];
+
+const MEDIAS = [
+    { id: 1, titre: 'Hackathon 2026 - Finale', type: 'Photo', url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=600' },
+    { id: 2, titre: 'Atelier Arduino / IoT', type: 'Photo', url: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=600' },
+    { id: 3, titre: 'Conférence Cybersécurité', type: 'Photo', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600' },
+    { id: 4, titre: 'Membres du bureau 2025', type: 'Photo', url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=600' },
+    { id: 5, titre: 'Séance de Mentorat IT', type: 'Photo', url: 'https://images.unsplash.com/photo-1531535934200-873499974982?auto=format&fit=crop&q=80&w=600' },
+    { id: 6, titre: 'Visite d\'entreprise partenaire', type: 'Photo', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=600' },
 ];
 
 export default function Home() {
@@ -47,6 +64,26 @@ export default function Home() {
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [openArticle, setOpenArticle] = useState('bureau-exec');
     const [dossierOuvert, setDossierOuvert] = useState(null);
+
+    /* ── State Activités & Médias ── */
+    const [activeTab, setActiveTab] = useState('activites'); // 'activites' ou 'medias'
+    const [filtreAct, setFiltreAct] = useState('tous');
+    const [lightboxImage, setLightboxImage] = useState(null);
+    const [inscriptions, setInscriptions] = useState({});
+    const [toastMessage, setToastMessage] = useState(null);
+    const [inscrireModal, setInscrireModal] = useState(null);
+    const [nomInscrit, setNomInscrit] = useState('');
+    const [emailInscrit, setEmailInscrit] = useState('');
+
+    /* ── State Formulaire de Contact ── */
+    const [nomContact, setNomContact] = useState('');
+    const [emailContact, setEmailContact] = useState('');
+    const [telContact, setTelContact] = useState('');
+    const [msgContact, setMsgContact] = useState('');
+    const [contactErrors, setContactErrors] = useState({});
+    const [contactSubmitting, setContactSubmitting] = useState(false);
+    const [contactStatus, setContactStatus] = useState(null); // null ou { type: 'success'|'error', msg: string }
+
 
     /* ── Données Firestore ── */
     const [bureau, setBureau] = useState([]);
@@ -106,6 +143,95 @@ export default function Home() {
         fichiers: ressources.filter(r => r.categorie === cat.id),
     }));
 
+    const inscrireActivite = (act) => {
+        setInscrireModal(act);
+        setNomInscrit('');
+        setEmailInscrit('');
+    };
+
+    const gererInscription = (e) => {
+        e.preventDefault();
+        if (!nomInscrit || !emailInscrit) return;
+        
+        // Simuler la validation
+        setInscriptions(prev => ({ ...prev, [inscrireModal.id]: true }));
+        
+        // Afficher un toast
+        setToastMessage(`Félicitations ! Vous êtes inscrit à l'activité : ${inscrireModal.titre}`);
+        setInscrireModal(null);
+        setTimeout(() => setToastMessage(null), 4000);
+    };
+
+    const gererSoumissionContact = async (e) => {
+        e.preventDefault();
+        setContactStatus(null);
+        
+        // Validation des saisies
+        const errors = {};
+        if (!nomContact.trim()) {
+            errors.nom = "Le nom complet est requis.";
+        }
+        
+        // Validation Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailContact.trim()) {
+            errors.email = "L'adresse email est requise.";
+        } else if (!emailRegex.test(emailContact)) {
+            errors.email = "L'adresse email n'est pas valide.";
+        }
+        
+        // Validation Téléphone (si renseigné)
+        if (telContact.trim()) {
+            const cleanTel = telContact.replace(/[\s.-]/g, '');
+            if (!/^\+?\d{8,15}$/.test(cleanTel)) {
+                errors.telephone = "Le numéro de téléphone n'est pas valide.";
+            }
+        }
+        
+        // Validation Message
+        if (!msgContact.trim()) {
+            errors.message = "Votre requête ne peut pas être vide.";
+        } else if (msgContact.trim().length < 10) {
+            errors.message = "Le message doit faire au moins 10 caractères.";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setContactErrors(errors);
+            setContactStatus({ type: 'error', msg: "Veuillez corriger les erreurs de saisie." });
+            return;
+        }
+
+        // Si tout est valide, envoi à Supabase
+        setContactErrors({});
+        setContactSubmitting(true);
+
+        try {
+            const { error } = await supabase.from('messages').insert([
+                {
+                    nom: nomContact.trim(),
+                    email: emailContact.trim(),
+                    telephone: telContact.trim() || null,
+                    message: msgContact.trim(),
+                    statut: 'non_lu'
+                }
+            ]);
+
+            if (error) throw error;
+
+            setContactStatus({ type: 'success', msg: "Votre message a été transmis avec succès. Le bureau vous répondra dans les plus brefs délais." });
+            // Réinitialiser les champs
+            setNomContact('');
+            setEmailContact('');
+            setTelContact('');
+            setMsgContact('');
+        } catch (err) {
+            console.error("Erreur d'envoi du message:", err);
+            setContactStatus({ type: 'error', msg: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer." });
+        } finally {
+            setContactSubmitting(false);
+        }
+    };
+
     const maqIT = maquettes.find(m => m.filiere === 'IT');
     const maqHEC = maquettes.find(m => m.filiere === 'HEC');
 
@@ -117,8 +243,8 @@ export default function Home() {
                 __html: `
         @keyframes spin-slow   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         @keyframes pulse-ring  {
-          0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5),0 0 0 4px rgba(34,197,94,.15)}
-          50%    {box-shadow:0 0 0 6px rgba(34,197,94,0), 0 0 0 10px rgba(34,197,94,0)}
+          0%,100%{box-shadow:0 0 0 0 rgba(24,120,64,.5),0 0 0 4px rgba(24,120,64,.15)}
+          50%    {box-shadow:0 0 0 6px rgba(24,120,64,0), 0 0 0 10px rgba(24,120,64,0)}
         }
         @keyframes ken-burns {
           0%  {transform:scale(1)    translateX(0)   translateY(0)}
@@ -161,18 +287,18 @@ export default function Home() {
             {/* ════════════════════════════════════════
           NAVBAR
       ════════════════════════════════════════ */}
-            <nav className="bg-[#0f213a] text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
+            <nav className="bg-[#003058]/80 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
 
                 {/* Logo */}
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
                     <div className="relative w-10 h-10 shrink-0">
                         <span style={{
                             position: 'absolute', inset: '-4px', borderRadius: '9999px',
-                            border: '2px dashed rgba(34,197,94,.5)',
+                            border: '2px dashed rgba(24,120,64,.5)',
                             animation: 'spin-slow 10s linear infinite'
                         }} />
                         <img src="/images/logo-CMET.jpeg" alt="Logo Club-MET"
-                            className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#22c55e]/60 relative z-10" />
+                            className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#187840]/60 relative z-10" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-bold text-sm tracking-wide leading-none">CLUB-MET</span>
@@ -182,16 +308,16 @@ export default function Home() {
 
                 {/* Liens nav (Desktop) */}
                 <div className="hidden md:flex gap-6 text-xs font-medium items-center">
-                    <a href="#about-club" className="hover:text-[#22c55e] transition-colors">Le Club</a>
-                    <a href="#fonctionnement" className="hover:text-[#22c55e] transition-colors">Fonctionnement</a>
-                    <a href="#composition-bureau" className="hover:text-[#22c55e] transition-colors">Composition du Bureau</a>
-                    <a href="#ufr-met" className="hover:text-[#22c55e] transition-colors">L'UFR MET</a>
+                    <a href="#about-club" className="hover:text-[#187840] transition-colors">Le Club</a>
+                    <a href="#fonctionnement" className="hover:text-[#187840] transition-colors">Fonctionnement</a>
+                    <a href="#composition-bureau" className="hover:text-[#187840] transition-colors">Composition du Bureau</a>
+                    <a href="#ufr-met" className="hover:text-[#187840] transition-colors">L'UFR MET</a>
 
-                    {/* Dropdown Ressources */}
+                    {/* Règlement Intérieur Dropdown */}
                     <div className="relative">
                         <button onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="hover:text-[#22c55e] transition-colors flex items-center gap-1 font-semibold text-[#22c55e]">
-                            Ressources
+                            className="hover:text-[#187840] transition-colors flex items-center gap-1 font-semibold text-[#187840]">
+                            Règlement Intérieur
                             <svg className="w-2.5 h-2.5 fill-current transition-transform duration-200"
                                 style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
                                 viewBox="0 0 20 20">
@@ -200,63 +326,33 @@ export default function Home() {
                         </button>
 
                         {dropdownOpen && (
-                            <div className="absolute left-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 py-2 text-slate-800 z-50">
-                                <div className="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-50">
-                                    Espace Documentaire
+                            <div className="absolute left-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 text-slate-800 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                <div className="px-4 pb-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-gray-100">
+                                    Documents Officiels
                                 </div>
-                                <div className="flex flex-col">
-                                    {categories.map(cat => (
-                                        <div key={cat.id} className="flex flex-col border-b border-gray-50 last:border-0">
-                                            <button onClick={e => toggleDossier(e, cat.id)}
-                                                className="w-full text-left px-4 py-2.5 hover:bg-slate-50 font-semibold text-xs text-slate-700 flex justify-between items-center transition-colors">
-                                                <span className="flex items-center gap-2">
-                                                    <svg className={`w-4 h-4 shrink-0 ${dossierOuvert === cat.id ? 'text-[#22c55e]' : 'text-amber-400'}`}
-                                                        fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M3 7a2 2 0 012-2h4.586a1 1 0 01.707.293L11.414 6.5A2 2 0 0012.828 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                                <div className="flex flex-col mt-2 px-2 max-h-60 overflow-y-auto">
+                                    {ressources.filter(r => r.categorie === 'reglement').length === 0 ? (
+                                        <p className="text-[11px] text-slate-400 italic text-center py-4">Aucun document disponible.</p>
+                                    ) : ressources.filter(r => r.categorie === 'reglement').map(file => (
+                                        <div key={file.id} className="flex items-center justify-between gap-3 p-2 hover:bg-[#F8F0F0] rounded-xl transition-colors">
+                                            <span className="flex items-center gap-2 text-xs text-slate-700 font-semibold truncate max-w-[150px]" title={file.nom}>
+                                                <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                </svg>
+                                                <span className="truncate">{file.nom}</span>
+                                            </span>
+                                            <div className="flex items-center gap-1.5 shrink-0">
+                                                <button onClick={() => { ouvrirFichier(file.url, file.nom); setDropdownOpen(false); }}
+                                                    className="flex items-center gap-1 bg-[#003058] hover:bg-[#002850] text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-sm transition-colors">
+                                                    Voir
+                                                </button>
+                                                <button onClick={() => déclencherTéléchargement(file.url, file.nom)}
+                                                    className="flex items-center justify-center bg-[#187840]/10 hover:bg-[#187840]/20 text-[#187840] w-7 h-7 rounded-lg transition-colors border border-[#187840]/20">
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                     </svg>
-                                                    {cat.nomDossier}
-                                                </span>
-                                                <span className="flex items-center gap-1 text-[10px] text-gray-400 shrink-0">
-                                                    {dossierOuvert === cat.id ? (
-                                                        <><svg className="w-3 h-3 text-[#22c55e]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg><span className="text-[#22c55e] font-bold">Fermer</span></>
-                                                    ) : (
-                                                        <><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg><span>Ouvrir</span></>
-                                                    )}
-                                                </span>
-                                            </button>
-
-                                            {dossierOuvert === cat.id && (
-                                                <div className="bg-slate-50/70 pl-5 pr-3 py-1.5 space-y-1 border-t border-b border-slate-100">
-                                                    {cat.fichiers.length === 0 ? (
-                                                        <p className="text-[10px] text-slate-400 italic py-2">Aucun fichier.</p>
-                                                    ) : cat.fichiers.map(file => (
-                                                        <div key={file.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-slate-100/80 last:border-0">
-                                                            <span className="flex items-center gap-2 text-[11px] text-slate-600 font-medium truncate max-w-[150px]" title={file.nom}>
-                                                                <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                                </svg>
-                                                                <span className="truncate">{file.nom}</span>
-                                                            </span>
-                                                            <div className="flex items-center gap-1.5 shrink-0">
-                                                                <button onClick={() => { ouvrirFichier(file.url, file.nom); setDropdownOpen(false); }}
-                                                                    className="flex items-center gap-1 bg-[#0f213a] hover:bg-[#1e3a5f] text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-sm transition-colors">
-                                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    </svg>
-                                                                    Voir
-                                                                </button>
-                                                                <button onClick={() => déclencherTéléchargement(file.url, file.nom)}
-                                                                    className="flex items-center justify-center bg-[#22c55e]/15 hover:bg-[#22c55e]/30 text-[#22c55e] w-7 h-7 rounded-lg transition-colors border border-[#22c55e]/20">
-                                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                </button>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -264,7 +360,7 @@ export default function Home() {
                         )}
                     </div>
 
-                    <a href="#contact" className="hover:text-[#22c55e] transition-colors">Contact</a>
+                    <a href="#contact" className="hover:text-[#187840] transition-colors">Contact</a>
                 </div>
 
                 {/* Boutons auth (Desktop) */}
@@ -274,7 +370,7 @@ export default function Home() {
                         Se connecter
                     </button>
                     <button onClick={() => navigate('/register')}
-                        className="bg-[#22c55e] text-white px-5 py-2 rounded-lg font-bold tracking-wide hover:bg-green-600 transition-colors shadow-md">
+                        className="bg-[#187840] text-white px-5 py-2 rounded-lg font-bold tracking-wide hover:bg-green-600 transition-colors shadow-md">
                         S'inscrire
                     </button>
                 </div>
@@ -293,12 +389,35 @@ export default function Home() {
 
             {/* Menu Mobile Overlay */}
             {mobileNavOpen && (
-                <div className="md:hidden fixed inset-0 z-40 bg-[#0f213a] pt-24 px-6 pb-6 overflow-y-auto">
+                <div className="md:hidden fixed inset-0 z-40 bg-[#003058] pt-24 px-6 pb-6 overflow-y-auto">
                     <div className="flex flex-col gap-6 text-lg font-medium text-white">
                         <a href="#about-club" onClick={() => setMobileNavOpen(false)}>Le Club</a>
                         <a href="#fonctionnement" onClick={() => setMobileNavOpen(false)}>Fonctionnement</a>
                         <a href="#composition-bureau" onClick={() => setMobileNavOpen(false)}>Composition du Bureau</a>
                         <a href="#ufr-met" onClick={() => setMobileNavOpen(false)}>L'UFR MET</a>
+
+                        <div className="border-t border-slate-700 my-2 pt-4">
+                            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Règlement Intérieur</p>
+                            <div className="flex flex-col gap-2 pl-2 text-xs text-slate-300">
+                                {ressources.filter(r => r.categorie === 'reglement').length === 0 ? (
+                                    <span className="text-[10px] text-slate-500 italic">- Aucun document disponible</span>
+                                ) : ressources.filter(r => r.categorie === 'reglement').map(file => (
+                                    <div key={file.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-slate-700/50 last:border-0">
+                                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="hover:text-white truncate flex items-center gap-2 max-w-[70%]">
+                                            <svg className="w-3.5 h-3.5 text-red-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                            </svg>
+                                            <span className="truncate">{file.nom}</span>
+                                        </a>
+                                        <button onClick={() => déclencherTéléchargement(file.url, file.nom)} className="text-[#187840] hover:text-green-400 p-1">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
                         <div className="border-t border-slate-700 my-2 pt-4">
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Connexion</p>
@@ -308,7 +427,7 @@ export default function Home() {
                                     Se connecter
                                 </button>
                                 <button onClick={() => { setMobileNavOpen(false); navigate('/register'); }}
-                                    className="w-full text-center bg-[#22c55e] text-white py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-md">
+                                    className="w-full text-center bg-[#187840] text-white py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-md">
                                     S'inscrire
                                 </button>
                             </div>
@@ -323,15 +442,15 @@ export default function Home() {
             <main className="flex-grow" onClick={() => setDropdownOpen(false)}>
 
                 {/* ── HERO ── */}
-                <section className="relative bg-[#0f213a] text-white py-16 md:py-24 px-6 overflow-hidden">
+                <section className="relative bg-[#003058] text-white py-16 md:py-24 px-6 overflow-hidden">
                     <div className="absolute inset-0 overflow-hidden">
                         <img src="/images/logo-CMET.jpeg" alt=""
                             className="anim-bg w-full h-full object-cover opacity-20"
                             style={{ transformOrigin: 'center center' }} />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#0f213a]/70 via-[#0f213a]/55 to-[#0f213a]/92" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#003058]/70 via-[#003058]/55 to-[#003058]/92" />
                     <div className="anim-sweep absolute inset-0 pointer-events-none"
-                        style={{ background: 'linear-gradient(105deg,transparent 30%,rgba(34,197,94,.07) 50%,transparent 70%)', width: '60%', left: 0 }} />
+                        style={{ background: 'linear-gradient(105deg,transparent 30%,rgba(24,120,64,.07) 50%,transparent 70%)', width: '60%', left: 0 }} />
 
                     {/* Particules */}
                     {[
@@ -343,12 +462,12 @@ export default function Home() {
                         { left: '82%', delay: '1.8s', dur: '7.5s', size: 4, op: .35 },
                         { left: '92%', delay: '0.9s', dur: '6.5s', size: 5, op: .4 },
                     ].map((p, i) => (
-                        <span key={i} className="particle absolute bottom-0 rounded-full bg-[#22c55e] pointer-events-none"
+                        <span key={i} className="particle absolute bottom-0 rounded-full bg-[#187840] pointer-events-none"
                             style={{ left: p.left, width: p.size, height: p.size, opacity: p.op, animationDuration: p.dur, animationDelay: p.delay }} />
                     ))}
 
                     <div className="relative max-w-5xl mx-auto text-center z-10">
-                        <span className="anim-badge inline-block bg-[#1e3a5f] text-[#22c55e] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
+                        <span className="anim-badge inline-block bg-[#002850] text-[#187840] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
                             Cadre Institutionnel
                         </span>
                         <h1 className="anim-h1 text-3xl md:text-5xl font-extrabold tracking-tight mt-5 mb-4 leading-tight">
@@ -359,14 +478,14 @@ export default function Home() {
                         </p>
                         <div className="anim-btns flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer"
-                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white text-[#0f213a] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
+                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white text-[#003058] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" />
                                 </svg>
                                 Découvrir l'UCAK
                             </a>
                             <button onClick={() => navigate('/decouvrir-ucak')}
-                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-[#22c55e] text-white px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-green-600 transition-all hover:scale-105 shadow-lg">
+                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-[#187840] text-white px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-green-600 transition-all hover:scale-105 shadow-lg">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
@@ -379,7 +498,7 @@ export default function Home() {
                 {/* ── À PROPOS ── */}
                 <section id="about-club" className="py-16 px-6 max-w-5xl mx-auto scroll-mt-20">
                     <div className="mb-12">
-                        <h2 className="text-xl md:text-2xl font-extrabold text-[#0f213a] mb-4">Le Club Métiers & Technologies</h2>
+                        <h2 className="text-xl md:text-2xl font-extrabold text-[#003058] mb-4">Le Club Métiers & Technologies</h2>
                         <p className="text-slate-600 text-xs md:text-sm leading-relaxed text-justify">
                             Le <strong>Club Métiers & Technologies (Club-MET)</strong> est régi par un règlement intérieur strict qui définit ses statuts, ses instances de gouvernance et le comportement éthique de ses membres au sein de l'<strong>Université Cheikh Ahmadou Khadim (UCAK)</strong>. Notre organisation s'assure que chaque étudiant évolue dans un cadre propice à l'acquisition de compétences réelles en ingénierie logicielle, réseaux, IoT et cybersécurité.
                         </p>
@@ -400,10 +519,10 @@ export default function Home() {
                             },
                         ].map((c, i) => (
                             <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 text-center shadow-sm flex flex-col items-center">
-                                <div className="w-16 h-16 mb-4 text-[#22c55e] flex items-center justify-center">
+                                <div className="w-16 h-16 mb-4 text-[#187840] flex items-center justify-center">
                                     <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">{c.icon}</svg>
                                 </div>
-                                <h3 className="font-bold text-xs text-[#0f213a] mb-2">{c.titre}</h3>
+                                <h3 className="font-bold text-xs text-[#003058] mb-2">{c.titre}</h3>
                                 <p className="text-[11px] text-slate-500 leading-relaxed">{c.desc}</p>
                             </div>
                         ))}
@@ -411,13 +530,13 @@ export default function Home() {
                 </section>
 
                 {/* ── FONCTIONNEMENT ── */}
-                <section id="fonctionnement" className="py-16 bg-slate-50 border-t border-b border-gray-100 px-6 scroll-mt-20">
+                <section id="fonctionnement" className="py-16 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-10">
                             <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Régime Interne</span>
-                            <h2 className="text-2xl font-bold text-[#0f213a] mt-3">Règles de Fonctionnement Exécutif</h2>
+                            <h2 className="text-2xl font-bold text-[#003058] mt-3">Règles de Fonctionnement Exécutif</h2>
                         </div>
-                        <div className="bg-white border border-gray-200/60 rounded-2xl shadow-sm p-6 space-y-4">
+                        <div className="bg-white border border-[#C8C8C8]/60 rounded-2xl shadow-sm p-6 space-y-4">
                             {[
                                 {
                                     id: 'bureau-exec', label: 'Composition des Organes Légaux du Club',
@@ -440,9 +559,9 @@ export default function Home() {
                             ].map(item => (
                                 <div key={item.id} className="border border-gray-100 rounded-xl overflow-hidden">
                                     <button onClick={() => setOpenArticle(openArticle === item.id ? null : item.id)}
-                                        className="w-full bg-slate-50 px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
+                                        className="w-full bg-[#F8F0F0] px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
                                         <span className="text-xs font-bold text-slate-700 flex items-center gap-2">
-                                            <svg className="w-4 h-4 text-[#22c55e]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
+                                            <svg className="w-4 h-4 text-[#187840]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
                                             {item.label}
                                         </span>
                                         <span className="text-xs text-gray-400">{openArticle === item.id ? '▲' : '▼'}</span>
@@ -455,45 +574,209 @@ export default function Home() {
                 </section>
 
                 {/* ── BUREAU (données Firestore) ── */}
-                <section id="composition-bureau" className="py-16 px-6 max-w-5xl mx-auto scroll-mt-20">
-                    <div className="text-center mb-10">
-                        <span className="text-xs font-bold text-green-600 uppercase tracking-widest bg-green-50 px-3 py-1 rounded-full">Organigramme</span>
-                        <h2 className="text-2xl font-bold text-[#0f213a] mt-3">Membres Officiels du Bureau</h2>
+                <section id="composition-bureau" className="py-20 px-6 max-w-6xl mx-auto scroll-mt-20 overflow-hidden">
+                    <div className="text-center mb-16">
+                        <span className="badge-green mb-3">Organigramme</span>
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058]">Membres Officiels du Bureau</h2>
+                        <p className="text-slate-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">Découvrez l'équipe dirigeante qui orchestre les activités et veille au bon fonctionnement du Club Métiers & Technologies.</p>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+                    <motion.div 
+                        initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}
+                        variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                         {bureau.length === 0 ? (
-                            <div className="col-span-5 text-center py-12 text-xs text-slate-400">
+                            <div className="col-span-full text-center py-12 text-sm text-slate-400">
                                 Aucun membre enregistré pour le moment.
                             </div>
-                        ) : bureau.map(m => (
-                            <div key={m.id} className="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-shadow">
-                                <div className="w-20 h-20 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-100">
-                                    {m.imageUrl
-                                        ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
-                                        : <div className="w-full h-full bg-[#0f213a] flex items-center justify-center text-[#22c55e] text-xl font-bold">{m.nom?.[0]}</div>
-                                    }
+                        ) : bureau.map((m) => (
+                            <motion.div key={m.id} 
+                                variants={{ 
+                                    hidden: { opacity: 0, y: 40, scale: 0.95 }, 
+                                    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 15 } } 
+                                }}
+                                whileHover={{ 
+                                    y: -8, 
+                                    scale: 1.03,
+                                    boxShadow: "0 20px 25px -5px rgba(24,120,64,0.1), 0 10px 10px -5px rgba(0,48,88,0.04)"
+                                }}
+                                className="group relative bg-white border border-[#C8C8C8]/40 rounded-3xl p-6 text-center shadow-sm transition-all duration-300 overflow-hidden select-none">
+                                {/* Glowing background decoration */}
+                                <div className="absolute -inset-1 bg-gradient-to-r from-[#187840] to-[#003058] rounded-3xl blur opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+                                
+                                {/* Base background */}
+                                <div className="absolute inset-0 bg-white rounded-3xl z-0" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F8F0F0]/50 rounded-3xl pointer-events-none z-0" />
+                                
+                                <div className="relative z-10">
+                                    {/* Avatar with dynamic frame */}
+                                    <div className="relative w-28 h-28 mx-auto mb-6">
+                                        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#187840] to-[#003058] opacity-50 group-hover:rotate-180 transition-transform duration-700 ease-out" style={{ padding: '2px' }}>
+                                            <div className="w-full h-full bg-white rounded-full" />
+                                        </div>
+                                        <div className="absolute inset-1.5 rounded-full overflow-hidden border-2 border-white shadow-inner bg-slate-100">
+                                            {m.imageUrl
+                                                ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                : <div className="w-full h-full bg-gradient-to-br from-[#003058] to-[#187840] flex items-center justify-center text-white text-3xl font-black group-hover:scale-110 transition-transform duration-500">{m.nom?.[0]}</div>
+                                            }
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Member info */}
+                                    <h4 className="font-extrabold text-base text-[#003058] truncate mb-1 group-hover:text-[#187840] transition-colors">{m.nom}</h4>
+                                    <p className="text-xs text-[#187840] font-black uppercase tracking-wider mb-4 h-5 flex items-center justify-center">{m.poste}</p>
+                                    
+                                    {/* Badge */}
+                                    <div className="mb-4">
+                                        <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-3.5 py-1.5 rounded-full border border-[#C8C8C8]/50 uppercase tracking-widest shadow-sm group-hover:bg-[#187840]/10 group-hover:border-[#187840]/30 group-hover:text-[#187840] transition-colors">
+                                            {m.classe}
+                                        </span>
+                                    </div>
+
+                                    {/* Social links (interactive) */}
+                                    <div className="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">
+                                        <a href="#contact" className="w-7 h-7 rounded-full bg-[#003058]/10 hover:bg-[#003058] hover:text-white flex items-center justify-center text-[#003058] transition-all duration-200">
+                                            <FacebookIcon />
+                                        </a>
+                                        <a href="#contact" className="w-7 h-7 rounded-full bg-[#187840]/10 hover:bg-[#187840] hover:text-white flex items-center justify-center text-[#187840] transition-all duration-200">
+                                            <LinkedInIcon />
+                                        </a>
+                                    </div>
                                 </div>
-                                <h4 className="font-bold text-xs text-[#0f213a] truncate">{m.nom}</h4>
-                                <p className="text-[11px] text-[#22c55e] font-semibold mt-0.5 leading-tight">{m.poste}</p>
-                                <div className="mt-2 text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</div>
-                            </div>
+                            </motion.div>
                         ))}
+                    </motion.div>
+                </section>
+
+                {/* ── ACTIVITÉS & MÉDIAS (Dynamique) ── */}
+                <section id="activites-medias" className="py-20 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20 overflow-hidden">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="text-center mb-10">
+                            <span className="badge-navy mb-3">Vie du Club</span>
+                            <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058]">Actualités, Activités & Médias</h2>
+                            <p className="text-slate-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">Suivez nos événements, participez à nos ateliers et revivez en images les moments forts du club.</p>
+                        </div>
+
+                        {/* Navigation des Sous-Onglets */}
+                        <div className="flex justify-center mb-10">
+                            <div className="bg-white p-1.5 rounded-2xl border border-gray-200/60 shadow-sm flex gap-2">
+                                <button 
+                                    onClick={() => setActiveTab('activites')}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'activites' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
+                                    🚀 Événements & Activités
+                                </button>
+                                <button 
+                                    onClick={() => setActiveTab('medias')}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'medias' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
+                                    📸 Galerie Médias
+                                </button>
+                            </div>
+                        </div>
+
+                        {activeTab === 'activites' ? (
+                            <div>
+                                {/* Filtres de catégories pour Activités */}
+                                <div className="flex justify-center gap-2 flex-wrap mb-8">
+                                    {['tous', 'Hackathon', 'Workshop', 'Conférence', 'Formation'].map(f => (
+                                        <button 
+                                            key={f}
+                                            onClick={() => setFiltreAct(f)}
+                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${filtreAct === f ? 'bg-[#187840] text-white border-[#187840] shadow-sm' : 'bg-white text-slate-500 border-[#C8C8C8]/60 hover:border-[#187840] hover:text-[#187840]'}`}>
+                                            {f === 'tous' ? 'Tous' : f}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Grille des Activités */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    {ACTIVITES.filter(act => filtreAct === 'tous' || act.type === filtreAct).map((act) => (
+                                        <motion.div key={act.id} 
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 flex flex-col justify-between group transition-all duration-300">
+                                            <div>
+                                                <div className="h-48 overflow-hidden relative">
+                                                    <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
+                                                    <img src={act.img} alt={act.titre} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
+                                                        {act.type}
+                                                    </span>
+                                                </div>
+                                                <div className="p-6">
+                                                    <div className="text-[10px] font-extrabold text-[#187840] mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                                                        <Calendar size={12} /> {act.date}
+                                                    </div>
+                                                    <h3 className="text-base font-extrabold text-[#003058] mb-3 group-hover:text-[#187840] transition-colors">{act.titre}</h3>
+                                                    <p className="text-xs text-slate-500 leading-relaxed text-justify">{act.desc}</p>
+                                                </div>
+                                            </div>
+                                            <div className="p-6 pt-0 border-t border-slate-50 mt-4 flex items-center justify-between gap-4">
+                                                <div className="text-xs font-medium text-slate-400">
+                                                    {act.places > 0 ? (
+                                                        <span className="text-[#187840] font-bold">{act.places} place(s) restante(s)</span>
+                                                    ) : (
+                                                        <span className="text-red-500 font-bold">Complet</span>
+                                                    )}
+                                                </div>
+                                                {inscriptions[act.id] ? (
+                                                    <span className="flex items-center gap-1.5 text-xs text-[#187840] font-black uppercase tracking-wider bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
+                                                        <Check size={14} /> Inscrit
+                                                    </span>
+                                                ) : act.places > 0 ? (
+                                                    <button 
+                                                        onClick={() => inscrireActivite(act)}
+                                                        className="bg-[#003058] hover:bg-[#002850] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 shadow-sm">
+                                                        S'inscrire
+                                                    </button>
+                                                ) : (
+                                                    <button 
+                                                        disabled
+                                                        className="bg-slate-100 text-slate-400 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
+                                                        Fermé
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            /* Galerie Médias */
+                            <div>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                    {MEDIAS.map((media) => (
+                                        <motion.div key={media.id}
+                                            whileHover={{ scale: 1.02 }}
+                                            onClick={() => setLightboxImage(media)}
+                                            className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 aspect-[4/3] cursor-pointer group">
+                                            <img src={media.url} alt={media.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
+                                                <span className="text-[9px] uppercase font-black tracking-widest text-[#187840] mb-1 bg-white px-2 py-0.5 rounded-full w-max">{media.type}</span>
+                                                <h4 className="font-extrabold text-xs tracking-wide truncate">{media.titre}</h4>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </section>
 
                 {/* ── UFR MET — MAQUETTES (données Firestore) ── */}
-                <section id="ufr-met" className="py-16 bg-slate-50 border-t border-b border-gray-100 px-6 scroll-mt-20">
+                <section id="ufr-met" className="py-16 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-12">
-                            <h2 className="text-2xl font-extrabold text-[#0f213a]">L'UFR Métiers & Technologies</h2>
+                            <h2 className="text-2xl font-extrabold text-[#003058]">L'UFR Métiers & Technologies</h2>
                             <p className="text-gray-500 text-xs mt-1">Visualisez ou téléchargez les maquettes réelles de vos filières.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                             {/* IT */}
-                            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
+                            <div className="bg-white border border-[#C8C8C8] rounded-xl p-6 shadow-sm flex flex-col justify-between">
                                 <div>
-                                    <h3 className="font-bold text-base text-[#0f213a] mb-2">Informatique & Télécommunications (IT)</h3>
+                                    <h3 className="font-bold text-base text-[#003058] mb-2">Informatique & Télécommunications (IT)</h3>
                                     <p className="text-xs text-slate-600 leading-relaxed text-justify mb-6">
                                         Cette filière forme les futurs experts du numérique à travers un cursus rigoureux mêlant développement d'applications, administration de bases de données, sécurité des réseaux Cisco et administration Linux avancée.
                                     </p>
@@ -504,7 +787,7 @@ export default function Home() {
                                         Voir la maquette
                                     </button>
                                     <button onClick={() => maqIT ? déclencherTéléchargement(maqIT.url, maqIT.nom) : alert('Maquette IT non disponible.')}
-                                        className="flex-1 bg-[#0f213a] hover:bg-[#1e3a5f] text-white py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                        className="flex-1 bg-[#003058] hover:bg-[#002850] text-white py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm">
                                         <span>Télécharger</span>
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -514,9 +797,9 @@ export default function Home() {
                             </div>
 
                             {/* HEC */}
-                            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
+                            <div className="bg-white border border-[#C8C8C8] rounded-xl p-6 shadow-sm flex flex-col justify-between">
                                 <div>
-                                    <h3 className="font-bold text-base text-[#0f213a] mb-2">Hautes Études Commerciales (HEC)</h3>
+                                    <h3 className="font-bold text-base text-[#003058] mb-2">Hautes Études Commerciales (HEC)</h3>
                                     <p className="text-xs text-slate-600 leading-relaxed text-justify mb-6">
                                         Orientée vers la gestion et la stratégie d'entreprise, cette filière prépare aux métiers de la finance globale, de l'audit de performance, du contrôle analytique et du management international.
                                     </p>
@@ -542,31 +825,121 @@ export default function Home() {
 
                 {/* ── CONTACT ── */}
                 <section id="contact" className="py-16 px-6 max-w-xl mx-auto scroll-mt-20">
-                    <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                        <h3 className="text-lg font-bold text-[#0f213a] mb-1 text-center">Formulaire de Contact</h3>
-                        <p className="text-gray-400 text-[11px] text-center mb-4">Portail de communication avec les instances du Bureau.</p>
-                        <div className="space-y-3">
-                            {[
-                                { label: 'Nom Complet', type: 'text', placeholder: 'Fatou Diop' },
-                                { label: 'Adresse Email Pro', type: 'email', placeholder: 'votre.nom@ucak.edu.sn' },
-                                { label: 'Numéro de Téléphone', type: 'tel', placeholder: '+221 77 000 00 00' },
-                            ].map(f => (
-                                <div key={f.label}>
-                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{f.label}</label>
-                                    <input type={f.type} placeholder={f.placeholder}
-                                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#22c55e]" />
-                                </div>
-                            ))}
+                    <div className="bg-white border border-gray-200 p-8 rounded-3xl shadow-sm relative overflow-hidden">
+                        <h3 className="text-lg font-black text-[#003058] mb-1 text-center">Formulaire de Contact</h3>
+                        <p className="text-slate-400 text-[11px] text-center mb-6 font-semibold">Portail de communication avec les instances du Bureau.</p>
+                        
+                        <form onSubmit={gererSoumissionContact} className="space-y-4">
+                            {/* Banderoles de Statut */}
+                            <AnimatePresence>
+                                {contactStatus && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className={`p-4 rounded-xl border text-xs font-semibold leading-relaxed flex items-start gap-2.5 overflow-hidden ${
+                                            contactStatus.type === 'success' 
+                                                ? 'bg-green-50 text-[#125e31] border-green-200' 
+                                                : 'bg-red-50 text-red-600 border-red-200'
+                                        }`}>
+                                        <span className="mt-0.5 select-none shrink-0">
+                                            {contactStatus.type === 'success' ? '✅' : '⚠️'}
+                                        </span>
+                                        <span>{contactStatus.msg}</span>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* Nom Complet */}
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Requête</label>
-                                <textarea rows="3" placeholder="Votre message..."
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#22c55e]" />
+                                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nom Complet</label>
+                                <input 
+                                    type="text" 
+                                    value={nomContact}
+                                    onChange={e => {
+                                        setNomContact(e.target.value);
+                                        if (contactErrors.nom) setContactErrors(p => ({ ...p, nom: null }));
+                                    }}
+                                    disabled={contactSubmitting}
+                                    placeholder="Fatou Diop"
+                                    className={`input-field ${contactErrors.nom ? 'border-red-400 focus:ring-red-200' : ''}`} 
+                                />
+                                {contactErrors.nom && (
+                                    <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.nom}</p>
+                                )}
                             </div>
-                            <button onClick={() => alert('Message transmis avec succès.')}
-                                className="w-full bg-[#22c55e] text-white py-2.5 text-xs font-bold rounded-lg hover:bg-green-600 transition-colors shadow-sm">
-                                Soumettre la demande
+
+                            {/* Adresse Email Pro */}
+                            <div>
+                                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Adresse Email Pro</label>
+                                <input 
+                                    type="email" 
+                                    value={emailContact}
+                                    onChange={e => {
+                                        setEmailContact(e.target.value);
+                                        if (contactErrors.email) setContactErrors(p => ({ ...p, email: null }));
+                                    }}
+                                    disabled={contactSubmitting}
+                                    placeholder="votre.nom@ucak.edu.sn"
+                                    className={`input-field ${contactErrors.email ? 'border-red-400 focus:ring-red-200' : ''}`} 
+                                />
+                                {contactErrors.email && (
+                                    <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.email}</p>
+                                )}
+                            </div>
+
+                            {/* Numéro de Téléphone */}
+                            <div>
+                                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Numéro de Téléphone (Optionnel)</label>
+                                <input 
+                                    type="tel" 
+                                    value={telContact}
+                                    onChange={e => {
+                                        setTelContact(e.target.value);
+                                        if (contactErrors.telephone) setContactErrors(p => ({ ...p, telephone: null }));
+                                    }}
+                                    disabled={contactSubmitting}
+                                    placeholder="+221 77 000 00 00"
+                                    className={`input-field ${contactErrors.telephone ? 'border-red-400 focus:ring-red-200' : ''}`} 
+                                />
+                                {contactErrors.telephone && (
+                                    <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.telephone}</p>
+                                )}
+                            </div>
+
+                            {/* Message / Requête */}
+                            <div>
+                                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Votre Message</label>
+                                <textarea 
+                                    rows="3" 
+                                    value={msgContact}
+                                    onChange={e => {
+                                        setMsgContact(e.target.value);
+                                        if (contactErrors.message) setContactErrors(p => ({ ...p, message: null }));
+                                    }}
+                                    disabled={contactSubmitting}
+                                    placeholder="Décrivez votre demande ou suggestion..."
+                                    className={`input-field resize-none ${contactErrors.message ? 'border-red-400 focus:ring-red-200' : ''}`} 
+                                />
+                                {contactErrors.message && (
+                                    <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.message}</p>
+                                )}
+                            </div>
+
+                            <button 
+                                type="submit"
+                                disabled={contactSubmitting}
+                                className="btn-primary w-full flex items-center justify-center gap-2 py-3 mt-4 disabled:opacity-50">
+                                {contactSubmitting ? (
+                                    <>
+                                        <Loader2 className="animate-spin w-4 h-4" />
+                                        <span>Transmission en cours...</span>
+                                    </>
+                                ) : (
+                                    <span>Soumettre la demande</span>
+                                )}
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </section>
 
@@ -575,27 +948,27 @@ export default function Home() {
             {/* ════════════════════════════════════════
           FOOTER
       ════════════════════════════════════════ */}
-            <footer className="bg-[#0f213a] text-white pt-10 pb-4 px-6 border-t border-slate-800 text-xs">
+            <footer className="bg-[#003058] text-white pt-10 pb-4 px-6 border-t border-slate-800 text-xs">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
 
                     {/* Contacts */}
                     <div className="space-y-3">
-                        <h5 className="font-bold text-[#22c55e] uppercase tracking-wider">Contacts</h5>
+                        <h5 className="font-bold text-[#187840] uppercase tracking-wider">Contacts</h5>
                         <div className="text-slate-400 space-y-3 leading-relaxed">
                             <div className="flex items-start gap-2.5">
-                                <svg className="w-4 h-4 text-[#22c55e] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-[#187840] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 </svg>
                                 <span>Complexe Universitaire de Touba, Mbacké, Sénégal</span>
                             </div>
                             <div className="flex items-center gap-2.5">
-                                <svg className="w-4 h-4 text-[#22c55e] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-[#187840] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                                 <a href="tel:+221338000000" className="hover:text-white underline">+221 33 800 00 00</a>
                             </div>
                             <div className="flex items-center gap-2.5">
-                                <svg className="w-4 h-4 text-[#22c55e] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-[#187840] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                                 <a href="mailto:contact.met@ucak.edu.sn" className="hover:text-white underline">contact.met@ucak.edu.sn</a>
@@ -607,10 +980,10 @@ export default function Home() {
                     <div className="space-y-1.5">
                         <h5 className="font-bold text-slate-300 uppercase tracking-wider">Navigation</h5>
                         <ul className="space-y-1 text-slate-400">
-                            <li><a href="#about-club" className="hover:text-[#22c55e] transition-colors">L'Institution</a></li>
-                            <li><a href="#fonctionnement" className="hover:text-[#22c55e] transition-colors">Règlement Interne</a></li>
-                            <li><a href="#composition-bureau" className="hover:text-[#22c55e] transition-colors">Le Bureau</a></li>
-                            <li><a href="#ufr-met" className="hover:text-[#22c55e] transition-colors">L'UFR MET</a></li>
+                            <li><a href="#about-club" className="hover:text-[#187840] transition-colors">L'Institution</a></li>
+                            <li><a href="#fonctionnement" className="hover:text-[#187840] transition-colors">Règlement Interne</a></li>
+                            <li><a href="#composition-bureau" className="hover:text-[#187840] transition-colors">Le Bureau</a></li>
+                            <li><a href="#ufr-met" className="hover:text-[#187840] transition-colors">L'UFR MET</a></li>
                         </ul>
                     </div>
 
@@ -618,9 +991,9 @@ export default function Home() {
                     <div className="space-y-1.5">
                         <h5 className="font-bold text-slate-300 uppercase tracking-wider">Espace Maquettes</h5>
                         <ul className="space-y-1 text-slate-400">
-                            <li><a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer" className="hover:text-[#22c55e]">Portail UCAK ↗</a></li>
-                            <li><button onClick={() => maqIT ? ouvrirFichier(maqIT.url, maqIT.nom) : alert('Maquette IT non disponible.')} className="hover:text-[#22c55e] text-left">Maquette IT</button></li>
-                            <li><button onClick={() => maqHEC ? ouvrirFichier(maqHEC.url, maqHEC.nom) : alert('Maquette HEC non disponible.')} className="hover:text-[#22c55e] text-left">Maquette HEC</button></li>
+                            <li><a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer" className="hover:text-[#187840]">Portail UCAK ↗</a></li>
+                            <li><button onClick={() => maqIT ? ouvrirFichier(maqIT.url, maqIT.nom) : alert('Maquette IT non disponible.')} className="hover:text-[#187840] text-left">Maquette IT</button></li>
+                            <li><button onClick={() => maqHEC ? ouvrirFichier(maqHEC.url, maqHEC.nom) : alert('Maquette HEC non disponible.')} className="hover:text-[#187840] text-left">Maquette HEC</button></li>
                         </ul>
                     </div>
 
@@ -656,6 +1029,103 @@ export default function Home() {
                     <span>© {new Date().getFullYear()} Club-MET UCAK. Tous droits réservés.</span>
                 </div>
             </footer>
+            {/* Toast Notification */}
+            <AnimatePresence>
+                {toastMessage && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 50, scale: 0.9 }}
+                        className="fixed bottom-6 right-6 z-50 bg-[#187840] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10 font-bold text-xs select-none">
+                        <Check className="w-5 h-5 shrink-0 bg-white/20 p-1 rounded-full text-white" />
+                        <span>{toastMessage}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Inscription Modal */}
+            <AnimatePresence>
+                {inscrireModal && (
+                    <div className="fixed inset-0 z-55 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            onClick={e => e.stopPropagation()}
+                            className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-gray-100 overflow-hidden relative text-slate-800">
+                            <button 
+                                onClick={() => setInscrireModal(null)}
+                                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors z-10">
+                                <X size={16} />
+                            </button>
+                            <span className="inline-block bg-[#187840]/10 text-[#187840] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                                Inscription Activité
+                            </span>
+                            <h3 className="text-lg font-extrabold text-[#003058] mb-2">{inscrireModal.titre}</h3>
+                            <p className="text-xs text-slate-400 mb-6 font-medium">Complétez le formulaire ci-dessous pour réserver votre place.</p>
+                            
+                            <form onSubmit={gererInscription} className="space-y-4">
+                                <div className="text-left">
+                                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nom Complet</label>
+                                    <input 
+                                        type="text" 
+                                        required
+                                        value={nomInscrit}
+                                        onChange={e => setNomInscrit(e.target.value)}
+                                        placeholder="Ex: Fatou Diop"
+                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
+                                    />
+                                </div>
+                                <div className="text-left">
+                                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Adresse Email Pro</label>
+                                    <input 
+                                        type="email" 
+                                        required
+                                        value={emailInscrit}
+                                        onChange={e => setEmailInscrit(e.target.value)}
+                                        placeholder="Ex: fatou.diop@ucak.edu.sn"
+                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
+                                    />
+                                </div>
+                                <button 
+                                    type="submit"
+                                    className="w-full bg-[#187840] hover:bg-green-600 text-white py-3.5 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-colors shadow-md mt-6 flex items-center justify-center gap-2">
+                                    Valider mon inscription
+                                </button>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Media Lightbox */}
+            <AnimatePresence>
+                {lightboxImage && (
+                    <div 
+                        onClick={() => setLightboxImage(null)}
+                        className="fixed inset-0 z-55 flex items-center justify-center p-4 bg-black/95 backdrop-blur-md cursor-zoom-out">
+                        <button 
+                            onClick={() => setLightboxImage(null)}
+                            className="absolute top-6 right-6 text-white hover:text-gray-300 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors z-55">
+                            <X size={24} />
+                        </button>
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            onClick={e => e.stopPropagation()}
+                            className="max-w-4xl w-full flex flex-col items-center select-none cursor-default">
+                            <img src={lightboxImage.url} alt={lightboxImage.titre} className="max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
+                            <div className="text-center mt-5 text-white">
+                                <span className="inline-block bg-[#187840] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
+                                    {lightboxImage.type}
+                                </span>
+                                <h3 className="text-base font-extrabold tracking-wide">{lightboxImage.titre}</h3>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
         </div>
     );

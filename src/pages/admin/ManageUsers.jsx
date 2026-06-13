@@ -134,11 +134,11 @@ export default function ManageUsers() {
     const resetForm = () => { setForm(VIDE); setEditId(null); setImageFile(null); setPreview(null); };
 
     return (
-        <div className="min-h-screen bg-slate-50 p-6 animate-in fade-in duration-500">
+        <div className="min-h-screen bg-[#F8F0F0] p-6 animate-in fade-in duration-500">
 
             {/* Toast */}
             {toast && (
-                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#22c55e]"}`}>
+                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
                     {toast.msg}
                 </div>
             )}
@@ -150,7 +150,7 @@ export default function ManageUsers() {
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
-                        <h3 className="font-black text-xl text-[#0f213a] mb-2">Supprimer ce membre ?</h3>
+                        <h3 className="font-black text-xl text-[#003058] mb-2">Supprimer ce membre ?</h3>
                         <p className="text-sm text-slate-500 mb-8"><strong>{confirmDel.nom}</strong> sera définitivement retiré du bureau.</p>
                         <div className="flex gap-4">
                             <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
@@ -162,15 +162,15 @@ export default function ManageUsers() {
 
             <div className="max-w-5xl mx-auto space-y-8">
                 <div>
-                    <h1 className="text-3xl font-black text-[#0f213a] tracking-tight">Gestion du Bureau</h1>
+                    <h1 className="text-3xl font-black text-[#003058] tracking-tight">Gestion du Bureau</h1>
                     <p className="text-sm text-slate-500 mt-1 font-medium">Ajouter, modifier ou supprimer les membres officiels du bureau.</p>
                 </div>
 
                 {/* Formulaire */}
                 <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
-                    <h2 className="font-bold text-lg text-[#0f213a] mb-6 flex items-center gap-3">
-                        <span className="w-10 h-10 bg-[#22c55e]/10 rounded-2xl flex items-center justify-center">
-                            {editId ? <Pencil className="w-5 h-5 text-[#22c55e]" /> : <UserPlus className="w-5 h-5 text-[#22c55e]" />}
+                    <h2 className="font-bold text-lg text-[#003058] mb-6 flex items-center gap-3">
+                        <span className="w-10 h-10 bg-[#187840]/10 rounded-2xl flex items-center justify-center">
+                            {editId ? <Pencil className="w-5 h-5 text-[#187840]" /> : <UserPlus className="w-5 h-5 text-[#187840]" />}
                         </span>
                         {editId ? "Modifier le membre" : "Ajouter un membre"}
                     </h2>
@@ -178,7 +178,7 @@ export default function ManageUsers() {
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         {/* Photo */}
-                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#F8F0F0] rounded-2xl border border-slate-100">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
                                 {preview
                                     ? <img src={preview} alt="preview" className="w-full h-full object-cover"/>
@@ -187,7 +187,7 @@ export default function ManageUsers() {
                             </div>
                             <div>
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Photo du membre</label>
-                                <label className="cursor-pointer bg-white border border-slate-200 hover:border-[#22c55e] hover:text-[#22c55e] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
+                                <label className="cursor-pointer bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
                                     <ImageIcon size={16} />
                                     {imageFile ? imageFile.name : "Choisir une photo"}
                                     <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden"/>
@@ -201,14 +201,14 @@ export default function ManageUsers() {
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Nom complet *</label>
                             <input type="text" value={form.nom} onChange={e => setForm({ ...form, nom: e.target.value })}
                                    placeholder="Ex: Mamadou Diop"
-                                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white focus:border-[#22c55e] transition-colors"/>
+                                   className="input-field" />
                         </div>
 
                         {/* Poste */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Poste *</label>
                             <select value={form.poste} onChange={e => setForm({ ...form, poste: e.target.value })}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white focus:border-[#22c55e] transition-colors">
+                                    className="input-field">
                                 <option value="">— Sélectionner un poste —</option>
                                 {POSTES.map(p => <option key={p} value={p}>{p}</option>)}
                             </select>
@@ -218,20 +218,20 @@ export default function ManageUsers() {
                         <div className="space-y-1.5 md:col-span-2">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
                             <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white focus:border-[#22c55e] transition-colors">
+                                    className="input-field">
                                 <option value="">— Sélectionner un niveau —</option>
                                 {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
                         </div>
 
                         {uploading && (
-                            <div className="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                <div className="flex justify-between text-[11px] font-bold text-[#0f213a] mb-2">
-                                    <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#22c55e]" /> Upload en cours...</span>
-                                    <span className="text-[#22c55e]">{progress}%</span>
+                            <div className="md:col-span-2 bg-[#F8F0F0] p-4 rounded-xl border border-slate-100">
+                                <div className="flex justify-between text-[11px] font-bold text-[#003058] mb-2">
+                                    <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#187840]" /> Upload en cours...</span>
+                                    <span className="text-[#187840]">{progress}%</span>
                                 </div>
                                 <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                                    <div className="bg-[#22c55e] h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${progress}%` }}/>
+                                    <div className="bg-[#187840] h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${progress}%` }}/>
                                 </div>
                             </div>
                         )}
@@ -244,7 +244,7 @@ export default function ManageUsers() {
                                 </button>
                             )}
                             <button type="submit" disabled={uploading}
-                                    className="bg-[#0f213a] text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-[#1e3a5f] transition-colors disabled:opacity-60 shadow-sm shadow-[#0f213a]/20 flex items-center gap-2">
+                                    className="btn-primary w-full mt-2">
                                 {uploading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                                 {editId ? "Mettre à jour" : "Ajouter le membre"}
                             </button>
@@ -255,46 +255,46 @@ export default function ManageUsers() {
                 {/* Liste */}
                 <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
                     <div className="flex items-center justify-between mb-8">
-                        <h2 className="font-black text-xl text-[#0f213a] flex items-center gap-3">
-                            <Users className="text-[#22c55e]" size={24} />
+                        <h2 className="font-black text-xl text-[#003058] flex items-center gap-3">
+                            <Users className="text-[#187840]" size={24} />
                             Membres enregistrés
-                            <span className="bg-[#22c55e]/10 text-[#22c55e] text-sm px-3 py-1 rounded-full">{membres.length}</span>
+                            <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{membres.length}</span>
                         </h2>
                     </div>
 
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
-                            <Loader2 className="w-8 h-8 text-[#22c55e] animate-spin" />
+                            <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
                             <p className="text-sm font-medium text-slate-500">Chargement...</p>
                         </div>
                     ) : membres.length === 0 ? (
-                        <div className="text-center py-20 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
                             <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucun membre enregistré.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {membres.map(m => (
-                                <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#22c55e]/30 transition-all group relative">
-                                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
+                                    <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                         <button onClick={() => { setEditId(m.id); setForm({ nom:m.nom, poste:m.poste, classe:m.classe, imageUrl:m.imageUrl||"" }); setPreview(m.imageUrl||null); setImageFile(null); window.scrollTo({ top:0, behavior:"smooth" }); }}
-                                                className="w-7 h-7 bg-white border border-slate-200 hover:border-[#22c55e] hover:text-[#22c55e] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
+                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Pencil size={14} strokeWidth={2.5} />
                                         </button>
                                         <button onClick={() => setConfirmDel(m)}
-                                                className="w-7 h-7 bg-white border border-slate-200 hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
+                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Trash2 size={14} strokeWidth={2.5} />
                                         </button>
                                     </div>
                                     <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
                                         {m.imageUrl
                                             ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover"/>
-                                            : <div className="w-full h-full bg-[#0f213a] flex items-center justify-center text-[#22c55e] text-2xl font-black">{m.nom?.[0]}</div>
+                                            : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
                                         }
                                     </div>
-                                    <h4 className="font-bold text-sm text-[#0f213a] truncate">{m.nom}</h4>
-                                    <p className="text-xs text-[#22c55e] font-semibold mt-1 leading-tight">{m.poste}</p>
-                                    <div className="mt-3 text-[10px] font-bold text-slate-500 bg-slate-50 py-1 rounded-lg border border-slate-100 uppercase tracking-wider">{m.classe}</div>
+                                    <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                    <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
+                                    <div className="mt-3 text-[10px] font-bold text-slate-500 bg-[#F8F0F0] py-1 rounded-lg border border-slate-100 uppercase tracking-wider">{m.classe}</div>
                                 </div>
                             ))}
                         </div>

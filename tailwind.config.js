@@ -9,17 +9,17 @@ export default {
     extend: {
       colors: {
         ucak: {
-          // Nouvelles couleurs modernes et vibrantes
+          // Nouvelles couleurs basées sur le logo
           purple: '#7C3AED',      // Primaire - Élégant et premium
           cyan: '#06B6D4',        // Secondaire - Technologie et innovation
           lime: '#84CC16',        // Accent - Énergie et dynamique
-          blue: '#3B82F6',        // Bleu (mis à jour pour meilleur contraste)
-          green: '#10B981',       // Vert (mis à jour)
-          gold: '#FBBF24',        // Or (mis à jour pour meilleur contraste)
-          light: '#F8FAFC',       // Fond clair
-          dark: '#0F172A',        // Slate-950 - Fond dark mode
-          'dark-card': '#1E293B', // Slate-800 - Cartes dark mode
-          'dark-hover': '#334155' // Slate-700 - Survols dark mode
+          blue: '#003058',        // Bleu MET
+          green: '#187840',       // Vert MET
+          gold: '#FBBF24',        
+          light: '#F8F0F0',       // Gris clair
+          dark: '#002850',        // Bleu foncé secondaire
+          'dark-card': '#1E293B', 
+          'dark-hover': '#334155' 
         },
       },
       fontFamily: {

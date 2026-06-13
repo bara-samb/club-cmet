@@ -33,20 +33,20 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f213a] flex items-center justify-center px-4">
+        <div className="min-h-screen bg-[#003058] flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
 
                 {/* Header */}
-                <div className="bg-[#0f213a] px-8 py-8 text-center border-b border-slate-700">
+                <div className="bg-[#003058] px-8 py-8 text-center border-b border-slate-700">
                     <img src="/images/logo-CMET.jpeg" alt="Club-MET"
-                         className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-[#22c55e]/50 object-cover" />
+                         className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-[#187840]/50 object-cover" />
                     <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
                     <p className="text-slate-400 text-[11px] mt-0.5">UFR Métiers & Technologies · UCAK</p>
                 </div>
 
                 {/* Body */}
                 <div className="px-8 py-8">
-                    <h2 className="text-[#0f213a] font-bold text-lg mb-1">Connexion</h2>
+                    <h2 className="text-[#003058] font-bold text-lg mb-1">Connexion</h2>
                     <p className="text-slate-400 text-xs mb-6">Accédez à votre espace personnel Club-MET.</p>
 
                     {error && (
@@ -64,24 +64,24 @@ export default function Login() {
                             <input type="email" required value={form.email}
                                    onChange={e => setForm({ ...form, email: e.target.value })}
                                    placeholder="prenom.nom@ucak.edu.sn"
-                                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-1 focus:ring-[#22c55e]/30 transition-colors" />
+                                   className="input-field" />
                         </div>
 
                         <div>
                             <div className="flex justify-between items-center mb-1.5">
                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Mot de passe</label>
-                                <span className="text-[10px] text-[#22c55e] font-semibold cursor-pointer hover:underline">
+                                <span className="text-[10px] text-[#187840] font-semibold cursor-pointer hover:underline">
                   Mot de passe oublié ?
                 </span>
                             </div>
                             <input type="password" required value={form.password}
                                    onChange={e => setForm({ ...form, password: e.target.value })}
                                    placeholder="••••••••"
-                                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-1 focus:ring-[#22c55e]/30 transition-colors" />
+                                   className="input-field" />
                         </div>
 
                         <button type="submit" disabled={loading}
-                                className="w-full bg-[#22c55e] hover:bg-green-600 text-white py-3 rounded-xl text-xs font-bold shadow-sm disabled:opacity-60 transition-colors flex items-center justify-center gap-2 mt-2">
+                                className="btn-primary w-full mt-2 disabled:opacity-60">
                             {loading ? (
                                 <>
                                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -96,7 +96,7 @@ export default function Login() {
 
                     <p className="text-center text-xs text-slate-400 mt-6">
                         Pas encore de compte ?{" "}
-                        <Link to="/register" className="text-[#22c55e] font-bold hover:underline">S'inscrire</Link>
+                        <Link to="/register" className="text-[#187840] font-bold hover:underline">S'inscrire</Link>
                     </p>
                     <div className="text-center mt-3">
                         <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">← Retour à l'accueil</Link>
