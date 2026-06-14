@@ -1,62 +1,75 @@
-# 🌍 CLUB MET - UCAK (Plateforme Officielle)
+:
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![React](https://img.shields.io/badge/React-18-61DAFB.svg) ![Vite](https://img.shields.io/badge/Vite-5.0-646CFF.svg) ![Tailwind](https://img.shields.io/badge/Tailwind-3.0-38B2AC.svg)
+🚀 Club MET - Plateforme de Gestion et de Rayonnement
+Bienvenue sur le dépôt officiel du Club des Métiers et Technologies (MET) de l'Université Cheikh Ahmadoul Khadim (UCAK). Cette plateforme est dédiée à la gestion interne du club, à la transparence de ses activités et au partage de ressources académiques.
 
-Bienvenue sur le dépôt du Frontend de la plateforme numérique du **Club Métiers et Technologies (MET)** de l'Université Cheikh Ahmadoul Khadim (UCAK) de Touba.
+📋 À propos du projet
+Le Club MET a pour vocation d'apporter une expertise technologique et organisationnelle au sein de l'UCAK. Ce projet web permet de :
 
-Cette application est une **Single Page Application (SPA)** moderne, conçue pour centraliser la vie étudiante, l'apprentissage et l'insertion professionnelle.
+Gérer les activités : Suivi des événements (Génie en Herbe, etc.) et actions sociales.
 
----
+Centraliser les ressources : Accès aux maquettes de formation et documents officiels.
 
-## 🚀 Fonctionnalités Clés
+Assurer la transparence : Suivi financier rigoureux (Recettes/Dépenses) et bilans des commissions.
 
-### 🏛️ Institutionnel & Vie du Club
-* **Présentation Dynamique** : Page "À Propos" avec effets parallaxe et distinction claire entre le portail Université et le Club.
-* **Newsroom** : Fil d'actualités et Agenda des événements (Hackathons, Conférences) avec filtrage par catégorie.
+Dynamiser la communauté : Galerie média pour valoriser les moments forts du club.
 
-### 📚 Pôle Savoir (LMS)
-* **Catalogue de Cours** : Interface type "Netflix" pour les formations vidéo avec barre de progression et niveaux.
-* **Bibliothèque Numérique** : Accès et téléchargement de documents (PDF, ePub) filtrables par filière (Info/HEC).
-* **Lecteur Immersif** : Mode "Focus" pour suivre les cours sans distraction.
+📊 Engagement et Transparence
+Le projet reflète l'engagement du Club MET envers ses membres à travers :
 
-### 💼 Carrière & Réseau
-* **Career Center** : Générateur de CV professionnel (WYSIWYG) avec export PDF aux couleurs de l'UCAK.
-* **Networking Hub** : Annuaire des Alumni (Anciens) avec carte du monde des talents et badge "Mentor".
-* **Job Board** : Offres de stages et d'emplois dédiées aux étudiants.
-* **Showroom** : Vitrine des projets étudiants et des profils talents.
+Gestion des Commissions : Suivi des activités de la Cellule Organisation (logistique des matchs, hygiène) et de la Commission Sociale (assistance aux étudiants).
 
-### 👤 Espace Membre (Innovations)
-* **Smart Dashboard** : Tableau de bord personnel avec statistiques et gamification (Badges, XP).
-* **E-Carte Étudiant** : Carte numérique interactive (Recto/Verso avec QR Code) et **imprimable** au format CR80.
-* **Module Élections** : Système de vote sécurisé pour élire le bureau du club (réservé aux membres vérifiés).
+Transparence Financière : Enregistrement rigoureux des recettes (cotisations, ventes) et des dépenses (social, matériel, rafraîchissements).
 
-### ⚡ Performance & UX
-* **Optimisation** : Lazy Loading (chargement différé) des pages et images pour une rapidité maximale.
-* **Design System** : Thème sombre/clair (Dark Mode), animations fluides (Framer Motion) et motifs culturels "Mouride Tech".
+Responsabilité Institutionnelle : Respect du cadre de l'UCAK, incluant la gestion éthique des partenariats et la communication interne.
 
----
+🛠️ Stack Technique
+Frontend : React.js, Vite, Tailwind CSS, Framer Motion, Lucide React.
 
-## 🛠 Stack Technique
+Backend / Base de données : Supabase (Authentification, Database, Storage).
 
-Ce projet utilise les dernières technologies du web moderne :
+Déploiement : Vercel / Netlify.
 
-* **Core** : [React](https://react.dev/) (v18) + [Vite](https://vitejs.dev/) (Build tool ultra-rapide).
-* **Styling** : [Tailwind CSS](https://tailwindcss.com/) (Utilitaire-first CSS).
-* **Animations** : [Framer Motion](https://www.framer.com/motion/) (Transitions de pages et micro-interactions).
-* **Routing** : [React Router DOM](https://reactrouter.com/) (Navigation SPA).
-* **Icônes** : [Lucide React](https://lucide.dev/).
+📂 Structure du Projet
+Plaintext
+src/
+├── components/       # Composants UI (Sidebar, Layout, etc.)
+├── config/           # Configuration Supabase
+├── pages/
+│   ├── admin/        # Pages protégées (ManageEvents, ManageMedia)
+│   ├── student/        # Pages protégées (ManageEvents, ManageMedia)
+│   └── public/       # Page d'accueil et sections publiques
+└── assets/           # Ressources (maquettes PDF, images)
+🔐 Fonctionnalités Administrateur
+L'interface d'administration permet aux membres de la commission de :
 
----
+Gestion des Événements : Ajouter, modifier ou supprimer des activités avec leurs types et descriptions.
 
-## 💻 Installation & Démarrage
+Gestion des Médias : Uploader des photos et vidéos pour la galerie.
 
-Suivez ces étapes pour lancer le projet en local sur votre machine.
+Gestion Documentaire : Mise à jour des ressources académiques et rapports d'activité.
 
-### Prérequis
-* Node.js (v16 ou supérieur)
-* npm (installé avec Node.js)
+🚀 Installation
+Cloner le dépôt :
+git clone https://github.com/bara-samb/club-cmet.git
 
-### 1. Cloner le dépôt
-```bash
-git clone [https://github.com/votre-username/club-met-frontend.git](https://github.com/votre-username/club-met-frontend.git)
-cd club-met-frontend
+Installer les dépendances :
+npm install
+
+Configurer les variables d'environnement (.env) avec vos clés Supabase.
+
+Lancer le serveur de développement :
+npm run dev
+
+🤝 Contribution
+Pour contribuer :
+
+Créez une branche (git checkout -b feature/nom-fonctionnalite).
+
+Commitez vos changements (git commit -m "ajout de...").
+
+Poussez vers la branche (git push origin feature/nom-fonctionnalite).
+
+Ouvrez une Pull Request.
+
+Développé avec ❤️ par l'équipe technique du Club MET - UCAK.
