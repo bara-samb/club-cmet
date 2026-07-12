@@ -1,0 +1,360 @@
+// src/pages/admin/ManageRegisteredUsers.jsx
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../config/supabaseClient";
+import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail } from "lucide-react";
+
+const NIVEAUX = [
+    "TC1", "TC2",
+    "Licence 1 IT", "Licence 2 IT", "Licence 3 IT",
+    "Licence 1 HEC", "Licence 2 HEC", "Licence 3 HEC",
+    "Master 1 IT", "Master 2 IT", "Master 1 HEC", "Master 2 HEC",
+];
+
+export default function ManageRegisteredUsers() {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [roleFilter, setRoleFilter] = useState("all");
+    const [levelFilter, setLevelFilter] = useState("all");
+    const [actionLoading, setActionLoading] = useState(null); // id of user undergoing action
+    const [toast, setToast] = useState(null);
+    const [confirmDeleteUser, setConfirmDeleteUser] = useState(null);
+    const [confirmRoleUser, setConfirmRoleUser] = useState(null);
+
+    const showToast = (msg, type = "success") => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
+
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from("users")
+                .select("*")
+                .order("createdAt", { ascending: false });
+
+            if (error) throw error;
+            setUsers(data || []);
+        } catch (err) {
+            console.error("Erreur chargement utilisateurs:", err);
+            showToast("Impossible de charger les utilisateurs.", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+
+        // Abonnement Supabase Temps Réel
+        const channel = supabase.channel("users-db-changes")
+            .on("postgres_changes", { event: "*", schema: "public", table: "users" }, () => {
+                fetchUsers();
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
+
+    const handleToggleRole = async (user) => {
+        const targetRole = user.role === "admin" ? "student" : "admin";
+        setActionLoading(user.id);
+        setConfirmRoleUser(null);
+        try {
+            const { error } = await supabase
+                .from("users")
+                .update({ role: targetRole })
+                .eq("id", user.id);
+
+            if (error) throw error;
+            showToast(`Rôle mis à jour avec succès : ${user.prenom} ${user.nom} est désormais ${targetRole === "admin" ? "Administrateur" : "Étudiant"}.`);
+        } catch (err) {
+            console.error("Erreur mise à jour rôle:", err);
+            showToast("Échec de la modification du rôle.", "error");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleDeleteUser = async (user) => {
+        setActionLoading(user.id);
+        setConfirmDeleteUser(null);
+        try {
+            const { error } = await supabase
+                .from("users")
+                .delete()
+                .eq("id", user.id);
+
+            if (error) throw error;
+            showToast(`L'utilisateur ${user.prenom} ${user.nom} a été supprimé de l'application.`);
+        } catch (err) {
+            console.error("Erreur suppression utilisateur:", err);
+            showToast("Impossible de supprimer cet utilisateur.", "error");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    // Filtrage
+    const filteredUsers = users.filter((u) => {
+        const matchesSearch =
+            (u.nom || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (u.prenom || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (u.email || "").toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesRole = roleFilter === "all" || u.role === roleFilter;
+        const matchesLevel = levelFilter === "all" || u.niveau === levelFilter;
+        return matchesSearch && matchesRole && matchesLevel;
+    });
+
+    // Statistiques
+    const totalCount = users.length;
+    const adminCount = users.filter((u) => u.role === "admin").length;
+    const studentCount = users.filter((u) => u.role === "student").length;
+
+    return (
+        <div className="min-h-screen bg-[#F8F0F0] p-4 md:p-8 animate-in fade-in duration-500">
+            {/* Toast Alerts */}
+            {toast && (
+                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all transform translate-y-0 ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                    {toast.msg}
+                </div>
+            )}
+
+            {/* Modal de confirmation de rôle */}
+            {confirmRoleUser && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+                        <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                            <Shield className="w-8 h-8 text-[#003058]" />
+                        </div>
+                        <h3 className="font-black text-xl text-[#003058] mb-2">Modifier le rôle ?</h3>
+                        <p className="text-sm text-slate-500 mb-6">
+                            Voulez-vous vraiment changer le rôle de <strong>{confirmRoleUser.prenom} {confirmRoleUser.nom}</strong> en tant que{" "}
+                            <span className="font-extrabold text-[#187840]">
+                                {confirmRoleUser.role === "admin" ? "Étudiant" : "Administrateur"}
+                            </span> ?
+                        </p>
+                        <div className="flex gap-4">
+                            <button onClick={() => setConfirmRoleUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">
+                                Annuler
+                            </button>
+                            <button onClick={() => handleToggleRole(confirmRoleUser)} className="flex-1 bg-[#003058] hover:bg-[#002545] text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">
+                                Confirmer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de confirmation de suppression */}
+            {confirmDeleteUser && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                            <ShieldAlert className="w-8 h-8 text-red-500" />
+                        </div>
+                        <h3 className="font-black text-xl text-red-600 mb-2">Supprimer l'utilisateur ?</h3>
+                        <p className="text-sm text-slate-500 mb-6">
+                            Cette action supprimera définitivement le compte de <strong>{confirmDeleteUser.prenom} {confirmDeleteUser.nom}</strong> ({confirmDeleteUser.email}) de l'application Club-MET.
+                        </p>
+                        <div className="flex gap-4">
+                            <button onClick={() => setConfirmDeleteUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">
+                                Annuler
+                            </button>
+                            <button onClick={() => handleDeleteUser(confirmDeleteUser)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm shadow-red-500/20">
+                                Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="max-w-6xl mx-auto space-y-6">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-black text-[#003058] tracking-tight">Utilisateurs Inscrits</h1>
+                        <p className="text-sm text-slate-500 mt-1 font-medium">Visualiser, filtrer et gérer les permissions des utilisateurs enregistrés sur la plateforme.</p>
+                    </div>
+                    <button onClick={fetchUsers} className="self-start md:self-auto flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors">
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Actualiser
+                    </button>
+                </div>
+
+                {/* Stat Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Utilisateurs</span>
+                            <span className="block text-2xl font-black text-[#003058] mt-1">{totalCount}</span>
+                        </div>
+                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+                            <User size={22} />
+                        </div>
+                    </div>
+                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Administrateurs</span>
+                            <span className="block text-2xl font-black text-[#187840] mt-1">{adminCount}</span>
+                        </div>
+                        <div className="w-12 h-12 bg-[#187840]/10 rounded-xl flex items-center justify-center text-[#187840]">
+                            <Shield size={22} />
+                        </div>
+                    </div>
+                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Étudiants</span>
+                            <span className="block text-2xl font-black text-[#003058] mt-1">{studentCount}</span>
+                        </div>
+                        <div className="w-12 h-12 bg-[#003058]/10 rounded-xl flex items-center justify-center text-[#003058]">
+                            <GraduationCap size={22} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Filters Row */}
+                <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center">
+                    {/* Search */}
+                    <div className="relative w-full md:flex-1">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                        <input
+                            type="text"
+                            placeholder="Rechercher par nom, prénom ou email..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
+                        />
+                    </div>
+
+                    {/* Role Filter */}
+                    <div className="w-full md:w-48">
+                        <select
+                            value={roleFilter}
+                            onChange={(e) => setRoleFilter(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840]"
+                        >
+                            <option value="all">Tous les rôles</option>
+                            <option value="student">Étudiants</option>
+                            <option value="admin">Administrateurs</option>
+                        </select>
+                    </div>
+
+                    {/* Level Filter */}
+                    <div className="w-full md:w-56">
+                        <select
+                            value={levelFilter}
+                            onChange={(e) => setLevelFilter(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840]"
+                        >
+                            <option value="all">Tous les niveaux</option>
+                            {NIVEAUX.map((l) => (
+                                <option key={l} value={l}>
+                                    {l}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Users List Container */}
+                <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center py-24 gap-3">
+                            <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
+                            <p className="text-sm font-bold text-slate-500">Chargement des comptes...</p>
+                        </div>
+                    ) : filteredUsers.length === 0 ? (
+                        <div className="text-center py-20 bg-white px-4">
+                            <User className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                            <h3 className="font-bold text-slate-600">Aucun utilisateur trouvé</h3>
+                            <p className="text-xs text-slate-400 mt-1">Essayez d'ajuster vos filtres ou termes de recherche.</p>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full border-collapse text-left">
+                                <thead>
+                                    <tr className="border-b border-slate-100 bg-slate-50/70">
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Utilisateur</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Email</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Niveau / Classe</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Rôle</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {filteredUsers.map((user) => {
+                                        const initials = `${user.prenom?.[0] || ""}${user.nom?.[0] || ""}`.toUpperCase();
+                                        const isActionLoading = actionLoading === user.id;
+
+                                        return (
+                                            <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black shadow-sm shrink-0 ${user.role === "admin" ? "bg-[#187840]/10 text-[#187840] border border-[#187840]/10" : "bg-[#003058]/10 text-[#003058] border border-[#003058]/10"}`}>
+                                                            {user.avatar_url || user.profilePic ? (
+                                                                <img src={user.avatar_url || user.profilePic} alt="" className="w-full h-full object-cover rounded-xl" />
+                                                            ) : (
+                                                                initials || "?"
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-xs font-bold text-[#003058]">{user.prenom} {user.nom}</div>
+                                                            <div className="text-[10px] text-slate-400 font-semibold mt-0.5">ID: {user.id.slice(0, 8)}...</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+                                                        <Mail size={12} className="text-slate-400" />
+                                                        {user.email}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#F8F0F0] border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
+                                                        {user.niveau || "Non spécifié"}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={user.role === "admin" ? "badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20 text-[9px] px-2.5 py-1 rounded-full uppercase font-black" : "badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10 text-[9px] px-2.5 py-1 rounded-full uppercase font-black"}>
+                                                        {user.role === "admin" ? "Administrateur" : "Étudiant"}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        {isActionLoading ? (
+                                                            <Loader2 size={16} className="animate-spin text-[#187840]" />
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => setConfirmRoleUser(user)}
+                                                                    title={user.role === "admin" ? "Rétrograder en Étudiant" : "Promouvoir en Administrateur"}
+                                                                    className="p-2 bg-slate-50 hover:bg-[#003058]/10 text-[#003058] border border-slate-200 hover:border-[#003058]/20 rounded-xl transition-all shadow-sm"
+                                                                >
+                                                                    <Shield size={14} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => setConfirmDeleteUser(user)}
+                                                                    title="Supprimer l'utilisateur"
+                                                                    className="p-2 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 border border-slate-200 hover:border-red-200 rounded-xl transition-all shadow-sm"
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}

@@ -1,200 +1,184 @@
-// src/pages/student/Profile.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { Camera, Save, User as UserIcon, Mail, BookOpen, Loader2 } from 'lucide-react';
+import { Camera, Save, Loader2, User } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const NIVEAUX = ['Commun', 'L1', 'L2', 'L3', 'M1', 'M2'];
 
 export default function Profile() {
     const [user, setUser] = useState(null);
-    const [prenom, setPrenom] = useState('');
-    const [nom, setNom] = useState('');
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
-    const [saving, setSaving] = useState(false);
-    const fileInputRef = useRef(null);
+    const [nom, setNom] = useState('');
+    const [prenom, setPrenom] = useState('');
+    const [niveau, setNiveau] = useState('');
 
     useEffect(() => {
-        let active = true;
-        const fetchUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
-            const { data } = await supabase.from('users').select('*').eq('id', session.user.id).single();
-            if (data && active) {
-                setUser(data);
-                setPrenom(data.prenom || '');
-                setNom(data.nom || '');
-            }
-        };
-        fetchUser();
-        return () => { active = false; };
+        getProfile();
     }, []);
 
-    const handleUpdate = async () => {
-        if (!user) return;
-        setSaving(true);
-        const { error } = await supabase.from('users').update({ prenom, nom }).eq('id', user.id);
-        setSaving(false);
-        if (error) {
-            alert("Erreur lors de la mise à jour : " + error.message);
-        } else {
-            setUser(prev => ({ ...prev, prenom, nom }));
-            alert("Profil mis à jour !");
+    const getProfile = async () => {
+        try {
+            setLoading(true);
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            setEmail(session.user.email);
+
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+
+            if (error) throw error;
+
+            if (data) {
+                setUser(data);
+                setNom(data.nom || '');
+                setPrenom(data.prenom || '');
+                setNiveau(data.niveau || '');
+            }
+        } catch (error) {
+            console.error("Erreur chargement profil:", error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handlePhoto = async (e) => {
-        const file = e.target.files[0];
-        if (!file || !user) return;
-        
-        setUploading(true);
-        const fileExt = file.name.split('.').pop();
-        const filePath = `profiles/${user.id}.${fileExt}`;
+    const handleUpload = async (event) => {
+        try {
+            setUploading(true);
+            const file = event.target.files[0];
+            if (!file) return;
 
-        // Upload to bucket 'club-met-storage'
-        const { error: uploadError } = await supabase.storage
-            .from('club-met-storage')
-            .upload(filePath, file, { upsert: true });
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+            const filePath = `avatars/${fileName}`;
 
-        if (uploadError) {
-            alert("Erreur upload photo : " + uploadError.message);
+            const { error: uploadError } = await supabase.storage
+                .from('club-met-storage')
+                .upload(filePath, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage.from('club-met-storage').getPublicUrl(filePath);
+
+            const { error: updateError } = await supabase
+                .from('users')
+                .update({ avatar_url: publicUrl })
+                .eq('id', user.id);
+
+            if (updateError) throw updateError;
+
+            setUser({ ...user, avatar_url: publicUrl });
+            alert('Photo de profil mise à jour !');
+        } catch (error) {
+            alert('Erreur lors de l\'upload : ' + error.message);
+        } finally {
             setUploading(false);
-            return;
-        }
-
-        const { data: { publicUrl } } = supabase.storage
-            .from('club-met-storage')
-            .getPublicUrl(filePath);
-
-        // Ajout d'un timestamp pour contourner le cache du navigateur
-        const urlWithCacheBuster = `${publicUrl}?t=${new Date().getTime()}`;
-
-        const { error: dbError } = await supabase
-            .from('users')
-            .update({ profilePic: urlWithCacheBuster })
-            .eq('id', user.id);
-
-        setUploading(false);
-        if (dbError) {
-            alert("Erreur base de données : " + dbError.message);
-        } else {
-            setUser(prev => ({ ...prev, profilePic: urlWithCacheBuster }));
         }
     };
 
-    if (!user) {
+    const updateProfile = async () => {
+        try {
+            const { error } = await supabase
+                .from('users')
+                .update({ nom, prenom, niveau })
+                .eq('id', user.id);
+
+            if (error) throw error;
+            alert('Profil mis à jour avec succès !');
+        } catch (error) {
+            alert('Erreur lors de la mise à jour : ' + error.message);
+        }
+    };
+
+    if (loading) {
         return (
-            <div className="flex items-center justify-center p-10">
-                <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
+            <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
+                <Loader2 className="animate-spin w-5 h-5" />
+                <span className="text-sm">Chargement du profil...</span>
             </div>
         );
     }
 
-    const initiales = `${user.prenom?.[0] ?? ''}${user.nom?.[0] ?? ''}`.toUpperCase();
-
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
-            {/* Titre de la page */}
-            <div>
-                <h1 className="text-2xl font-black text-[#003058] tracking-tight">Paramètres du profil</h1>
-                <p className="text-sm text-slate-500 mt-1">Gérez vos informations personnelles et votre apparence.</p>
+        <div className="p-4 md:p-6 max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500">
+            {/* En-tête */}
+            <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                    <User className="text-[#003058]" size={22} />
+                </div>
+                <div>
+                    <h1 className="text-xl font-bold text-[#003058] tracking-tight">Mon Profil</h1>
+                    <p className="text-xs text-slate-400 mt-0.5">Gérez vos informations personnelles et votre photo de profil</p>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Colonne Gauche: Avatar & Info Résumé */}
-                <div className="md:col-span-1 space-y-6">
-                    <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm text-center">
-                        <div className="relative inline-block mb-4">
-                            <div className="w-28 h-28 mx-auto rounded-full border-4 border-white shadow-lg overflow-hidden bg-[#F8F0F0] flex items-center justify-center relative group">
-                                {user.profilePic ? (
-                                    <img src={user.profilePic} alt="Profil" className="w-full h-full object-cover" />
-                                ) : (
-                                    <span className="text-3xl font-black text-[#187840]/50">{initiales}</span>
-                                )}
-                                
-                                <div 
-                                    className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    {uploading ? (
-                                        <Loader2 className="w-6 h-6 text-white animate-spin" />
-                                    ) : (
-                                        <>
-                                            <Camera className="w-6 h-6 text-white mb-1" />
-                                            <span className="text-[10px] text-white font-bold">Modifier</span>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                            <input 
-                                type="file" 
-                                accept="image/*"
-                                className="hidden" 
-                                ref={fileInputRef}
-                                onChange={handlePhoto} 
-                                disabled={uploading}
+            <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-8">
+                {/* Photo de profil */}
+                <div className="flex flex-col items-center gap-4">
+                    <div className="relative group">
+                        {user?.avatar_url ? (
+                            <img
+                                src={user.avatar_url}
+                                className="w-32 h-32 rounded-full object-cover border-4 border-slate-100 shadow-md transition-all group-hover:brightness-90"
+                                alt="Avatar"
                             />
-                        </div>
-                        
-                        <h2 className="text-lg font-bold text-[#003058]">{user.prenom} {user.nom}</h2>
-                        <p className="text-xs text-slate-400 font-medium">{user.role === 'admin' ? 'Administrateur' : 'Étudiant'}</p>
-                        
-                        <div className="mt-6 flex flex-col gap-3 text-left bg-[#F8F0F0] p-4 rounded-2xl">
-                            <div className="flex items-center gap-3 text-xs text-slate-600">
-                                <Mail size={16} className="text-slate-400 shrink-0" />
-                                <span className="truncate">{user.email}</span>
+                        ) : (
+                            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#003058] to-[#187840] flex items-center justify-center text-white text-5xl font-black shadow-md">
+                                {prenom?.[0] || user?.email?.[0]?.toUpperCase()}
                             </div>
-                            <div className="flex items-center gap-3 text-xs text-slate-600">
-                                <BookOpen size={16} className="text-slate-400 shrink-0" />
-                                <span>{user.niveau || 'Non spécifié'}</span>
-                            </div>
+                        )}
+                        <label className="absolute bottom-0 right-0 p-3 bg-[#187840] text-white rounded-full cursor-pointer hover:bg-[#125e31] hover:scale-105 transition-all shadow-md">
+                            {uploading ? <Loader2 className="animate-spin" size={18} /> : <Camera size={18} />}
+                            <input type="file" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
+                        </label>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Mettre à jour ma photo</span>
+                </div>
+
+                {/* Formulaire */}
+                <div className="space-y-5">
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Adresse e-mail</label>
+                        <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed" value={email} disabled />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Prénom</label>
+                            <input className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom" />
                         </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Nom</label>
+                            <input className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau d'études</label>
+                        <select 
+                            value={niveau} 
+                            onChange={e => setNiveau(e.target.value)}
+                            className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
+                        >
+                            <option value="">Sélectionnez un niveau</option>
+                            {NIVEAUX.map(niv => (
+                                <option key={niv} value={niv}>{niv === 'Commun' ? 'Tronc Commun' : niv}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
-                {/* Colonne Droite: Formulaire */}
-                <div className="md:col-span-2">
-                    <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
-                        <h3 className="text-base font-bold text-[#003058] mb-6 flex items-center gap-2">
-                            <UserIcon size={18} className="text-[#187840]" />
-                            Informations Personnelles
-                        </h3>
-                        
-                        <div className="space-y-5">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-700 ml-1">Prénom</label>
-                                    <input 
-                                        type="text" 
-                                        value={prenom}
-                                        onChange={(e) => setPrenom(e.target.value)} 
-                                        className="input-field"
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-700 ml-1">Nom</label>
-                                    <input 
-                                        type="text" 
-                                        value={nom}
-                                        onChange={(e) => setNom(e.target.value)} 
-                                        className="input-field"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Bouton de sauvegarde */}
-                            <div className="pt-4 border-t border-slate-100 flex justify-end">
-                                <button 
-                                    onClick={handleUpdate} 
-                                    disabled={saving || (!prenom && !nom)}
-                                    className="btn-primary"
-                                >
-                                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                                    Enregistrer les modifications
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <button 
+                    onClick={updateProfile} 
+                    className="w-full bg-[#003058] hover:bg-[#002850] text-white p-3.5 rounded-xl font-bold flex justify-center items-center gap-2 shadow-md hover:shadow-lg transition-all"
+                >
+                    <Save size={18} /> Enregistrer les modifications
+                </button>
             </div>
         </div>
     );

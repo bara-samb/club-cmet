@@ -9,6 +9,7 @@ const CATEGORIES = [
     { id: 'td',            label: 'TD & Exercices' },
     { id: 'examens',       label: 'Examens & Corrigés' },
     { id: 'projets',       label: 'Projets & Mémoires' },
+    { id: 'maquette',      label: 'Maquettes de Filière' },
     { id: 'autres',        label: 'Autres documents' },
 ];
 
@@ -37,25 +38,39 @@ export default function Library() {
 
     useEffect(() => {
         let active = true;
-        let channel;
+        let c1, c2;
 
-        const fetchBib = async () => {
-            const { data } = await supabase.from('bibliotheque').select('*');
-            if (data && active) {
-                setBibliotheque(data);
+        const fetchAll = async () => {
+            const [bibData, maqData] = await Promise.all([
+                supabase.from('bibliotheque').select('*'),
+                supabase.from('maquettes').select('*')
+            ]);
+            if (active) {
+                const bibList = bibData.data || [];
+                const maqList = (maqData.data || []).map(m => ({
+                    ...m,
+                    categorie: 'maquette',
+                    niveau: 'Commun'
+                }));
+                setBibliotheque([...bibList, ...maqList]);
                 setLoading(false);
             }
         };
 
-        fetchBib();
+        fetchAll();
 
-        channel = supabase.channel('library-realtime')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'bibliotheque' }, fetchBib)
+        c1 = supabase.channel('library-realtime-bib')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bibliotheque' }, fetchAll)
+            .subscribe();
+
+        c2 = supabase.channel('library-realtime-maq')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, fetchAll)
             .subscribe();
 
         return () => {
             active = false;
-            if (channel) supabase.removeChannel(channel);
+            if (c1) supabase.removeChannel(c1);
+            if (c2) supabase.removeChannel(c2);
         };
     }, []);
 
@@ -109,6 +124,7 @@ export default function Library() {
             td:            'bg-orange-50 text-orange-700 border-orange-200',
             examens:       'bg-red-50 text-red-700 border-red-200',
             projets:       'bg-indigo-50 text-indigo-700 border-indigo-200',
+            maquette:      'bg-amber-50 text-amber-700 border-amber-200',
             autres:        'bg-slate-50 text-slate-700 border-slate-200',
         };
         return colors[cat] || 'bg-slate-50 text-slate-700 border-slate-200';
@@ -120,6 +136,7 @@ export default function Library() {
             td:            'TD & Exercice',
             examens:       'Examen & Corrigé',
             projets:       'Projet & Mémoire',
+            maquette:      'Maquette de Filière',
             autres:        'Autre',
         };
         return labels[cat] || cat;

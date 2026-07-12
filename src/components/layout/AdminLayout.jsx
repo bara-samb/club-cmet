@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, FileText, Settings, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail } from 'lucide-react';
+import { Users, FileText, Settings, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
 import { supabase } from '../../config/supabaseClient';
-import { Calendar, Camera } from "lucide-react";
 
 export default function AdminLayout() {
     const location = useLocation();
@@ -14,9 +13,10 @@ export default function AdminLayout() {
         { path: '/admin/manage-users', label: 'Membres', Icon: Users },
         { path: '/admin/manage-docs', label: 'Documents', Icon: FileText },
         { path: '/admin/manage-messages', label: 'Messages', Icon: Mail },
-        { path: '/admin/settings', label: 'Paramètres', Icon: Settings },
+        { path: '/admin/manage-notifications', label: 'Notifications', Icon: Bell }, // Ajouté
         { path: '/admin/events', label: 'Événements', Icon: Calendar },
         { path: '/admin/media', label: 'Médias', Icon: Camera },
+
     ];
 
     const closeMobileMenu = () => setIsMobileMenuOpen(false);

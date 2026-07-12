@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, BookOpen, FolderOpen, User, Users, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
 import { supabase } from '../../config/supabaseClient';
 
 export default function StudentLayout() {
@@ -12,7 +12,8 @@ export default function StudentLayout() {
         { path: '/student/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
         { path: '/student/library', label: 'Bibliothèque', Icon: BookOpen },
         { path: '/student/resources', label: 'Ressources', Icon: FolderOpen },
-        { path: '/student/tutorat', label: 'Tutorat', Icon: Users },
+        { path: '/student/tutorat', label: 'Messages', Icon: MessageSquare },
+        { path: '/student/notifications', label: 'Notifications', Icon: Bell },
         { path: '/student/profile', label: 'Profil', Icon: User },
     ];
 
@@ -36,8 +37,8 @@ export default function StudentLayout() {
 
             {/* Overlay pour mobile */}
             {isMobileMenuOpen && (
-                <div 
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity" 
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity"
                     onClick={closeMobileMenu}
                 />
             )}
@@ -51,7 +52,7 @@ export default function StudentLayout() {
                         <p className="text-white/70 text-[10px] font-medium tracking-wider uppercase mt-1">Espace Étudiant</p>
                     </div>
                 </div>
-                
+
                 <nav className="flex-grow space-y-2">
                     {menuItems.map((item) => (
                         <Link key={item.path} to={item.path} onClick={closeMobileMenu}

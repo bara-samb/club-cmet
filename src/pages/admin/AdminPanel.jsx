@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, FileText, Settings, LayoutDashboard, Mail } from 'lucide-react';
+import { Users, UserCheck, FileText, Settings, LayoutDashboard, Mail, Bell, Calendar, Image } from 'lucide-react';
 import { supabase } from '../../config/supabaseClient';
 
 export default function AdminPanel() {
@@ -32,10 +32,13 @@ export default function AdminPanel() {
     }, []);
 
     const adminActions = [
-        { title: "Gérer les Membres", path: "/admin/manage-users", icon: Users, desc: "Ajouter ou supprimer des membres du bureau" },
+        { title: "Comptes Utilisateurs", path: "/admin/users", icon: Users, desc: "Gérer les permissions, rôles et accès des utilisateurs" },
+        { title: "Membres du Bureau", path: "/admin/manage-users", icon: UserCheck, desc: "Ajouter ou supprimer des membres officiels du bureau" },
         { title: "Espace Documentaire", path: "/admin/manage-docs", icon: FileText, desc: "Ajouter des ressources (Règlements, Rapports...)" },
         { title: "Messages de Contact", path: "/admin/manage-messages", icon: Mail, desc: "Lire et gérer les messages reçus du formulaire", badge: unreadCount },
-        { title: "Paramètres Club", path: "/admin/settings", icon: Settings, desc: "Configuration générale du site" }
+        { title: "Notifications", path: "/admin/manage-notifications", icon: Bell, desc: "Diffuser une information à tous les étudiants" },
+        { title: "Événements & Activités", path: "/admin/events", icon: Calendar, desc: "Gérer les actualités et événements du club" },
+        { title: "Galerie Médias", path: "/admin/media", icon: Image, desc: "Gérer les photos et vidéos de la galerie" },
     ];
 
     return (
@@ -72,7 +75,7 @@ export default function AdminPanel() {
                         className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#187840]/30 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden"
                     >
                         <div className="w-14 h-14 bg-[#F8F0F0] rounded-2xl flex items-center justify-center mb-6 text-[#003058] group-hover:bg-[#187840] group-hover:text-white transition-colors duration-300 border border-slate-100 group-hover:border-[#187840]">
-                            <action.icon size={26} strokeWidth={2}/>
+                            <action.icon size={26} strokeWidth={2} />
                         </div>
                         {action.badge !== undefined && action.badge > 0 && (
                             <span className="absolute top-6 right-6 bg-red-500 text-white font-extrabold text-[10px] px-3 py-1 rounded-full shadow-sm tracking-wide">

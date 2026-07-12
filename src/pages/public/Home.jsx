@@ -49,22 +49,12 @@ const CATEGORIES_STATIQUES = [
     { id: 'reglement', nomDossier: 'Règlement Intérieur' },
 ];
 
-const ACTIVITES = [
-    { id: 1, titre: 'Hackathon UCAK 2026', date: '12 Mars 2026', type: 'Hackathon', desc: '48h de développement intensif pour créer des solutions numériques innovantes répondant aux défis locaux.', img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=600', places: 12 },
-    { id: 2, titre: 'Atelier IoT & Robotique', date: '28 Février 2026', type: 'Workshop', desc: 'Conception pratique de systèmes connectés avec ESP32, capteurs et IoT cloud.', img: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=600', places: 5 },
-    { id: 3, titre: 'Conférence Cybersécurité', date: '15 Février 2026', type: 'Conférence', desc: 'Démonstrations de hacking éthique et sensibilisation aux bonnes pratiques de sécurité des systèmes.', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600', places: 0 },
-    { id: 4, titre: 'Bootcamp Web & Mobile', date: '05 Janvier 2026', type: 'Formation', desc: 'Apprentissage intensif de React, TailwindCSS et Node.js pour concevoir des applications web complètes.', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600', places: 8 },
-    { id: 5, titre: 'CMET Tech Talk', date: '20 Décembre 2025', type: 'Conférence', desc: 'Échanges ouverts avec des ingénieurs diplômés sur les métiers de la tech et les opportunités de carrière.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=600', places: 0 },
-];
-
-const MEDIAS = [
-    { id: 1, titre: 'Hackathon 2026 - Finale', type: 'Photo', url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=600' },
-    { id: 2, titre: 'Atelier Arduino / IoT', type: 'Photo', url: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=600' },
-    { id: 3, titre: 'Conférence Cybersécurité', type: 'Photo', url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600' },
-    { id: 4, titre: 'Membres du bureau 2025', type: 'Photo', url: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=600' },
-    { id: 5, titre: 'Séance de Mentorat IT', type: 'Photo', url: 'https://images.unsplash.com/photo-1531535934200-873499974982?auto=format&fit=crop&q=80&w=600' },
-    { id: 6, titre: "Visite d'entreprise partenaire", type: 'Photo', url: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=600' },
-];
+/* ── Helpers date ── */
+const formatDateEvenement = (dateStr) => {
+    if (!dateStr) return '';
+    const d = new Date(`${dateStr}T00:00:00`);
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase();
+};
 
 export default function Home() {
     const navigate = useNavigate();
@@ -98,6 +88,10 @@ export default function Home() {
     const [bureau, setBureau] = useState([]);
     const [ressources, setRessources] = useState([]);
     const [maquettes, setMaquettes] = useState([]);
+    const [evenements, setEvenements] = useState([]);
+    const [medias, setMedias] = useState([]);
+    const [loadingEvenements, setLoadingEvenements] = useState(true);
+    const [loadingMedias, setLoadingMedias] = useState(true);
 
     useEffect(() => {
         let active = true;
@@ -116,8 +110,50 @@ export default function Home() {
             if (data && active) setMaquettes(data);
         };
 
+        const fetchEvenements = async () => {
+            setLoadingEvenements(true);
+            const { data } = await supabase
+                .from('activites')
+                .select('*')
+                .order('date', { ascending: false });
+            if (data && active) {
+                const parsed = data.map(ev => {
+                    let descText = ev.description || '';
+                    let imgs = [];
+                    if (descText.includes("||IMAGES||")) {
+                        const parts = descText.split("||IMAGES||");
+                        descText = parts[0];
+                        try {
+                            imgs = JSON.parse(parts[1]);
+                        } catch (e) {
+                            imgs = [];
+                        }
+                    }
+                    return {
+                        ...ev,
+                        descriptionText: descText,
+                        images: imgs
+                    };
+                });
+                setEvenements(parsed);
+            } else if (active) {
+                setEvenements([]);
+            }
+            if (active) setLoadingEvenements(false);
+        };
+
+        const fetchMedias = async () => {
+            setLoadingMedias(true);
+            const { data } = await supabase
+                .from('medias')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (data && active) setMedias(data);
+            if (active) setLoadingMedias(false);
+        };
+
         const init = async () => {
-            await Promise.all([fetchBureau(), fetchRessources(), fetchMaquettes()]);
+            await Promise.all([fetchBureau(), fetchRessources(), fetchMaquettes(), fetchEvenements(), fetchMedias()]);
             if (!active) return;
 
             const c1 = supabase.channel('bureau-home')
@@ -129,8 +165,14 @@ export default function Home() {
             const c3 = supabase.channel('maquettes-home')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, () => { fetchMaquettes(); })
                 .subscribe();
+            const c4 = supabase.channel('evenements-home')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'activites' }, () => { fetchEvenements(); })
+                .subscribe();
+            const c5 = supabase.channel('medias-home')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'medias' }, () => { fetchMedias(); })
+                .subscribe();
 
-            channels.push(c1, c2, c3);
+            channels.push(c1, c2, c3, c4, c5);
         };
 
         init();
@@ -280,7 +322,7 @@ export default function Home() {
       ` }} />
 
             {/* ════════ NAVBAR ════════ */}
-            <nav className="bg-[#003058]/80 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
+            <nav className="bg-[#1a5276]/90 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
                     <div className="relative w-10 h-10 shrink-0">
                         <span style={{
@@ -292,12 +334,12 @@ export default function Home() {
                             className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#187840]/60 relative z-10" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-bold text-sm tracking-wide leading-none">CLUB-MET</span>
+                        <span className="font-bold text-base tracking-wide leading-none">CLUB-MET</span>
                         <span className="text-[10px] text-gray-400 tracking-wider mt-0.5">UFR MET • UCAK</span>
                     </div>
                 </div>
 
-                <div className="hidden md:flex gap-6 text-xs font-medium items-center">
+                <div className="hidden md:flex gap-6 text-sm font-medium items-center">
                     <a href="#about-club" className="hover:text-[#187840] transition-colors">Le Club</a>
                     <a href="#fonctionnement" className="hover:text-[#187840] transition-colors">Fonctionnement</a>
                     <a href="#composition-bureau" className="hover:text-[#187840] transition-colors">Composition du Bureau</a>
@@ -427,13 +469,13 @@ export default function Home() {
             <main className="flex-grow" onClick={() => setDropdownOpen(false)}>
 
                 {/* ── HERO ── */}
-                <section className="relative bg-[#003058] text-white py-16 md:py-24 px-6 overflow-hidden">
+                <section className="relative bg-[#1a5276] text-white py-16 md:py-24 px-6 overflow-hidden">
                     <div className="absolute inset-0 overflow-hidden">
-                        <img src="/images/logo-CMET.jpeg" alt=""
+                        <img src="/images/GEH.jpg" alt=""
                             className="anim-bg w-full h-full object-cover opacity-20"
                             style={{ transformOrigin: 'center center' }} />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#003058]/70 via-[#003058]/55 to-[#003058]/92" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#1a5276]/70 via-[#1a5276]/55 to-[#1a5276]/92" />
                     <div className="anim-sweep absolute inset-0 pointer-events-none"
                         style={{ background: 'linear-gradient(105deg,transparent 30%,rgba(24,120,64,.07) 50%,transparent 70%)', width: '60%', left: 0 }} />
 
@@ -454,10 +496,10 @@ export default function Home() {
                         <span className="anim-badge inline-block bg-[#002850] text-[#187840] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
                             Club de l'UFR Métiers et Technologies
                         </span>
-                        <h1 className="anim-h1 text-3xl md:text-5xl font-extrabold tracking-tight mt-5 mb-4 leading-tight">
+                        <h1 className="anim-h1 text-4xl md:text-6xl font-extrabold tracking-tight mt-5 mb-4 leading-tight">
                             L'Excellence académique au cœur de la Technologie
                         </h1>
-                        <p className="anim-p text-slate-300 text-xs md:text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
+                        <p className="anim-p text-slate-300 text-sm md:text-base max-w-2xl mx-auto mb-10 leading-relaxed">
                             Rejoins l'écosystème numérique d'entraide et de partage de ressources du Club-MET, spécifiquement conçu pour les filières de l'UFR Métiers et Technologies.
                         </p>
                         <div className="anim-btns flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -475,9 +517,17 @@ export default function Home() {
                 {/* ── À PROPOS ── */}
                 <section id="about-club" className="py-16 px-6 max-w-5xl mx-auto scroll-mt-20">
                     <div className="mb-12">
-                        <h2 className="text-xl md:text-2xl font-extrabold text-[#003058] mb-4">Le Club Métiers & Technologies</h2>
+                        <h2 className="text-xl md:text-2xl font-extrabold text-[#003058] mb-4"><center>Le Club Métiers & Technologies</center></h2>
                         <p className="text-slate-600 text-xs md:text-sm leading-relaxed text-justify">
-                            Le <strong>Club Métiers & Technologies (Club-MET)</strong> est régi par un règlement intérieur strict qui définit ses statuts, ses instances de gouvernance et le comportement éthique de ses membres au sein de l'<strong>Université Cheikh Ahmadou Khadim (UCAK)</strong>. Notre organisation s'assure que chaque étudiant évolue dans un cadre propice à l'acquisition de compétences réelles en ingénierie logicielle, réseaux, IoT et cybersécurité.
+
+                            Le <strong>Club Métiers & Technologies (Club-MET)</strong> est la structure legale qui regroupe l'ensemble des etudians de l'UFR <strong>Métiers & Technologies(MET)</strong>.
+                            Le Club a pour missions de :
+                            <strong>Promouvoir l’innovation</strong>P technologique et entrepreneuriale.
+                            <strong>Organiser des tutorat</strong> par les pairs pour soutenir les apprentissages disciplinaires.
+                            <strong>Développer des projets communautaires</strong> (actions sociales, maraudes, supports
+                            pédagogiques).
+                            <strong>Faciliter la cohésion inter-filières</strong> via des événements culturels et des rencontres.
+
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -634,7 +684,7 @@ export default function Home() {
                         {activeTab === 'activites' ? (
                             <div>
                                 <div className="flex justify-center gap-2 flex-wrap mb-8">
-                                    {['tous', 'Hackathon', 'Workshop', 'Conférence', 'Formation'].map(f => (
+                                    {['tous', 'Génie en Herbe', 'Journée d\'Intégration', 'Accueil Nouveaux Étudiants', 'Action Sociale', 'Action Communautaire', 'Tutorat', 'Autre'].map(f => (
                                         <button
                                             key={f}
                                             onClick={() => setFiltreAct(f)}
@@ -644,71 +694,103 @@ export default function Home() {
                                     ))}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    {ACTIVITES.filter(act => filtreAct === 'tous' || act.type === filtreAct).map((act) => (
-                                        <motion.div key={act.id}
-                                            layout
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.9 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 flex flex-col justify-between group transition-all duration-300">
-                                            <div>
-                                                <div className="h-48 overflow-hidden relative">
-                                                    <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
-                                                    <img src={act.img} alt={act.titre} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
-                                                        {act.type}
-                                                    </span>
-                                                </div>
-                                                <div className="p-6">
-                                                    <div className="text-[10px] font-extrabold text-[#187840] mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                                                        <Calendar size={12} /> {act.date}
+                                {loadingEvenements ? (
+                                    <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
+                                        <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" /></svg>
+                                        Chargement des événements...
+                                    </div>
+                                ) : evenements.filter(ev => filtreAct === 'tous' || ev.type === filtreAct).length === 0 ? (
+                                    <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                                        {filtreAct === 'tous' ? "Aucun événement publié pour le moment." : `Aucun événement de type « ${filtreAct} » pour le moment.`}
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        {evenements.filter(ev => filtreAct === 'tous' || ev.type === filtreAct).map((ev) => (
+                                            <motion.div key={ev.id}
+                                                layout
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.9 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 flex flex-col justify-between group transition-all duration-300">
+                                                <div>
+                                                    <div className="h-48 overflow-hidden relative bg-slate-100">
+                                                        <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
+                                                        {ev.images?.[0] ? (
+                                                            <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                                <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                                                            </div>
+                                                        )}
+                                                        <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
+                                                            {ev.type}
+                                                        </span>
+                                                        {ev.images?.length > 1 && (
+                                                            <span className="absolute top-4 right-4 z-20 bg-black/50 text-white text-[9px] font-bold px-2 py-1 rounded-full">
+                                                                +{ev.images.length - 1} photo(s)
+                                                            </span>
+                                                        )}
                                                     </div>
-                                                    <h3 className="text-base font-extrabold text-[#003058] mb-3 group-hover:text-[#187840] transition-colors">{act.titre}</h3>
-                                                    <p className="text-xs text-slate-500 leading-relaxed text-justify">{act.desc}</p>
+                                                    <div className="p-6">
+                                                        <div className="text-[10px] font-extrabold text-[#187840] mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                                                            <Calendar size={12} /> {formatDateEvenement(ev.date)}
+                                                        </div>
+                                                        <h3 className="text-base font-extrabold text-[#003058] mb-3 group-hover:text-[#187840] transition-colors">{ev.titre}</h3>
+                                                        <p className="text-xs text-slate-500 leading-relaxed text-justify line-clamp-3">{ev.descriptionText}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="p-6 pt-0 border-t border-slate-50 mt-4 flex items-center justify-between gap-4">
-                                                <div className="text-xs font-medium text-slate-400">
-                                                    {act.places > 0
-                                                        ? <span className="text-[#187840] font-bold">{act.places} place(s) restante(s)</span>
-                                                        : <span className="text-red-500 font-bold">Complet</span>
-                                                    }
+                                                <div className="p-6 pt-0 border-t border-slate-50 mt-4 flex items-center justify-end gap-4">
+                                                    {inscriptions[ev.id] ? (
+                                                        <span className="flex items-center gap-1.5 text-xs text-[#187840] font-black uppercase tracking-wider bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
+                                                            <Check size={14} /> Inscrit
+                                                        </span>
+                                                    ) : (
+                                                        <button onClick={() => inscrireActivite(ev)}
+                                                            className="bg-[#003058] hover:bg-[#002850] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 shadow-sm">
+                                                            S'inscrire
+                                                        </button>
+                                                    )}
                                                 </div>
-                                                {inscriptions[act.id] ? (
-                                                    <span className="flex items-center gap-1.5 text-xs text-[#187840] font-black uppercase tracking-wider bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
-                                                        <Check size={14} /> Inscrit
-                                                    </span>
-                                                ) : act.places > 0 ? (
-                                                    <button onClick={() => inscrireActivite(act)}
-                                                        className="bg-[#003058] hover:bg-[#002850] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 shadow-sm">
-                                                        S'inscrire
-                                                    </button>
-                                                ) : (
-                                                    <button disabled className="bg-slate-100 text-slate-400 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
-                                                        Fermé
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                {MEDIAS.map((media) => (
-                                    <motion.div key={media.id}
-                                        whileHover={{ scale: 1.02 }}
-                                        onClick={() => setLightboxImage(media)}
-                                        className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 aspect-[4/3] cursor-pointer group">
-                                        <img src={media.url} alt={media.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
-                                            <span className="text-[9px] uppercase font-black tracking-widest text-[#187840] mb-1 bg-white px-2 py-0.5 rounded-full w-max">{media.type}</span>
-                                            <h4 className="font-extrabold text-xs tracking-wide truncate">{media.titre}</h4>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                            <div>
+                                {loadingMedias ? (
+                                    <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
+                                        <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" /></svg>
+                                        Chargement de la galerie...
+                                    </div>
+                                ) : medias.length === 0 ? (
+                                    <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                                        Aucun média publié pour le moment.
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                        {medias.map((media) => (
+                                            <motion.div key={media.id}
+                                                whileHover={{ scale: 1.02 }}
+                                                onClick={() => media.type !== 'Vidéo' && setLightboxImage(media)}
+                                                className={`relative rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 aspect-[4/3] group ${media.type !== 'Vidéo' ? 'cursor-pointer' : ''}`}>
+                                                {media.type === 'Vidéo' ? (
+                                                    <video src={media.url} className="w-full h-full object-cover" muted loop playsInline
+                                                        onMouseEnter={e => e.target.play()}
+                                                        onMouseLeave={e => { e.target.pause(); e.target.currentTime = 0; }}
+                                                        preload="metadata" />
+                                                ) : (
+                                                    <img src={media.url} alt={media.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                )}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
+                                                    <span className="text-[9px] uppercase font-black tracking-widest text-[#187840] mb-1 bg-white px-2 py-0.5 rounded-full w-max">{media.type}</span>
+                                                    <h4 className="font-extrabold text-xs tracking-wide truncate">{media.titre}</h4>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

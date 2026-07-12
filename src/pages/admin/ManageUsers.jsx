@@ -4,29 +4,33 @@ import { supabase } from "../../config/supabaseClient";
 import { Pencil, Trash2, AlertTriangle, UserPlus, Image as ImageIcon, Save, Loader2, Users } from "lucide-react";
 
 const POSTES = [
-    "Président","Vice-Président (Dauphin)","Secrétaire Général(e)",
-    "Trésorier(e)","Responsable Commission IT","Adjoint Commission IT",
-    "Responsable Commission HEC","Adjoint Commission HEC",
-    "Chargé(e) de Communication","Autre",
+    "Président", "Vice-Président", "Secrétaire Général(e)",
+    "Responsable C.Finances", "Adjoint(e) C.Finance",
+    "Responsable C.Pédagogique", "Adjoint(e) C.Pédagogique",
+    "Responsable C.Partenariat", "Adjoint(e) C.Partenariat",
+    "Responsable C.Communication", "Adjoint(e) C.Communication",
+    "Responsable C.Social", "Adjoint(e) C.Social",
+    "Responsable C.Organisation", "Adjoint(e) C.Organisation",
+
+
 ];
 const NIVEAUX = [
-    "TC1","TC2",
-    "Licence 1 IT","Licence 2 IT","Licence 3 IT",
-    "Licence 1 HEC","Licence 2 HEC","Licence 3 HEC",
-    "Master 1 IT","Master 2 IT","Master 1 HEC","Master 2 HEC",
+    "Licence 1 IT", "Licence 2 IT", "Licence 3 IT",
+    "Licence 1 HEC", "Licence 2 HEC", "Licence 3 HEC",
+    "Master 1 IT", "Master 2 IT", "Master 1 HEC", "Master 2 HEC",
 ];
-const VIDE = { nom:"", poste:"", classe:"", imageUrl:"" };
+const VIDE = { nom: "", poste: "", classe: "", imageUrl: "" };
 
 export default function ManageUsers() {
-    const [membres, setMembres]       = useState([]);
-    const [form, setForm]             = useState(VIDE);
-    const [editId, setEditId]         = useState(null);
-    const [imageFile, setImageFile]   = useState(null);
-    const [preview, setPreview]       = useState(null);
-    const [uploading, setUploading]   = useState(false);
-    const [progress, setProgress]     = useState(0);
-    const [loading, setLoading]       = useState(true);
-    const [toast, setToast]           = useState(null);
+    const [membres, setMembres] = useState([]);
+    const [form, setForm] = useState(VIDE);
+    const [editId, setEditId] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [toast, setToast] = useState(null);
     const [confirmDel, setConfirmDel] = useState(null);
 
     useEffect(() => {
@@ -58,29 +62,29 @@ export default function ManageUsers() {
         };
     }, []);
 
-    const showToast = (msg, type="success") => {
+    const showToast = (msg, type = "success") => {
         setToast({ msg, type });
         setTimeout(() => setToast(null), 3500);
     };
 
     const uploadImage = async () => {
         if (!imageFile) return form.imageUrl || "";
-        
+
         const fileName = `${Date.now()}_${imageFile.name}`;
         const filePath = `bureau/${fileName}`;
-        
+
         setProgress(20);
         const { error: uploadError } = await supabase.storage
             .from('club-met-storage')
             .upload(filePath, imageFile, { upsert: true });
-            
+
         if (uploadError) throw uploadError;
         setProgress(80);
-        
+
         const { data: { publicUrl } } = supabase.storage
             .from('club-met-storage')
             .getPublicUrl(filePath);
-            
+
         setProgress(100);
         return publicUrl;
     };
@@ -93,12 +97,12 @@ export default function ManageUsers() {
         setUploading(true);
         try {
             const imageUrl = await uploadImage();
-            const data = { 
+            const data = {
                 nom: form.nom,
                 poste: form.poste,
                 classe: form.classe,
-                imageUrl, 
-                updatedAt: new Date().toISOString() 
+                imageUrl,
+                updatedAt: new Date().toISOString()
             };
             if (editId) {
                 const { error } = await supabase.from("bureau").update(data).eq("id", editId);
@@ -181,7 +185,7 @@ export default function ManageUsers() {
                         <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#F8F0F0] rounded-2xl border border-slate-100">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
                                 {preview
-                                    ? <img src={preview} alt="preview" className="w-full h-full object-cover"/>
+                                    ? <img src={preview} alt="preview" className="w-full h-full object-cover" />
                                     : <ImageIcon className="w-8 h-8 text-slate-300" />
                                 }
                             </div>
@@ -190,7 +194,7 @@ export default function ManageUsers() {
                                 <label className="cursor-pointer bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
                                     <ImageIcon size={16} />
                                     {imageFile ? imageFile.name : "Choisir une photo"}
-                                    <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden"/>
+                                    <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden" />
                                 </label>
                                 <p className="text-[10px] text-slate-400 mt-2 font-medium">JPG, PNG — max 5 MB</p>
                             </div>
@@ -200,15 +204,15 @@ export default function ManageUsers() {
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Nom complet *</label>
                             <input type="text" value={form.nom} onChange={e => setForm({ ...form, nom: e.target.value })}
-                                   placeholder="Ex: Mamadou Diop"
-                                   className="input-field" />
+                                placeholder="Ex: Mamadou Diop"
+                                className="input-field" />
                         </div>
 
                         {/* Poste */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Poste *</label>
                             <select value={form.poste} onChange={e => setForm({ ...form, poste: e.target.value })}
-                                    className="input-field">
+                                className="input-field">
                                 <option value="">— Sélectionner un poste —</option>
                                 {POSTES.map(p => <option key={p} value={p}>{p}</option>)}
                             </select>
@@ -218,7 +222,7 @@ export default function ManageUsers() {
                         <div className="space-y-1.5 md:col-span-2">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
                             <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
-                                    className="input-field">
+                                className="input-field">
                                 <option value="">— Sélectionner un niveau —</option>
                                 {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
@@ -231,7 +235,7 @@ export default function ManageUsers() {
                                     <span className="text-[#187840]">{progress}%</span>
                                 </div>
                                 <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                                    <div className="bg-[#187840] h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${progress}%` }}/>
+                                    <div className="bg-[#187840] h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
                                 </div>
                             </div>
                         )}
@@ -239,12 +243,12 @@ export default function ManageUsers() {
                         <div className="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                             {editId && (
                                 <button type="button" onClick={resetForm}
-                                        className="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
+                                    className="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
                                     Annuler
                                 </button>
                             )}
                             <button type="submit" disabled={uploading}
-                                    className="btn-primary w-full mt-2">
+                                className="btn-primary w-full mt-2">
                                 {uploading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                                 {editId ? "Mettre à jour" : "Ajouter le membre"}
                             </button>
@@ -277,18 +281,18 @@ export default function ManageUsers() {
                             {membres.map(m => (
                                 <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                     <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => { setEditId(m.id); setForm({ nom:m.nom, poste:m.poste, classe:m.classe, imageUrl:m.imageUrl||"" }); setPreview(m.imageUrl||null); setImageFile(null); window.scrollTo({ top:0, behavior:"smooth" }); }}
-                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
+                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                            className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Pencil size={14} strokeWidth={2.5} />
                                         </button>
                                         <button onClick={() => setConfirmDel(m)}
-                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
+                                            className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Trash2 size={14} strokeWidth={2.5} />
                                         </button>
                                     </div>
                                     <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
                                         {m.imageUrl
-                                            ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover"/>
+                                            ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
                                             : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
                                         }
                                     </div>

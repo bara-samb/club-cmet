@@ -7,12 +7,10 @@ const CATEGORIES_RESSOURCES = [
     { id: 'reglement', label: 'Règlement Intérieur', icon: '📜', color: '#187840', desc: 'Charte éthique et règlements de fonctionnement du Club-MET.' },
     { id: 'rapports', label: 'Rapports Mensuels', icon: '📈', color: '#003058', desc: 'Suivi et comptes-rendus d\'activités mensuels des commissions.' },
     { id: 'comptes_rendus', label: 'Comptes Rendus', icon: '📝', color: '#7c3aed', desc: 'Rapports officiels des réunions et Assemblées Générales.' },
-    { id: 'maquette', label: 'Maquettes de Filière', icon: '🎓', color: '#d97706', desc: 'Syllabi de formation et maquettes pédagogiques de l\'UFR MET.' },
 ];
 
 export default function Resources() {
     const [ressources, setRessources] = useState([]);
-    const [maquettes, setMaquettes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [recherche, setRecherche] = useState('');
     const [dossierActif, setDossierActif] = useState(null); // null = vue racine des dossiers, ou ID de catégorie
@@ -22,14 +20,10 @@ export default function Resources() {
         let channels = [];
 
         const fetchAll = async () => {
-            const [resData, maqData] = await Promise.all([
-                supabase.from('ressources').select('*'),
-                supabase.from('maquettes').select('*')
-            ]);
+            const { data } = await supabase.from('ressources').select('*');
             
             if (active) {
-                if (resData.data) setRessources(resData.data);
-                if (maqData.data) setMaquettes(maqData.data.map(d => ({ ...d, categorie: 'maquette' })));
+                if (data) setRessources(data);
                 setLoading(false);
             }
         };
@@ -41,11 +35,8 @@ export default function Resources() {
             const c1 = supabase.channel('resources-realtime-res')
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'ressources' }, fetchAll)
                 .subscribe();
-            const c2 = supabase.channel('resources-realtime-maq')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, fetchAll)
-                .subscribe();
 
-            channels.push(c1, c2);
+            channels.push(c1);
         };
 
         init();
@@ -55,7 +46,7 @@ export default function Resources() {
         };
     }, []);
 
-    const tousLesDocuments = [...ressources, ...maquettes];
+    const tousLesDocuments = [...ressources];
 
     // Documents filtrés par recherche
     const documentsFiltrés = tousLesDocuments.filter(doc => {
