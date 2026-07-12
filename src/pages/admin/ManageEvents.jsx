@@ -63,7 +63,19 @@ export default function Evenements() {
             const parsed = data.map(ev => {
                 let descText = ev.description || '';
                 let imgs = [];
-                if (descText.includes("||IMAGES||")) {
+
+                // Priorité : lire depuis la colonne `img`
+                if (ev.img) {
+                    try {
+                        imgs = JSON.parse(ev.img);
+                    } catch (e) {
+                        // Si ce n'est pas du JSON, traiter comme URL unique
+                        imgs = [ev.img];
+                    }
+                }
+
+                // Fallback : ancien format ||IMAGES|| dans description (migration)
+                if (imgs.length === 0 && descText.includes("||IMAGES||")) {
                     const parts = descText.split("||IMAGES||");
                     descText = parts[0];
                     try {
@@ -72,6 +84,7 @@ export default function Evenements() {
                         imgs = [];
                     }
                 }
+
                 return {
                     ...ev,
                     descriptionText: descText,
@@ -163,12 +176,12 @@ export default function Evenements() {
         try {
             const urlsTeleversees = await televerserImages();
             const images = [...existingImages, ...urlsTeleversees];
-            const finalDescription = description.trim() + "||IMAGES||" + JSON.stringify(images);
             const payload = {
                 titre: titre.trim(),
                 type,
                 date: date,
-                description: finalDescription,
+                description: description.trim(),
+                img: images.length > 0 ? JSON.stringify(images) : null,
             };
             let error;
             if (editingId) {

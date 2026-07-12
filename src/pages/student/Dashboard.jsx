@@ -3,9 +3,10 @@ import { supabase } from '../../config/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Box, Users, GraduationCap, BookOpen, User, Bell, MessageSquare, ChevronRight } from 'lucide-react';
 import NotificationFeed from './NotificationFeed';
+import useAuth from '../../hooks/useAuth';
 
 export default function Dashboard() {
-    const [user, setUser] = useState(null);
+    const { user } = useAuth();
     const [bureau, setBureau] = useState([]);
     const [ressources, setRessources] = useState([]);
     const [maquettes, setMaquettes] = useState([]);
@@ -13,13 +14,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         let active = true;
-        let authSubscription;
         let channels = [];
 
-        const fetchUserProfile = async (userId) => {
-            const { data } = await supabase.from('users').select('*').eq('id', userId).single();
-            if (data && active) setUser(data);
-        };
         const fetchBureau = async () => {
             const { data } = await supabase.from('bureau').select('*').order('createdAt', { ascending: false });
             if (data && active) setBureau(data);
@@ -34,9 +30,6 @@ export default function Dashboard() {
         };
 
         const init = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
-            await fetchUserProfile(session.user.id);
             await Promise.all([fetchBureau(), fetchRessources(), fetchMaquettes()]);
             if (!active) return;
             const c1 = supabase.channel('bureau-changes').on('postgres_changes', { event: '*', schema: 'public', table: 'bureau' }, fetchBureau).subscribe();
@@ -45,16 +38,10 @@ export default function Dashboard() {
             channels.push(c1, c2, c3);
         };
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (session) fetchUserProfile(session.user.id);
-            else if (active) setUser(null);
-        });
-        authSubscription = subscription;
         init();
 
         return () => {
             active = false;
-            if (authSubscription) authSubscription.unsubscribe();
             channels.forEach(c => supabase.removeChannel(c));
         };
     }, []);

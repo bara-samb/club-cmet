@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Send, CheckCircle2, MessageSquare, Clock, Loader2, Mail, MailOpen, RefreshCw } from 'lucide-react';
+import useAuth from '../../hooks/useAuth';
 
 export default function MessagesHub() {
-    const [user, setUser] = useState(null);
+    const { user } = useAuth();
 
     /* ── Form state ── */
     const [objet, setObjet] = useState('');
@@ -22,21 +23,6 @@ export default function MessagesHub() {
         setToast({ msg, type });
         setTimeout(() => setToast(null), 4000);
     };
-
-    /* ── Fetch logged-in user ── */
-    useEffect(() => {
-        const getUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
-            const { data } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', session.user.id)
-                .single();
-            if (data) setUser(data);
-        };
-        getUser();
-    }, []);
 
     /* ── Fetch student's message history ── */
     const fetchMyMessages = async () => {
@@ -70,6 +56,7 @@ export default function MessagesHub() {
 
             return () => supabase.removeChannel(channel);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     /* ── Submit new message ── */

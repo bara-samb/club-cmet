@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, FileText, Settings, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
-import { supabase } from '../../config/supabaseClient';
+import { Users, UserCheck, FileText, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
+import useAuth from '../../hooks/useAuth';
 
 export default function AdminLayout() {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { signOut } = useAuth();
 
     const menuItems = [
         { path: '/admin/panel', label: 'Dashboard', Icon: LayoutDashboard },
-        { path: '/admin/manage-users', label: 'Membres', Icon: Users },
+        { path: '/admin/users', label: 'Utilisateurs', Icon: Users },
+        { path: '/admin/manage-users', label: 'Bureau', Icon: UserCheck },
         { path: '/admin/manage-docs', label: 'Documents', Icon: FileText },
         { path: '/admin/manage-messages', label: 'Messages', Icon: Mail },
-        { path: '/admin/manage-notifications', label: 'Notifications', Icon: Bell }, // Ajouté
+        { path: '/admin/manage-notifications', label: 'Notifications', Icon: Bell },
         { path: '/admin/events', label: 'Événements', Icon: Calendar },
         { path: '/admin/media', label: 'Médias', Icon: Camera },
-
     ];
 
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -68,7 +69,7 @@ export default function AdminLayout() {
                     <Link to="/" className="flex items-center gap-2 text-xs text-slate-500 hover:text-white transition">
                         <ChevronLeft size={16} /> Retour au site
                     </Link>
-                    <button onClick={() => supabase.auth.signOut()} className="flex w-full items-center gap-3 p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition">
+                    <button onClick={signOut} className="flex w-full items-center gap-3 p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition">
                         <LogOut size={20} /> Déconnexion
                     </button>
                 </div>

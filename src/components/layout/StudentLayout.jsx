@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
-import { supabase } from '../../config/supabaseClient';
+import useAuth from '../../hooks/useAuth';
 
 export default function StudentLayout() {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { signOut } = useAuth();
 
     const menuItems = [
         { path: '/student/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
@@ -67,7 +68,7 @@ export default function StudentLayout() {
                     <Link to="/" className="flex items-center gap-2 text-xs text-slate-500 hover:text-white transition">
                         <ChevronLeft size={16} /> Retour au site
                     </Link>
-                    <button onClick={() => supabase.auth.signOut()} className="flex items-center gap-3 p-3 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition w-full">
+                    <button onClick={signOut} className="flex items-center gap-3 p-3 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition w-full">
                         <LogOut size={20} /> Déconnexion
                     </button>
                 </div>

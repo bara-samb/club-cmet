@@ -1,51 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Camera, Save, Loader2, User } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-const NIVEAUX = ['Commun', 'L1', 'L2', 'L3', 'M1', 'M2'];
+import useAuth from '../../hooks/useAuth';
+import { NIVEAUX } from '../../config/constants';
 
 export default function Profile() {
-    const [user, setUser] = useState(null);
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(true);
+    const { user, session, refreshProfile, loading } = useAuth();
     const [uploading, setUploading] = useState(false);
-    const [nom, setNom] = useState('');
-    const [prenom, setPrenom] = useState('');
-    const [niveau, setNiveau] = useState('');
+    const [nom, setNom] = useState(user?.nom || '');
+    const [prenom, setPrenom] = useState(user?.prenom || '');
+    const [niveau, setNiveau] = useState(user?.niveau || '');
 
     useEffect(() => {
-        getProfile();
-    }, []);
-
-    const getProfile = async () => {
-        try {
-            setLoading(true);
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
-
-            setEmail(session.user.email);
-
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', session.user.id)
-                .single();
-
-            if (error) throw error;
-
-            if (data) {
-                setUser(data);
-                setNom(data.nom || '');
-                setPrenom(data.prenom || '');
-                setNiveau(data.niveau || '');
-            }
-        } catch (error) {
-            console.error("Erreur chargement profil:", error.message);
-        } finally {
-            setLoading(false);
+        if (user) {
+            setNom(user.nom || '');
+            setPrenom(user.prenom || '');
+            setNiveau(user.niveau || '');
         }
-    };
+    }, [user]);
 
     const handleUpload = async (event) => {
         try {
@@ -72,7 +44,7 @@ export default function Profile() {
 
             if (updateError) throw updateError;
 
-            setUser({ ...user, avatar_url: publicUrl });
+            await refreshProfile();
             alert('Photo de profil mise à jour !');
         } catch (error) {
             alert('Erreur lors de l\'upload : ' + error.message);
@@ -81,7 +53,7 @@ export default function Profile() {
         }
     };
 
-    const updateProfile = async () => {
+    const handleUpdateProfile = async () => {
         try {
             const { error } = await supabase
                 .from('users')
@@ -89,6 +61,7 @@ export default function Profile() {
                 .eq('id', user.id);
 
             if (error) throw error;
+            await refreshProfile();
             alert('Profil mis à jour avec succès !');
         } catch (error) {
             alert('Erreur lors de la mise à jour : ' + error.message);
@@ -129,7 +102,7 @@ export default function Profile() {
                             />
                         ) : (
                             <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#003058] to-[#187840] flex items-center justify-center text-white text-5xl font-black shadow-md">
-                                {prenom?.[0] || user?.email?.[0]?.toUpperCase()}
+                                {prenom?.[0] || session?.user?.email?.[0]?.toUpperCase()}
                             </div>
                         )}
                         <label className="absolute bottom-0 right-0 p-3 bg-[#187840] text-white rounded-full cursor-pointer hover:bg-[#125e31] hover:scale-105 transition-all shadow-md">
@@ -144,7 +117,7 @@ export default function Profile() {
                 <div className="space-y-5">
                     <div className="space-y-1.5">
                         <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Adresse e-mail</label>
-                        <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed" value={email} disabled />
+                        <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed" value={session?.user?.email || ''} disabled />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -167,14 +140,14 @@ export default function Profile() {
                         >
                             <option value="">Sélectionnez un niveau</option>
                             {NIVEAUX.map(niv => (
-                                <option key={niv} value={niv}>{niv === 'Commun' ? 'Tronc Commun' : niv}</option>
+                                <option key={niv} value={niv}>{niv}</option>
                             ))}
                         </select>
                     </div>
                 </div>
 
                 <button 
-                    onClick={updateProfile} 
+                    onClick={handleUpdateProfile} 
                     className="w-full bg-[#003058] hover:bg-[#002850] text-white p-3.5 rounded-xl font-bold flex justify-center items-center gap-2 shadow-md hover:shadow-lg transition-all"
                 >
                     <Save size={18} /> Enregistrer les modifications

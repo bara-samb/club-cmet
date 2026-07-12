@@ -120,7 +120,18 @@ export default function Home() {
                 const parsed = data.map(ev => {
                     let descText = ev.description || '';
                     let imgs = [];
-                    if (descText.includes("||IMAGES||")) {
+
+                    // Priorité : lire depuis la colonne `img`
+                    if (ev.img) {
+                        try {
+                            imgs = JSON.parse(ev.img);
+                        } catch (e) {
+                            imgs = [ev.img];
+                        }
+                    }
+
+                    // Fallback : ancien format ||IMAGES|| dans description (migration)
+                    if (imgs.length === 0 && descText.includes("||IMAGES||")) {
                         const parts = descText.split("||IMAGES||");
                         descText = parts[0];
                         try {
@@ -129,6 +140,7 @@ export default function Home() {
                             imgs = [];
                         }
                     }
+
                     return {
                         ...ev,
                         descriptionText: descText,

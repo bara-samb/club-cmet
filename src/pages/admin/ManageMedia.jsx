@@ -29,7 +29,6 @@ export default function Medias() {
 
     useEffect(() => {
         fetchMedias();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchMedias = async () => {
@@ -37,7 +36,7 @@ export default function Medias() {
         const { data, error } = await supabase
             .from('medias')
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('date_ajout', { ascending: false });
         if (!error) setMedias(data || []);
         setLoading(false);
     };
@@ -62,7 +61,7 @@ export default function Medias() {
         setEditingId(m.id);
         setType(m.type || 'Photo');
         setTitre(m.titre || '');
-        setDescription(m.description || '');
+        setDescription('');
         setExistingUrl(m.url || '');
         if (preview) URL.revokeObjectURL(preview);
         setFile(null);
