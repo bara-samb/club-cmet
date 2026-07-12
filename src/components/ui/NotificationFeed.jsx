@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { Bell, ImageIcon, X } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationFeed() {
@@ -35,7 +35,6 @@ export default function NotificationFeed() {
         };
     }, []);
 
-    // Vérification : on n'affiche rien si pas de notification ou si l'utilisateur a fermé
     if (!notification || !isVisible) return null;
 
     return (
@@ -75,7 +74,6 @@ export default function NotificationFeed() {
                             {notification.message}
                         </p>
 
-                        {/* CORRECTION ICI : utilisation de image_url au lieu de imageUrl */}
                         {notification.image_url && (
                             <div className="mt-4 pt-4 border-t border-slate-100">
                                 <a href={notification.image_url} target="_blank" rel="noopener noreferrer" className="inline-block group relative overflow-hidden rounded-2xl border-4 border-white shadow-lg">

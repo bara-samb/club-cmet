@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Box, Users, GraduationCap, BookOpen, User, Bell, MessageSquare, ChevronRight } from 'lucide-react';
-import NotificationFeed from './NotificationFeed';
+import NotificationFeed from '../../components/ui/NotificationFeed';
 import useAuth from '../../hooks/useAuth';
 
 export default function Dashboard() {

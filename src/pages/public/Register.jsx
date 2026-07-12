@@ -3,12 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 
-const NIVEAUX = [
-    "TC1","TC2",
-    "Licence 1 IT","Licence 2 IT","Licence 3 IT",
-    "Licence 1 HEC","Licence 2 HEC","Licence 3 HEC",
-    "Master 1 IT","Master 2 IT","Master 1 HEC","Master 2 HEC",
-];
+import { NIVEAUX } from "../../config/constants";
 
 const ERRORS = {
     "User already registered": "Cet email est déjà utilisé.",

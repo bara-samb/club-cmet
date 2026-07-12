@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Send, Loader2, Image as ImageIcon, X, AlertTriangle } from 'lucide-react';
+import useAuth from '../../hooks/useAuth';
 
 export default function ManageNotifications() {
+    const { user } = useAuth();
     const [message, setMessage] = useState('');
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -40,13 +42,12 @@ export default function ManageNotifications() {
         let finalImageUrl = null;
 
         try {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) throw new Error("Vous devez être connecté.");
+            if (!user) throw new Error("Vous devez être connecté.");
 
             if (imageFile) {
                 const fileExt = imageFile.name.split('.').pop();
                 const fileName = `${Date.now()}.${fileExt}`;
-                const filePath = `notifs/${session.user.id}/${fileName}`;
+                const filePath = `notifs/${user.id}/${fileName}`;
 
                 const { error: uploadError } = await supabase.storage
                     .from('notification-images')
