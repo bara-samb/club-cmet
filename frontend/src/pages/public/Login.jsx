@@ -19,12 +19,24 @@ export default function Login() {
         setError("");
         setLoading(true);
         try {
-            const { error: err } = await supabase.auth.signInWithPassword({
+            const { data, error: err } = await supabase.auth.signInWithPassword({
                 email: form.email,
                 password: form.password
             });
             if (err) throw err;
-            navigate("/student/dashboard");
+
+            // Fetch role to redirect correctly
+            const { data: profile } = await supabase
+                .from('users')
+                .select('role')
+                .eq('id', data.user.id)
+                .single();
+
+            if (profile?.role === 'admin') {
+                navigate("/admin/panel");
+            } else {
+                navigate("/student/dashboard");
+            }
         } catch (err) {
             setError(ERRORS[err.message] || err.message || "Erreur de connexion.");
         } finally {

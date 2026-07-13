@@ -13,13 +13,11 @@ import Login from './pages/public/Login';
 import Register from './pages/public/Register';
 import Dashboard from './pages/student/Dashboard';
 import Library from './pages/student/Library';
-import Resources from './pages/student/Resources';
 import Profile from './pages/student/Profile';
 import TutoratHub from './pages/student/TutoratHub';
 import NotificationsHistory from './pages/student/NotificationsHistory';
 import AdminPanel from './pages/admin/AdminPanel';
 import ManageUsers from './pages/admin/ManageUsers';
-import ManageDocs from './pages/admin/ManageDocs';
 import ManageMessages from './pages/admin/ManageMessages';
 import ManageEvents from './pages/admin/ManageEvents';
 import ManageMedia from './pages/admin/ManageMedia';
@@ -81,7 +79,6 @@ export default function App() {
                         <Route index element={<Navigate to="dashboard" replace />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="library" element={<Library />} />
-                        <Route path="resources" element={<Resources />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="tutorat" element={<TutoratHub />} />
                         <Route path="notifications" element={<NotificationsHistory />} />
@@ -92,7 +89,6 @@ export default function App() {
                         <Route index element={<Navigate to="panel" replace />} />
                         <Route path="panel" element={<AdminPanel />} />
                         <Route path="manage-users" element={<ManageUsers />} />
-                        <Route path="manage-docs" element={<ManageDocs />} />
                         <Route path="manage-messages" element={<ManageMessages />} />
                         <Route path="manage-notifications" element={<ManageNotifications />} />
                         <Route path="events" element={<ManageEvents />} />

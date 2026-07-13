@@ -15,7 +15,7 @@ const POSTES = [
 
 ];
 import { NIVEAUX } from "../../config/constants";
-const VIDE = { nom: "", poste: "", classe: "", imageUrl: "" };
+const VIDE = { nom: "", poste: "", classe: "", imageUrl: "", whatsapp: "", linkedin: "", estAncien: false };
 
 export default function ManageUsers() {
     const [membres, setMembres] = useState([]);
@@ -98,6 +98,9 @@ export default function ManageUsers() {
                 poste: form.poste,
                 classe: form.classe,
                 imageUrl,
+                whatsapp: form.whatsapp,
+                linkedin: form.linkedin,
+                estAncien: form.estAncien,
                 updatedAt: new Date().toISOString()
             };
             if (editId) {
@@ -215,13 +218,39 @@ export default function ManageUsers() {
                         </div>
 
                         {/* Niveau */}
-                        <div className="space-y-1.5 md:col-span-2">
+                        <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
                             <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
                                 className="input-field">
                                 <option value="">— Sélectionner un niveau —</option>
                                 {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
+                        </div>
+
+                        {/* Statut Membre */}
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Statut du membre *</label>
+                            <select value={form.estAncien ? "ancien" : "actuel"} onChange={e => setForm({ ...form, estAncien: e.target.value === "ancien" })}
+                                className="input-field">
+                                <option value="actuel">Membre Actuel (Bureau en cours)</option>
+                                <option value="ancien">Ancien Membre (Mandats passés)</option>
+                            </select>
+                        </div>
+
+                        {/* WhatsApp Link */}
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Lien WhatsApp</label>
+                            <input type="url" value={form.whatsapp} onChange={e => setForm({ ...form, whatsapp: e.target.value })}
+                                placeholder="Ex: https://wa.me/221xxxxxxxxx"
+                                className="input-field" />
+                        </div>
+
+                        {/* LinkedIn Link */}
+                        <div className="space-y-1.5">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Lien LinkedIn</label>
+                            <input type="url" value={form.linkedin} onChange={e => setForm({ ...form, linkedin: e.target.value })}
+                                placeholder="Ex: https://linkedin.com/in/username"
+                                className="input-field" />
                         </div>
 
                         {uploading && (
@@ -277,7 +306,7 @@ export default function ManageUsers() {
                             {membres.map(m => (
                                 <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                     <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", whatsapp: m.whatsapp || "", linkedin: m.linkedin || "", estAncien: m.estAncien || false }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                                             className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Pencil size={14} strokeWidth={2.5} />
                                         </button>
@@ -294,7 +323,12 @@ export default function ManageUsers() {
                                     </div>
                                     <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
                                     <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
-                                    <div className="mt-3 text-[10px] font-bold text-slate-500 bg-[#F8F0F0] py-1 rounded-lg border border-slate-100 uppercase tracking-wider">{m.classe}</div>
+                                    <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
+                                        <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                        {m.estAncien && (
+                                            <span className="text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">Ancien</span>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>

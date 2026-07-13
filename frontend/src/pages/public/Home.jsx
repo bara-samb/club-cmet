@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Check, Loader2 } from 'lucide-react';
+import { Calendar, X, Check, Loader2, Users } from 'lucide-react';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (
@@ -62,6 +62,7 @@ export default function Home() {
     /* ── State UI ── */
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
+    const [isAnciensOpen, setIsAnciensOpen] = useState(false);
     const [openArticle, setOpenArticle] = useState('bureau-exec');
     const [dossierOuvert, setDossierOuvert] = useState(null);
 
@@ -334,7 +335,7 @@ export default function Home() {
       ` }} />
 
             {/* ════════ NAVBAR ════════ */}
-            <nav className="bg-[#1a5276]/90 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
+            <nav className="bg-[#003058]/95 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
                     <div className="relative w-10 h-10 shrink-0">
                         <span style={{
@@ -481,13 +482,13 @@ export default function Home() {
             <main className="flex-grow" onClick={() => setDropdownOpen(false)}>
 
                 {/* ── HERO ── */}
-                <section className="relative bg-[#1a5276] text-white py-16 md:py-24 px-6 overflow-hidden">
+                <section className="relative bg-[#003058] text-white py-16 md:py-24 px-6 overflow-hidden">
                     <div className="absolute inset-0 overflow-hidden">
                         <img src="/images/GEH.jpg" alt=""
-                            className="anim-bg w-full h-full object-cover opacity-20"
+                            className="anim-bg w-full h-full object-cover opacity-50"
                             style={{ transformOrigin: 'center center' }} />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#1a5276]/70 via-[#1a5276]/55 to-[#1a5276]/92" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#003058]/60 via-[#003058]/40 to-[#003058]/80" />
                     <div className="anim-sweep absolute inset-0 pointer-events-none"
                         style={{ background: 'linear-gradient(105deg,transparent 30%,rgba(24,120,64,.07) 50%,transparent 70%)', width: '60%', left: 0 }} />
 
@@ -529,18 +530,43 @@ export default function Home() {
                 {/* ── À PROPOS ── */}
                 <section id="about-club" className="py-16 px-6 max-w-5xl mx-auto scroll-mt-20">
                     <div className="mb-12">
-                        <h2 className="text-xl md:text-2xl font-extrabold text-[#003058] mb-4"><center>Le Club Métiers & Technologies</center></h2>
-                        <p className="text-slate-600 text-xs md:text-sm leading-relaxed text-justify">
-
-                            Le <strong>Club Métiers & Technologies (Club-MET)</strong> est la structure legale qui regroupe l'ensemble des etudians de l'UFR <strong>Métiers & Technologies(MET)</strong>.
-                            Le Club a pour missions de :
-                            <strong>Promouvoir l’innovation</strong>P technologique et entrepreneuriale.
-                            <strong>Organiser des tutorat</strong> par les pairs pour soutenir les apprentissages disciplinaires.
-                            <strong>Développer des projets communautaires</strong> (actions sociales, maraudes, supports
-                            pédagogiques).
-                            <strong>Faciliter la cohésion inter-filières</strong> via des événements culturels et des rencontres.
-
-                        </p>
+                        <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] mb-6 text-center">
+                            Le Club Métiers & Technologies
+                        </h2>
+                        <div className="text-slate-600 text-sm md:text-base leading-relaxed space-y-4">
+                            <p className="text-justify">
+                                Le <strong>Club Métiers & Technologies (Club-MET)</strong> est la structure légale qui regroupe l'ensemble des étudiants de l'UFR <strong>Métiers & Technologies (MET)</strong>.
+                            </p>
+                            <p className="font-semibold text-[#003058] mt-4">
+                                Le Club a pour missions de :
+                            </p>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                        <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
+                                    </span>
+                                    <span className="text-xs md:text-sm"><strong>Promouvoir l'innovation</strong> technologique et entrepreneuriale.</span>
+                                </li>
+                                <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                        <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
+                                    </span>
+                                    <span className="text-xs md:text-sm"><strong>Organiser des tutorats</strong> par les pairs pour soutenir les apprentissages disciplinaires.</span>
+                                </li>
+                                <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                        <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
+                                    </span>
+                                    <span className="text-xs md:text-sm"><strong>Développer des projets communautaires</strong> (actions sociales, maraudes, supports pédagogiques).</span>
+                                </li>
+                                <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                                    <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                        <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
+                                    </span>
+                                    <span className="text-xs md:text-sm"><strong>Faciliter la cohésion inter-filières</strong> via des événements culturels et des rencontres.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
@@ -565,6 +591,42 @@ export default function Home() {
                                 <p className="text-[11px] text-slate-500 leading-relaxed">{c.desc}</p>
                             </div>
                         ))}
+                    </div>
+                </section>
+
+                {/* ── PARCOURS & HISTOIRE ── */}
+                <section id="parcours" className="py-20 bg-gradient-to-b from-white to-[#F8F0F0] px-6 border-t border-gray-100 overflow-hidden">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="text-center mb-16">
+                            <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/25">
+                                Notre Histoire
+                            </span>
+                            <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058] mt-4">Le Parcours du Club-MET</h2>
+                            <p className="text-slate-500 mt-2 text-sm max-w-xl mx-auto">Découvrez les grandes étapes clés et les succès qui ont forgé notre club académique.</p>
+                        </div>
+
+                        <div className="relative border-l-2 border-dashed border-[#187840]/40 pl-6 md:pl-10 ml-4 md:ml-10 space-y-12">
+                            {[
+                                { year: '2021', title: 'Fondation & Vision', desc: "Lancement du Club-MET à l'UFR Métiers & Technologies pour briser les barrières inter-filières et créer une synergie d'entraide." },
+                                { year: '2023', title: 'Structuration du Tutorat', desc: "Mise en place d'un réseau structuré de tutorat par les pairs, dispensant des séances hebdomadaires à plus de 300 étudiants." },
+                                { year: '2024', title: 'Essor Technologique', desc: "Création des premiers outils numériques de partage, d'annales de cours et de maquettes, et premières participations aux hackathons régionaux." },
+                                { year: '2026', title: 'Modernisation & Plateforme Web', desc: "Déploiement de notre portail interactif connecté avec Supabase, offrant un espace étudiant avec messagerie instantanée, bibliothèque partagée et notifications en direct." }
+                            ].map((item, index) => (
+                                <div key={index} className="relative group">
+                                    {/* Timeline dot */}
+                                    <div className="absolute -left-[35px] md:-left-[51px] top-1 w-6 h-6 rounded-full bg-[#187840] border-4 border-white group-hover:scale-110 transition-transform flex items-center justify-center shadow-md">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                                    </div>
+                                    <div className="bg-white border border-[#C8C8C8]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                                            <h3 className="font-extrabold text-sm md:text-base text-[#003058]">{item.title}</h3>
+                                            <span className="text-xs font-black text-white bg-[#187840] px-3 py-1 rounded-full">{item.year}</span>
+                                        </div>
+                                        <p className="text-xs md:text-sm text-slate-500 leading-relaxed text-justify">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
@@ -668,6 +730,90 @@ export default function Home() {
                             </motion.div>
                         ))}
                     </motion.div>
+
+                    {/* Bouton Anciens Membres */}
+                    <div className="flex justify-center mt-12">
+                        <button
+                            onClick={() => setIsAnciensOpen(true)}
+                            className="bg-transparent hover:bg-[#003058] text-[#003058] hover:text-white px-6 py-3 rounded-xl font-bold text-xs border-2 border-[#003058] transition-all flex items-center gap-2 hover:scale-105 shadow-sm"
+                        >
+                            <Users size={16} />
+                            Anciens membres
+                        </button>
+                    </div>
+
+                    {/* Modal Anciens Membres */}
+                    <AnimatePresence>
+                        {isAnciensOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" 
+                                onClick={() => setIsAnciensOpen(false)}
+                            >
+                                <motion.div 
+                                    initial={{ scale: 0.95, y: 20 }}
+                                    animate={{ scale: 1, y: 0 }}
+                                    exit={{ scale: 0.95, y: 20 }}
+                                    className="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800" 
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    <button onClick={() => setIsAnciensOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-100 rounded-full">
+                                        <X size={20} />
+                                    </button>
+                                    <div className="text-center mb-6">
+                                        <h3 className="text-xl font-black text-[#003058]">Anciens Membres du Bureau</h3>
+                                        <p className="text-xs text-slate-400 mt-1">Les promotions précédentes qui ont fait grandir le Club-MET.</p>
+                                    </div>
+                                    <div className="space-y-6">
+                                        {[
+                                            {
+                                                mandat: 'Mandat 2024 - 2025',
+                                                membres: [
+                                                    { nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT' },
+                                                    { nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC' },
+                                                    { nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT' }
+                                                ]
+                                            },
+                                            {
+                                                mandat: 'Mandat 2023 - 2024',
+                                                membres: [
+                                                    { nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT' },
+                                                    { nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC' }
+                                                ]
+                                            },
+                                            {
+                                                mandat: 'Mandat 2022 - 2023',
+                                                membres: [
+                                                    { nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT' },
+                                                    { nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC' }
+                                                ]
+                                            }
+                                        ].map((m, idx) => (
+                                            <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                                                <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider mb-3 border-b border-slate-200/60 pb-1.5">{m.mandat}</h4>
+                                                <div className="space-y-2">
+                                                    {m.membres.map((mem, i) => (
+                                                        <div key={i} className="flex justify-between items-center gap-3 text-xs">
+                                                            <div>
+                                                                <span className="font-bold text-slate-700">{mem.nom}</span>
+                                                                <span className="text-[10px] text-slate-400 ml-2">({mem.classe})</span>
+                                                            </div>
+                                                            <span className="font-black text-[10px] uppercase text-[#003058] bg-[#003058]/5 px-2 py-0.5 rounded">{mem.poste}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="mt-8 flex justify-center">
+                                        <button onClick={() => setIsAnciensOpen(false)} className="bg-[#003058] text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-md hover:bg-[#002850] transition">Fermer</button>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </section>
 
                 {/* ── ACTIVITÉS & MÉDIAS ── */}

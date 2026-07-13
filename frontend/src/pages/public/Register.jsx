@@ -10,7 +10,7 @@ const ERRORS = {
 };
 
 export default function Register() {
-    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", password:"", confirm:"" });
+    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", role:"student", password:"", confirm:"" });
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -47,11 +47,16 @@ export default function Register() {
                         prenom: form.prenom,
                         email: form.email,
                         niveau: form.niveau,
-                        role: "student"
+                        role: form.role
                     });
                 if (insertErr) throw insertErr;
             }
-            navigate("/student/dashboard");
+            
+            if (form.role === 'admin') {
+                navigate("/admin/panel");
+            } else {
+                navigate("/student/dashboard");
+            }
         } catch (err) {
             setError(ERRORS[err.message] || err.message || "Erreur lors de l'inscription.");
         } finally {
@@ -111,6 +116,15 @@ export default function Register() {
                                     className="input-field bg-white">
                                 <option value="">— Sélectionner votre niveau —</option>
                                 {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Rôle *</label>
+                            <select required value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
+                                    className="input-field bg-white">
+                                <option value="student">Étudiant (Espace Étudiant)</option>
+                                <option value="admin">Administrateur (Espace Admin)</option>
                             </select>
                         </div>
 

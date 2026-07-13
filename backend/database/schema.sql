@@ -39,6 +39,9 @@ CREATE TABLE public.bureau (
     poste TEXT NOT NULL,
     classe TEXT NOT NULL,
     imageUrl TEXT,
+    whatsapp TEXT,
+    linkedin TEXT,
+    "estAncien" BOOLEAN DEFAULT false,
     createdAt TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
