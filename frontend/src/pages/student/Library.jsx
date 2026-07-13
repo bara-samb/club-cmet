@@ -9,7 +9,6 @@ const CATEGORIES = [
     { id: 'td',            label: 'TD & Exercices' },
     { id: 'examens',       label: 'Examens & Corrigés' },
     { id: 'projets',       label: 'Projets & Mémoires' },
-    { id: 'maquette',      label: 'Maquettes de Filière' },
     { id: 'autres',        label: 'Autres documents' },
 ];
 
@@ -38,21 +37,16 @@ export default function Library() {
 
     useEffect(() => {
         let active = true;
-        let c1, c2;
+        let c1;
 
         const fetchAll = async () => {
-            const [bibData, maqData] = await Promise.all([
-                supabase.from('bibliotheque').select('*'),
-                supabase.from('maquettes').select('*')
-            ]);
+            const { data, error } = await supabase.from('bibliotheque').select('*');
+            if (error) {
+                console.error("Erreur bibliothèque:", error);
+                return;
+            }
             if (active) {
-                const bibList = bibData.data || [];
-                const maqList = (maqData.data || []).map(m => ({
-                    ...m,
-                    categorie: 'maquette',
-                    niveau: 'Commun'
-                }));
-                setBibliotheque([...bibList, ...maqList]);
+                setBibliotheque(data || []);
                 setLoading(false);
             }
         };
@@ -63,14 +57,9 @@ export default function Library() {
             .on('postgres_changes', { event: '*', schema: 'public', table: 'bibliotheque' }, fetchAll)
             .subscribe();
 
-        c2 = supabase.channel('library-realtime-maq')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, fetchAll)
-            .subscribe();
-
         return () => {
             active = false;
             if (c1) supabase.removeChannel(c1);
-            if (c2) supabase.removeChannel(c2);
         };
     }, []);
 

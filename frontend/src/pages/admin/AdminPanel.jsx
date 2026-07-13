@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, UserCheck, FileText, LayoutDashboard, Mail, Bell, Calendar, Image } from 'lucide-react';
+import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, Mail, Bell, Calendar, Image } from 'lucide-react';
 import { supabase } from '../../config/supabaseClient';
 
 export default function AdminPanel() {
@@ -35,6 +35,7 @@ export default function AdminPanel() {
         { title: "Comptes Utilisateurs", path: "/admin/users", icon: Users, desc: "Gérer les permissions, rôles et accès des utilisateurs" },
         { title: "Membres du Bureau", path: "/admin/manage-users", icon: UserCheck, desc: "Ajouter ou supprimer des membres officiels du bureau" },
         { title: "Espace Documentaire", path: "/admin/manage-docs", icon: FileText, desc: "Ajouter des ressources (Règlements, Rapports...)" },
+        { title: "Gestion Cotisations", path: "/admin/manage-cotisations", icon: CreditCard, desc: "Lien Wave, validation des transferts et versements manuels" },
         { title: "Messages de Contact", path: "/admin/manage-messages", icon: Mail, desc: "Lire et gérer les messages reçus du formulaire", badge: unreadCount },
         { title: "Notifications", path: "/admin/manage-notifications", icon: Bell, desc: "Diffuser une information à tous les étudiants" },
         { title: "Événements & Activités", path: "/admin/events", icon: Calendar, desc: "Gérer les actualités et événements du club" },

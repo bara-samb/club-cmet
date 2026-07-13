@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, UserCheck, FileText, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
+import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 
 export default function AdminLayout() {
@@ -14,6 +14,7 @@ export default function AdminLayout() {
         { path: '/admin/users', label: 'Utilisateurs', Icon: Users },
         { path: '/admin/manage-users', label: 'Bureau', Icon: UserCheck },
         { path: '/admin/manage-docs', label: 'Documents', Icon: FileText },
+        { path: '/admin/manage-cotisations', label: 'Cotisations', Icon: CreditCard },
         { path: '/admin/manage-messages', label: 'Messages', Icon: Mail },
         { path: '/admin/manage-notifications', label: 'Notifications', Icon: Bell },
         { path: '/admin/events', label: 'Événements', Icon: Calendar },

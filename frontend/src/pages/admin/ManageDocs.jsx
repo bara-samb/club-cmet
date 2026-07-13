@@ -52,7 +52,11 @@ export default function ManageDocs() {
     const handleUpload = async () => {
         if (!docFile) return form.url;
 
-        const fileName = `${Date.now()}_${docFile.name}`;
+        const cleanName = docFile.name
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9.-]/g, "_");
+        const fileName = `${Date.now()}_${cleanName}`;
         const filePath = `documents/${fileName}`;
 
         const { error: uploadError } = await supabase.storage

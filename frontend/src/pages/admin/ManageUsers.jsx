@@ -66,7 +66,11 @@ export default function ManageUsers() {
     const uploadImage = async () => {
         if (!imageFile) return form.imageUrl || "";
 
-        const fileName = `${Date.now()}_${imageFile.name}`;
+        const cleanName = imageFile.name
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9.-]/g, "_");
+        const fileName = `${Date.now()}_${cleanName}`;
         const filePath = `bureau/${fileName}`;
 
         setProgress(20);

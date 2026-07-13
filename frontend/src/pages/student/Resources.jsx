@@ -4,6 +4,7 @@ import { FolderOpen, Search, Eye, Download, FileText, Loader2, AlertCircle } fro
 
 const CATEGORIES = [
     { id: 'all', label: 'Tous les documents' },
+    { id: 'maquette', label: 'Maquettes de Filière' },
     { id: 'reglement', label: 'Règlements Intérieurs' },
     { id: 'rapports', label: 'Rapports d\'Activité' },
     { id: 'comptes_rendus', label: 'Comptes Rendus d\'AG' }
@@ -18,17 +19,31 @@ export default function Resources() {
 
     useEffect(() => {
         let active = true;
+        let c1, c2;
 
         const fetchDocs = async () => {
             try {
-                const { data, error: fetchErr } = await supabase
-                    .from('ressources')
-                    .select('*')
-                    .order('createdAt', { ascending: false });
+                const [docsData, maqData] = await Promise.all([
+                    supabase.from('ressources').select('*').order('createdAt', { ascending: false }),
+                    supabase.from('maquettes').select('*')
+                ]);
 
-                if (fetchErr) throw fetchErr;
+                if (docsData.error) throw docsData.error;
+                if (maqData.error) throw maqData.error;
+
                 if (active) {
-                    setDocs(data || []);
+                    const parsedDocs = docsData.data || [];
+                    const parsedMaquettes = (maqData.data || []).map(m => ({
+                        ...m,
+                        categorie: 'maquette',
+                        createdAt: m.created_at || new Date(0).toISOString()
+                    }));
+
+                    const merged = [...parsedDocs, ...parsedMaquettes].sort((a, b) => {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                    });
+
+                    setDocs(merged);
                     setLoading(false);
                 }
             } catch (err) {
@@ -42,13 +57,18 @@ export default function Resources() {
 
         fetchDocs();
 
-        const channel = supabase.channel('student-resources-changes')
+        c1 = supabase.channel('student-resources-changes')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'ressources' }, fetchDocs)
+            .subscribe();
+
+        c2 = supabase.channel('student-resources-maq-changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, fetchDocs)
             .subscribe();
 
         return () => {
             active = false;
-            supabase.removeChannel(channel);
+            if (c1) supabase.removeChannel(c1);
+            if (c2) supabase.removeChannel(c2);
         };
     }, []);
 
@@ -60,6 +80,7 @@ export default function Resources() {
     });
 
     const badgeLabel = (cat) => {
+        if (cat === 'maquette') return 'Maquette';
         if (cat === 'reglement') return 'Règlement';
         if (cat === 'rapports') return 'Rapport';
         if (cat === 'comptes_rendus') return 'CR AG';
@@ -67,6 +88,7 @@ export default function Resources() {
     };
 
     const badgeColor = (cat) => {
+        if (cat === 'maquette') return 'text-amber-600 bg-amber-50 border-amber-200';
         if (cat === 'reglement') return 'text-red-600 bg-red-50 border-red-200';
         if (cat === 'rapports') return 'text-[#187840] bg-[#187840]/10 border-[#187840]/20';
         if (cat === 'comptes_rendus') return 'text-blue-600 bg-blue-50 border-blue-200';

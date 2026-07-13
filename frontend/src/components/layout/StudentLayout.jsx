@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users, CreditCard } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import { supabase } from '../../config/supabaseClient';
 
@@ -18,6 +18,7 @@ export default function StudentLayout() {
         { path: '/student/library', label: 'Bibliothèque', Icon: BookOpen },
         { path: '/student/resources', label: 'Documents', Icon: FolderOpen },
         { path: '/student/bureau', label: 'Le Bureau', Icon: Users },
+        { path: '/student/cotisations', label: 'Cotisations', Icon: CreditCard },
         { path: '/student/tutorat', label: 'Messages', Icon: MessageSquare },
         { path: '/student/notifications', label: 'Notifications', Icon: Bell },
         { path: '/student/profile', label: 'Profil', Icon: User },
