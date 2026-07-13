@@ -21,6 +21,16 @@ const LinkedInIcon = () => (
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
 );
+const WhatsAppIcon = () => (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.019-5.114-2.877-6.974-1.858-1.859-4.325-2.883-6.963-2.885-5.437 0-9.86 4.422-9.864 9.865-.001 1.73.454 3.42 1.32 4.925l-.995 3.635 3.71-.973zm11.514-5.29c-.07-.117-.258-.187-.54-.327-.281-.14-1.661-.82-1.919-.914-.258-.094-.446-.14-.633.14-.187.28-.725.914-.889 1.101-.164.186-.327.21-.609.07-.28-.14-1.187-.437-2.261-1.396-.836-.746-1.4-1.667-1.564-1.948-.164-.282-.018-.434.122-.574.127-.127.282-.328.422-.492.141-.164.188-.28.282-.469.094-.187.046-.351-.023-.49-.07-.14-.633-1.523-.867-2.086-.228-.547-.46-.473-.633-.482-.164-.008-.351-.01-.54-.01-.187 0-.491.07-.749.351-.258.282-.983.961-.983 2.343 0 1.382 1.006 2.719 1.147 2.907.14.187 1.98 3.024 4.797 4.237.67.289 1.192.462 1.6.593.673.214 1.287.184 1.77.112.54-.08 1.661-.68 1.896-1.336.234-.656.234-1.22.164-1.336z"/>
+    </svg>
+);
+const TikTokIcon = () => (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72-.08-.07-.17-.17-.25-.26V14c0 1.71-.35 3.48-1.4 4.88-1.5 2-4.12 2.95-6.55 2.5-2.2-.4-4.1-2.1-4.66-4.27-.7-2.73.48-5.91 3-7.16.85-.41 1.8-.62 2.75-.62.33 0 .66.02.99.07v4.13c-.33-.1-.67-.14-1.02-.13-1.63.02-3.13 1.19-3.48 2.78-.4 1.8.84 3.75 2.66 4.02 1.48.22 3.03-.54 3.55-1.93.2-.5.27-1.05.26-1.6V.02z" />
+    </svg>
+);
 
 /* ── Helpers ── */
 const déclencherTéléchargement = (url, nom) => {
@@ -1207,6 +1217,14 @@ export default function Home() {
                             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#0A66C2] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#0A66C2]/20 flex items-center justify-center transition-colors shrink-0"><LinkedInIcon /></span>
                                 <span>LinkedIn</span>
+                            </a>
+                            <a href="https://wa.me/221770000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#25D366] transition-colors group">
+                                <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#25D366]/20 flex items-center justify-center transition-colors shrink-0"><WhatsAppIcon /></span>
+                                <span>WhatsApp</span>
+                            </a>
+                            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#ff0050] transition-colors group">
+                                <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#ff0050]/20 flex items-center justify-center transition-colors shrink-0"><TikTokIcon /></span>
+                                <span>TikTok</span>
                             </a>
                         </div>
                     </div>
