@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
+import useAuth from '../../hooks/useAuth';
 import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus } from 'lucide-react';
 
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
 export default function ManageCotisations() {
+    const { user } = useAuth();
     const [waveLink, setWaveLink] = useState(DEFAULT_WAVE_LINK);
     const [cotisations, setCotisations] = useState([]);
     const [etudiants, setEtudiants] = useState([]);
@@ -100,9 +102,12 @@ export default function ManageCotisations() {
 
     const handleValidate = async (id) => {
         try {
+            const adminName = user?.user_metadata?.prenom 
+                ? `${user.user_metadata.prenom} ${user.user_metadata.nom}` 
+                : (user?.email || 'Admin');
             const { error } = await supabase
                 .from('cotisations')
-                .update({ statut: 'valide' })
+                .update({ statut: 'valide', enregistre_par: `${adminName} (Valide)` })
                 .eq('id', id);
             
             if (error) throw error;
@@ -135,14 +140,22 @@ export default function ManageCotisations() {
 
         setSubmittingPayment(true);
         try {
+            const adminName = user?.user_metadata?.prenom 
+                ? `${user.user_metadata.prenom} ${user.user_metadata.nom}` 
+                : (user?.email || 'Admin');
+
             const payload = {
-                user_id: userIdToInsert,
                 nom: finalNom,
                 classe: finalClasse,
                 montant: Number(manualMontant),
                 date_paiement: new Date().toLocaleDateString('fr-FR'),
-                statut: 'valide' // Paiement direct validé
+                statut: 'valide',
+                enregistre_par: adminName
             };
+
+            if (userIdToInsert) {
+                payload.user_id = userIdToInsert;
+            }
 
             const { error } = await supabase.from('cotisations').insert(payload);
             if (error) throw error;
@@ -333,6 +346,7 @@ export default function ManageCotisations() {
                                         <th className="py-4 px-4">Nom & Classe</th>
                                         <th className="py-4 px-4">Montant</th>
                                         <th className="py-4 px-4">Date de Paiement</th>
+                                        <th className="py-4 px-4">Enregistré par</th>
                                         <th className="py-4 px-4">Statut</th>
                                         <th className="py-4 px-4 text-right">Actions</th>
                                     </tr>
@@ -349,6 +363,9 @@ export default function ManageCotisations() {
                                             </td>
                                             <td className="py-4 px-4 text-slate-500 font-medium">
                                                 {c.date_paiement}
+                                            </td>
+                                            <td className="py-4 px-4 text-slate-600 font-medium text-xs">
+                                                {c.enregistre_par || <span className="text-slate-300 italic text-[11px]">Système</span>}
                                             </td>
                                             <td className="py-4 px-4">
                                                 {c.statut === 'valide' ? (

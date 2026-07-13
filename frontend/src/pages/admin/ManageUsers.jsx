@@ -1,6 +1,6 @@
 // src/pages/admin/ManageUsers.jsx
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../config/supabaseClient";
+import { supabase, safeInsert, safeUpdate } from "../../config/supabaseClient";
 import { Pencil, Trash2, AlertTriangle, UserPlus, Image as ImageIcon, Save, Loader2, Users } from "lucide-react";
 
 const POSTES = [
@@ -107,11 +107,11 @@ export default function ManageUsers() {
                 estAncien: form.estAncien
             };
             if (editId) {
-                const { error } = await supabase.from("bureau").update(data).eq("id", editId);
+                const { error } = await safeUpdate("bureau", data, q => q.eq("id", editId));
                 if (error) throw error;
                 showToast("Membre mis à jour ✓");
             } else {
-                const { error } = await supabase.from("bureau").insert(data);
+                const { error } = await safeInsert("bureau", data);
                 if (error) throw error;
                 showToast("Membre ajouté ✓");
             }

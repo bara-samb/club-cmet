@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Clock, AlertCircle, Image as ImageIcon, Loader2, ExternalLink } from 'lucide-react';
+import { Bell, Clock, AlertCircle, Image as ImageIcon, Loader2, ExternalLink, Trash2 } from 'lucide-react';
 
 const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -32,6 +32,21 @@ export default function NotificationsHistory() {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState(null);
+    const [hiddenIds, setHiddenIds] = useState(() => {
+        try {
+            const saved = localStorage.getItem('cmet_hidden_notifications');
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    const handleHideNotification = (id, e) => {
+        e.stopPropagation();
+        const updated = [...hiddenIds, id];
+        setHiddenIds(updated);
+        localStorage.setItem('cmet_hidden_notifications', JSON.stringify(updated));
+    };
 
     useEffect(() => {
         let active = true;
@@ -73,9 +88,9 @@ export default function NotificationsHistory() {
                     <h1 className="text-xl font-bold text-[#003058] tracking-tight">Historique des notifications</h1>
                     <p className="text-xs text-slate-400 mt-0.5">Tous les messages diffusés par le Club-MET</p>
                 </div>
-                {!loading && notifications.length > 0 && (
+                {!loading && visibleNotifications.length > 0 && (
                     <span className="ml-auto bg-blue-100 text-blue-600 text-xs font-black px-3 py-1 rounded-full">
-                        {notifications.length} message{notifications.length > 1 ? 's' : ''}
+                        {visibleNotifications.length} message{visibleNotifications.length > 1 ? 's' : ''}
                     </span>
                 )}
             </div>
@@ -86,7 +101,7 @@ export default function NotificationsHistory() {
                     <Loader2 className="animate-spin w-5 h-5" />
                     <span className="text-sm">Chargement des notifications...</span>
                 </div>
-            ) : notifications.length === 0 ? (
+            ) : visibleNotifications.length === 0 ? (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -100,7 +115,7 @@ export default function NotificationsHistory() {
                 </motion.div>
             ) : (
                 <div className="space-y-3">
-                    {notifications.map((notif, idx) => (
+                    {visibleNotifications.map((notif, idx) => (
                         <motion.div
                             key={notif.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -109,44 +124,54 @@ export default function NotificationsHistory() {
                             className={`bg-white rounded-2xl border border-slate-100 border-l-4 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 ${idx === 0 ? 'border-l-[#187840]' : 'border-l-[#003058]'}`}
                         >
                             {/* ── Header carte ── */}
-                            <button
-                                onClick={() => setExpandedId(expandedId === notif.id ? null : notif.id)}
-                                className="w-full text-left px-5 py-4 flex items-start gap-4"
-                            >
-                                {/* Icône */}
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 border border-slate-100'}`}>
-                                    <AlertCircle size={16} className={idx === 0 ? 'text-blue-500' : 'text-slate-400'} />
-                                </div>
-
-                                {/* Contenu principal */}
-                                <div className="flex-grow min-w-0">
-                                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                                        <span className="text-xs font-bold text-[#003058]">Information Club-MET</span>
-                                        {idx === 0 && (
-                                            <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse inline-block" />
-                                                Dernière
-                                            </span>
-                                        )}
+                            <div className="flex items-center w-full">
+                                <button
+                                    onClick={() => setExpandedId(expandedId === notif.id ? null : notif.id)}
+                                    className="flex-grow text-left px-5 py-4 flex items-start gap-4"
+                                >
+                                    {/* Icône */}
+                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 border border-slate-100'}`}>
+                                        <AlertCircle size={16} className={idx === 0 ? 'text-blue-500' : 'text-slate-400'} />
                                     </div>
-                                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                                        {notif.message}
-                                    </p>
-                                </div>
 
-                                {/* Date + chevron */}
-                                <div className="flex flex-col items-end gap-2 shrink-0">
-                                    <span className="text-[10px] text-slate-400 flex items-center gap-1 whitespace-nowrap">
-                                        <Clock size={10} /> {formatDate(notif.created_at)}
-                                    </span>
-                                    <svg
-                                        className={`w-4 h-4 text-slate-300 transition-transform duration-200 ${expandedId === notif.id ? 'rotate-180' : ''}`}
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </button>
+                                    {/* Contenu principal */}
+                                    <div className="flex-grow min-w-0">
+                                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                                            <span className="text-xs font-bold text-[#003058]">Information Club-MET</span>
+                                            {idx === 0 && (
+                                                <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse inline-block" />
+                                                    Dernière
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                            {notif.message}
+                                        </p>
+                                    </div>
+
+                                    {/* Date + chevron */}
+                                    <div className="flex flex-col items-end gap-2 shrink-0">
+                                        <span className="text-[10px] text-slate-400 flex items-center gap-1 whitespace-nowrap">
+                                            <Clock size={10} /> {formatDate(notif.created_at)}
+                                        </span>
+                                        <svg
+                                            className={`w-4 h-4 text-slate-300 transition-transform duration-200 ${expandedId === notif.id ? 'rotate-180' : ''}`}
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                
+                                <button
+                                    onClick={(e) => handleHideNotification(notif.id, e)}
+                                    title="Supprimer cette notification de mon flux"
+                                    className="mr-5 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition shrink-0"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
 
                             {/* ── Contenu déroulant ── */}
                             <AnimatePresence>

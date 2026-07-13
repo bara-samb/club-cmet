@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../config/supabaseClient';
+import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import { FolderOpen, Plus, Trash2, Eye, FileText, Loader2, AlertTriangle, Save, X } from 'lucide-react';
 
 const CATEGORIES = [
-    { id: 'reglement', label: 'Règlement Intérieur' },
-    { id: 'rapports', label: 'Rapport d\'Activité' },
-    { id: 'comptes_rendus', label: 'Compte Rendu d\'AG' }
+    { id: 'reglement', label: 'Règlement Intérieur (Espace Documents)' },
+    { id: 'rapports', label: 'Rapport d\'Activité (Espace Documents)' },
+    { id: 'comptes_rendus', label: 'Compte Rendu d\'AG (Espace Documents)' },
+    { id: 'maquette', label: 'Maquette de Filière (Espace Documents)' },
+    { id: 'cours', label: 'Cours & Supports (Bibliothèque)' },
+    { id: 'td', label: 'TD & Exercices (Bibliothèque)' },
+    { id: 'examens', label: 'Examens & Corrigés (Bibliothèque)' },
+    { id: 'projets', label: 'Projets & Mémoires (Bibliothèque)' },
+    { id: 'autres', label: 'Autres documents (Bibliothèque)' }
 ];
 
 export default function ManageDocs() {
@@ -15,32 +21,75 @@ export default function ManageDocs() {
     const [toast, setToast] = useState(null);
     const [confirmDel, setConfirmDel] = useState(null);
 
-    const [form, setForm] = useState({ nom: "", url: "", categorie: "reglement", description: "" });
+    const [form, setForm] = useState({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "Commun" });
     const [docFile, setDocFile] = useState(null);
 
     useEffect(() => {
         let active = true;
+        let c1, c2, c3;
 
         const fetchDocs = async () => {
-            const { data } = await supabase
-                .from('ressources')
-                .select('*')
-                .order('createdAt', { ascending: false });
-            if (data && active) {
-                setDocs(data);
-                setLoading(false);
+            try {
+                const [ressourcesData, maquettesData, biblioData] = await Promise.all([
+                    supabase.from('ressources').select('*'),
+                    supabase.from('maquettes').select('*'),
+                    supabase.from('bibliotheque').select('*')
+                ]);
+                
+                if (active) {
+                    const rList = (ressourcesData.data || []).map(r => ({ 
+                        ...r, 
+                        sourceTable: 'ressources',
+                        createdAt: r.createdAt || r.created_at || new Date(0).toISOString()
+                    }));
+                    const mList = (maquettesData.data || []).map(m => ({
+                        ...m,
+                        categorie: 'maquette',
+                        description: `Filière: ${m.filiere}`,
+                        sourceTable: 'maquettes',
+                        createdAt: m.createdAt || m.created_at || new Date(0).toISOString(),
+                        date: new Date(m.createdAt || m.created_at || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+                        typeDoc: 'PDF'
+                    }));
+                    const bList = (biblioData.data || []).map(b => ({
+                        ...b,
+                        sourceTable: 'bibliotheque',
+                        createdAt: b.date_ajout || b.createdAt || new Date(0).toISOString(),
+                        date: new Date(b.date_ajout || b.createdAt || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+                        typeDoc: 'PDF'
+                    }));
+
+                    const merged = [...rList, ...mList, ...bList].sort((a, b) => {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                    });
+
+                    setDocs(merged);
+                    setLoading(false);
+                }
+            } catch (err) {
+                console.error("Error fetching docs:", err);
             }
         };
 
         fetchDocs();
 
-        const channel = supabase.channel('admin-docs-changes')
+        c1 = supabase.channel('admin-docs-changes-ressources')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'ressources' }, fetchDocs)
+            .subscribe();
+
+        c2 = supabase.channel('admin-docs-changes-maquettes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'maquettes' }, fetchDocs)
+            .subscribe();
+
+        c3 = supabase.channel('admin-docs-changes-bibliotheque')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bibliotheque' }, fetchDocs)
             .subscribe();
 
         return () => {
             active = false;
-            supabase.removeChannel(channel);
+            if (c1) supabase.removeChannel(c1);
+            if (c2) supabase.removeChannel(c2);
+            if (c3) supabase.removeChannel(c3);
         };
     }, []);
 
@@ -84,20 +133,39 @@ export default function ManageDocs() {
             const finalUrl = await handleUpload();
             const typeDoc = docFile ? docFile.name.split('.').pop().toUpperCase() : 'Lien';
 
-            const payload = {
-                nom: form.nom,
-                url: finalUrl,
-                categorie: form.categorie,
-                description: form.description,
-                typeDoc,
-                date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
-            };
+            let error;
+            if (form.categorie === 'maquette') {
+                const payload = {
+                    nom: form.nom,
+                    url: finalUrl,
+                    filiere: form.filiere || 'IT'
+                };
+                ({ error } = await safeInsert('maquettes', payload));
+            } else if (['cours', 'td', 'examens', 'projets', 'autres'].includes(form.categorie)) {
+                const payload = {
+                    nom: form.nom,
+                    url: finalUrl,
+                    categorie: form.categorie,
+                    niveau: form.niveau || 'Commun',
+                    description: form.description
+                };
+                ({ error } = await safeInsert('bibliotheque', payload));
+            } else {
+                const payload = {
+                    nom: form.nom,
+                    url: finalUrl,
+                    categorie: form.categorie,
+                    description: form.description,
+                    typeDoc,
+                    date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+                };
+                ({ error } = await safeInsert('ressources', payload));
+            }
 
-            const { error } = await supabase.from('ressources').insert(payload);
             if (error) throw error;
 
             showToast("Document ajouté avec succès ! ✓");
-            setForm({ nom: "", url: "", categorie: "reglement", description: "" });
+            setForm({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "Commun" });
             setDocFile(null);
         } catch (err) {
             showToast("Erreur : " + err.message, "error");
@@ -108,7 +176,7 @@ export default function ManageDocs() {
 
     const handleDelete = async (doc) => {
         try {
-            const { error } = await supabase.from('ressources').delete().eq('id', doc.id);
+            const { error } = await supabase.from(doc.sourceTable).delete().eq('id', doc.id);
             if (error) throw error;
 
             if (doc.url && doc.url.includes('/club-met-storage/')) {
@@ -118,7 +186,7 @@ export default function ManageDocs() {
                     await supabase.storage.from('club-met-storage').remove([filePath]);
                 }
             }
-            showToast("Document supprimé.");
+            showToast("Document supprimé avec succès.");
         } catch (err) {
             showToast("Erreur : " + err.message, "error");
         } finally {
@@ -212,6 +280,40 @@ export default function ManageDocs() {
                                 {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
                             </select>
                         </div>
+
+                        {/* Filière (seulement pour les maquettes) */}
+                        {form.categorie === 'maquette' && (
+                            <div className="space-y-1.5 animate-in fade-in duration-200">
+                                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Filière *</label>
+                                <select 
+                                    value={form.filiere} 
+                                    onChange={e => setForm({ ...form, filiere: e.target.value })}
+                                    className="input-field bg-white"
+                                >
+                                    <option value="IT">Informatique & Télécommunications (IT)</option>
+                                    <option value="HEC">Hautes Études Commerciales (HEC)</option>
+                                </select>
+                            </div>
+                        )}
+
+                        {/* Niveau (seulement pour la bibliothèque) */}
+                        {['cours', 'td', 'examens', 'projets', 'autres'].includes(form.categorie) && (
+                            <div className="space-y-1.5 animate-in fade-in duration-200">
+                                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
+                                <select 
+                                    value={form.niveau} 
+                                    onChange={e => setForm({ ...form, niveau: e.target.value })}
+                                    className="input-field bg-white"
+                                >
+                                    <option value="Commun">Tronc Commun / Général</option>
+                                    <option value="L1">Licence 1</option>
+                                    <option value="L2">Licence 2</option>
+                                    <option value="L3">Licence 3</option>
+                                    <option value="M1">Master 1</option>
+                                    <option value="M2">Master 2</option>
+                                </select>
+                            </div>
+                        )}
 
                         {/* Description */}
                         <div className="space-y-1.5 md:col-span-2">
