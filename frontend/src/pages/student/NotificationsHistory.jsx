@@ -48,6 +48,8 @@ export default function NotificationsHistory() {
         localStorage.setItem('cmet_hidden_notifications', JSON.stringify(updated));
     };
 
+    const visibleNotifications = notifications.filter(n => !hiddenIds.includes(n.id));
+
     useEffect(() => {
         let active = true;
 
