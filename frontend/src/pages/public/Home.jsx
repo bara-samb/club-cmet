@@ -339,11 +339,11 @@ export default function Home() {
                     <div className="relative w-10 h-10 shrink-0">
                         <span style={{
                             position: 'absolute', inset: '-4px', borderRadius: '9999px',
-                            border: '2px dashed rgba(24,120,64,.5)',
+                            border: '2px dashed rgba(0,48,88,.5)',
                             animation: 'spin-slow 10s linear infinite'
                         }} />
-                        <img src="/images/logo-CMET.jpeg" alt="Logo Club-MET"
-                            className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#187840]/60 relative z-10" />
+                        <img src="/images/logo-CMET.png" alt="Logo Club-MET"
+                            className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#003058]/60 relative z-10" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-bold text-base tracking-wide leading-none">CLUB-MET</span>
@@ -1095,7 +1095,7 @@ export default function Home() {
 
                 <div className="text-center text-slate-500 border-t border-slate-800 pt-4 text-[10px]">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                        <img src="/images/logo-CMET.jpeg" alt="" className="w-7 h-7 rounded-full object-cover opacity-70" />
+                        <img src="/images/logo-CMET.png" alt="" className="w-7 h-7 rounded-full object-cover opacity-70" />
                         <span className="text-slate-400 font-semibold text-[11px] tracking-wide">CLUB-MET</span>
                     </div>
                     <span>© {new Date().getFullYear()} Club-MET UCAK. Tous droits réservés.</span>

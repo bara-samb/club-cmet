@@ -27,7 +27,7 @@ export default function AdminLayout() {
             {/* Mobile Header */}
             <div className="md:hidden bg-[#003058] text-white p-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
                 <div className="flex items-center gap-3">
-                    <img src="/images/logo-CMET.jpeg" alt="Logo Club-MET" className="w-8 h-8 rounded-full object-cover border border-[#187840]/60" />
+                    <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-8 h-8 rounded-full object-cover border border-[#003058]/60" />
                     <div>
                         <h1 className="text-lg font-black text-white leading-none">Club-MET</h1>
                         <p className="text-[#187840] text-[10px] font-semibold tracking-wider uppercase mt-1">Admin Panel</p>
@@ -49,7 +49,7 @@ export default function AdminLayout() {
             {/* Sidebar Admin */}
             <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#003058] text-white p-6 flex flex-col shrink-0 transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}>
                 <div className="mb-10 hidden md:flex items-center gap-3">
-                    <img src="/images/logo-CMET.jpeg" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border-2 border-[#187840]/60" />
+                    <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border-2 border-[#003058]/60" />
                     <div>
                         <h1 className="text-lg font-black text-white leading-none">Club-MET</h1>
                         <p className="text-[#187840] text-xs font-semibold tracking-wider uppercase mt-1">Admin Panel</p>

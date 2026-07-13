@@ -107,51 +107,51 @@ Le **Club-MET** est la structure légale qui regroupe l'ensemble des étudiants 
 
 ```
 club-cmet/
-├── public/
-│   ├── images/                    # Images publiques (logo, galerie)
-│   └── maquettes/                 # PDFs de maquettes (fallback)
+├── backend/
+│   ├── database/
+│   │   └── schema.sql            # Schéma de base de données & RLS
+│   └── scripts/                  # Scripts de tests / scripts backend utilitaires
 │
-├── src/
-│   ├── config/
-│   │   └── supabaseClient.js      # Initialisation client Supabase
+├── frontend/
+│   ├── public/
+│   │   ├── images/               # Images publiques (logo, galerie)
+│   │   └── maquettes/            # PDFs de maquettes (fallback)
 │   │
-│   ├── components/
-│   │   └── layout/
-│   │       ├── AdminLayout.jsx    # Layout sidebar admin
-│   │       └── StudentLayout.jsx  # Layout sidebar étudiant
-│   │
-│   ├── pages/
-│   │   ├── public/                # Pages accessibles sans connexion
-│   │   │   ├── Home.jsx           # Page d'accueil complète
-│   │   │   ├── Login.jsx          # Formulaire de connexion
-│   │   │   └── Register.jsx       # Formulaire d'inscription
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   ├── AdminLayout.jsx    # Layout sidebar admin
+│   │   │   │   └── StudentLayout.jsx  # Layout sidebar étudiant
+│   │   │   └── ui/
+│   │   │       └── NotificationFeed.jsx # Bannière alerte live
 │   │   │
-│   │   ├── student/               # Pages protégées (RequireAuth)
-│   │   │   ├── Dashboard.jsx      # Tableau de bord étudiant
-│   │   │   ├── Library.jsx        # Bibliothèque de maquettes
-│   │   │   ├── Resources.jsx      # Ressources académiques
-│   │   │   ├── TutoratHub.jsx     # Messagerie étudiant → bureau
-│   │   │   ├── NotificationFeed.jsx   # Composant feed temps réel
-│   │   │   ├── NotificationsHistory.jsx # Historique notifications
-│   │   │   └── Profile.jsx        # Profil utilisateur
+│   │   ├── config/
+│   │   │   ├── supabaseClient.js # Initialisation client Supabase
+│   │   │   └── constants.js      # Constantes partagées (ex: NIVEAUX)
 │   │   │
-│   │   └── admin/                 # Pages protégées (RequireAdmin)
-│   │       ├── AdminPanel.jsx     # Hub central administrateur
-│   │       ├── ManageRegisteredUsers.jsx  # Gestion des comptes
-│   │       ├── ManageUsers.jsx    # Gestion du bureau exécutif
-│   │       ├── ManageDocs.jsx     # Gestion documentaire
-│   │       ├── ManageMessages.jsx # Boîte de réception messages
-│   │       ├── ManageNotifications.jsx # Diffusion notifications
-│   │       ├── ManageEvents.jsx   # Gestion événements/activités
-│   │       └── ManageMedia.jsx    # Gestion galerie médias
+│   │   ├── context/
+│   │   │   ├── AuthContext.js    # Contexte Auth
+│   │   │   └── AuthProvider.jsx  # Provider d'Auth global
+│   │   │
+│   │   ├── hooks/
+│   │   │   └── useAuth.js        # Hook useAuth()
+│   │   │
+│   │   ├── services/
+│   │   │   └── supabaseService.js # Centralisation CRUD Supabase
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── public/           # Pages publiques (Home, Login, Register)
+│   │   │   ├── student/          # Pages espace étudiant
+│   │   │   └── admin/            # Pages espace administrateur
+│   │   │
+│   │   └── App.jsx               # Routeur principal + guards
 │   │
-│   └── App.jsx                    # Routeur principal + guards
+│   ├── .env                      # Variables d'environnement
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── vite.config.js
 │
-├── .env                           # Variables d'environnement (non versionné)
-├── package.json
-├── tailwind.config.js
-├── postcss.config.js
-├── vite.config.js
 └── README.md
 ```
 
@@ -172,17 +172,20 @@ club-cmet/
 git clone https://github.com/bara-samb/club-cmet.git
 cd club-cmet
 
-# 2. Installer les dépendances
+# 2. Se positionner dans le dossier frontend
+cd frontend
+
+# 3. Installer les dépendances
 npm install
 
-# 3. Configurer les variables d'environnement
-#    Créer un fichier .env à la racine (voir section ci-dessous)
+# 4. Configurer les variables d'environnement
+#    Créer un fichier .env dans le dossier frontend (voir section ci-dessous)
 
-# 4. Lancer le serveur de développement
+# 5. Lancer le serveur de développement
 npm run dev
 #    → L'application est accessible sur http://localhost:5173
 
-# 5. Build de production (optionnel)
+# 6. Build de production (optionnel)
 npm run build
 npm run preview
 ```
