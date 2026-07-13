@@ -100,8 +100,7 @@ export default function ManageUsers() {
                 imageUrl,
                 whatsapp: form.whatsapp,
                 linkedin: form.linkedin,
-                estAncien: form.estAncien,
-                updatedAt: new Date().toISOString()
+                estAncien: form.estAncien
             };
             if (editId) {
                 const { error } = await supabase.from("bureau").update(data).eq("id", editId);

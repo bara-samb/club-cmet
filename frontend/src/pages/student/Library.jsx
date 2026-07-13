@@ -302,29 +302,21 @@ export default function Library() {
                                                         </div>
 
                                                         {/* Actions */}
-                                                        {doc.categorie === 'maquette' ? (
-                                                            <div className="mt-auto pt-3 text-center border-t border-slate-50">
-                                                                <span className="text-[10px] font-medium text-slate-400 italic">
-                                                                    Consultation et téléchargement restreints
-                                                                </span>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50">
-                                                                <button
-                                                                    onClick={() => ouvrirFichier(doc.url, doc.nom)}
-                                                                    disabled={!doc.url}
-                                                                    className="flex-1 flex items-center justify-center gap-1.5 bg-[#003058] hover:bg-[#002850] disabled:opacity-40 text-white py-2 rounded-lg text-[10px] font-extrabold transition-colors shadow-sm">
-                                                                    <Eye size={12} />
-                                                                    Consulter
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => télécharger(doc.url, doc.nom)}
-                                                                    disabled={!doc.url}
-                                                                    className="flex items-center justify-center gap-1.5 bg-[#187840]/10 hover:bg-[#187840]/25 disabled:opacity-40 text-[#187840] border border-[#187840]/20 w-9 h-9 rounded-lg transition-colors">
-                                                                    <Download size={13} />
-                                                                </button>
-                                                            </div>
-                                                        )}
+                                                        <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50">
+                                                            <button
+                                                                onClick={() => ouvrirFichier(doc.url, doc.nom)}
+                                                                disabled={!doc.url}
+                                                                className="flex-1 flex items-center justify-center gap-1.5 bg-[#003058] hover:bg-[#002850] disabled:opacity-40 text-white py-2 rounded-lg text-[10px] font-extrabold transition-colors shadow-sm">
+                                                                <Eye size={12} />
+                                                                Consulter
+                                                            </button>
+                                                            <button
+                                                                onClick={() => télécharger(doc.url, doc.nom)}
+                                                                disabled={!doc.url}
+                                                                className="flex items-center justify-center gap-1.5 bg-[#187840]/10 hover:bg-[#187840]/25 disabled:opacity-40 text-[#187840] border border-[#187840]/20 w-9 h-9 rounded-lg transition-colors">
+                                                                <Download size={13} />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>

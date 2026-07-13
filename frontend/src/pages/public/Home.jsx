@@ -898,18 +898,6 @@ export default function Home() {
                                                         <p className="text-xs text-slate-500 leading-relaxed text-justify line-clamp-3">{ev.descriptionText}</p>
                                                     </div>
                                                 </div>
-                                                <div className="p-6 pt-0 border-t border-slate-50 mt-4 flex items-center justify-end gap-4">
-                                                    {inscriptions[ev.id] ? (
-                                                        <span className="flex items-center gap-1.5 text-xs text-[#187840] font-black uppercase tracking-wider bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
-                                                            <Check size={14} /> Inscrit
-                                                        </span>
-                                                    ) : (
-                                                        <button onClick={() => inscrireActivite(ev)}
-                                                            className="bg-[#003058] hover:bg-[#002850] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 shadow-sm">
-                                                            S'inscrire
-                                                        </button>
-                                                    )}
-                                                </div>
                                             </motion.div>
                                         ))}
                                     </div>
@@ -1012,17 +1000,10 @@ export default function Home() {
                                         Le Département Informatique et Télécommunications forme les futurs experts du numérique à travers un cursus rigoureux mêlant développement d'applications, administration de bases de données, sécurité des réseaux et administration Linux avancée.
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-3 border-t border-gray-100 px-6 py-4">
-                                    <button onClick={() => ouvrirFichier(maqIT.url, maqIT.nom)}
-                                        className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 text-xs font-bold rounded-lg transition-colors">
-                                        Voir la maquette
-                                    </button>
-                                    <button onClick={() => déclencherTéléchargement(maqIT.url, maqIT.nom)}
-                                        className="flex-1 bg-[#003058] hover:bg-[#002850] text-white py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm">
-                                        <span>Télécharger</span>
-                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                        </svg>
+                                <div className="border-t border-gray-100 px-6 py-4 text-center">
+                                    <button onClick={() => navigate('/login')}
+                                        className="text-xs font-bold text-[#003058] hover:text-[#187840] transition-colors">
+                                        Se connecter pour accéder aux maquettes
                                     </button>
                                 </div>
                             </div>
@@ -1055,17 +1036,10 @@ export default function Home() {
                                         Le Département Hautes Études Commerciales, orienté vers la gestion et la stratégie d'entreprise, prépare aux métiers de la finance globale, de la comptabilité, de l'audit de performance, du contrôle de gestion et du management international.
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-3 border-t border-gray-100 px-6 py-4">
-                                    <button onClick={() => ouvrirFichier(maqHEC.url, maqHEC.nom)}
-                                        className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 text-xs font-bold rounded-lg transition-colors">
-                                        Voir la maquette
-                                    </button>
-                                    <button onClick={() => déclencherTéléchargement(maqHEC.url, maqHEC.nom)}
-                                        className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2.5 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm">
-                                        <span>Télécharger</span>
-                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                        </svg>
+                                <div className="border-t border-gray-100 px-6 py-4 text-center">
+                                    <button onClick={() => navigate('/login')}
+                                        className="text-xs font-bold text-amber-600 hover:text-amber-700 transition-colors">
+                                        Se connecter pour accéder aux maquettes
                                     </button>
                                 </div>
                             </div>
@@ -1215,8 +1189,7 @@ export default function Home() {
                         <h5 className="font-bold text-slate-300 uppercase tracking-wider">Espace Maquettes</h5>
                         <ul className="space-y-1 text-slate-400">
                             <li><a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer" className="hover:text-[#187840]">Portail UCAK ↗</a></li>
-                            <li><button onClick={() => ouvrirFichier(maqIT.url, maqIT.nom)} className="hover:text-[#187840] text-left">Maquette IT</button></li>
-                            <li><button onClick={() => ouvrirFichier(maqHEC.url, maqHEC.nom)} className="hover:text-[#187840] text-left">Maquette HEC</button></li>
+                            <li><button onClick={() => navigate('/login')} className="hover:text-[#187840] text-left">Accéder aux maquettes (Connexion requise)</button></li>
                         </ul>
                     </div>
 
