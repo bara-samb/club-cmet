@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Check, Loader2, Users } from 'lucide-react';
+import { Calendar, X, Check, Loader2, Users, Phone, Linkedin, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon } from 'lucide-react';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (
@@ -362,16 +362,27 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="hidden md:flex gap-6 text-sm font-medium items-center">
-                    <a href="#about-club" className="hover:text-[#187840] transition-colors">Le Club</a>
-                    <a href="#fonctionnement" className="hover:text-[#187840] transition-colors">Fonctionnement</a>
-                    <a href="#composition-bureau" className="hover:text-[#187840] transition-colors">Composition du Bureau</a>
-                    <a href="#ufr-met" className="hover:text-[#187840] transition-colors">L'UFR MET</a>
+                <div className="hidden md:flex gap-6 text-[13px] font-medium items-center">
+                    <a href="#" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <HomeIcon size={14} /> Accueil
+                    </a>
+                    <a href="#about-club" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <Info size={14} /> Le Club
+                    </a>
+                    <a href="#fonctionnement" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <BookOpen size={14} /> Fonctionnement
+                    </a>
+                    <a href="#composition-bureau" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <Users size={14} /> Bureau
+                    </a>
+                    <a href="#ufr-met" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <GraduationCap size={14} /> L'UFR MET
+                    </a>
 
                     <div className="relative">
                         <button onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="hover:text-[#187840] transition-colors flex items-center gap-1 font-semibold text-[#187840]">
-                            Règlement Intérieur
+                            className="hover:text-[#187840] transition-colors flex items-center gap-1.5 font-semibold text-[#187840]">
+                            <FileText size={14} /> Règlement Intérieur
                             <svg className="w-2.5 h-2.5 fill-current transition-transform duration-200"
                                 style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
                                 viewBox="0 0 20 20">
@@ -414,7 +425,9 @@ export default function Home() {
                         )}
                     </div>
 
-                    <a href="#contact" className="hover:text-[#187840] transition-colors">Contact</a>
+                    <a href="#contact" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
+                        <Mail size={14} /> Contact
+                    </a>
                 </div>
 
                 <div className="hidden md:flex items-center gap-5 text-xs">
@@ -443,10 +456,24 @@ export default function Home() {
             {mobileNavOpen && (
                 <div className="md:hidden fixed inset-0 z-40 bg-[#003058] pt-24 px-6 pb-6 overflow-y-auto">
                     <div className="flex flex-col gap-6 text-lg font-medium text-white">
-                        <a href="#about-club" onClick={() => setMobileNavOpen(false)}>Le Club</a>
-                        <a href="#fonctionnement" onClick={() => setMobileNavOpen(false)}>Fonctionnement</a>
-                        <a href="#composition-bureau" onClick={() => setMobileNavOpen(false)}>Composition du Bureau</a>
-                        <a href="#ufr-met" onClick={() => setMobileNavOpen(false)}>L'UFR MET</a>
+                        <a href="#" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <HomeIcon size={20} /> Accueil
+                        </a>
+                        <a href="#about-club" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <Info size={20} /> Le Club
+                        </a>
+                        <a href="#fonctionnement" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <BookOpen size={20} /> Fonctionnement
+                        </a>
+                        <a href="#composition-bureau" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <Users size={20} /> Composition du Bureau
+                        </a>
+                        <a href="#ufr-met" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <GraduationCap size={20} /> L'UFR MET
+                        </a>
+                        <a href="#contact" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
+                            <Mail size={20} /> Contact
+                        </a>
 
                         <div className="border-t border-slate-700 my-2 pt-4">
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Règlement Intérieur</p>
@@ -680,6 +707,30 @@ export default function Home() {
                                     {openArticle === item.id && item.content}
                                 </div>
                             ))}
+
+                            {/* Document Règlement Intérieur */}
+                            <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="text-left">
+                                    <h4 className="text-xs font-black text-[#003058] uppercase tracking-wider">Document de Référence</h4>
+                                    <p className="text-[11px] text-slate-500 mt-0.5">
+                                        Consultez l'intégralité du Règlement Intérieur du Club-MET pour en savoir plus sur nos chartes et obligations.
+                                    </p>
+                                </div>
+                                {ressources.filter(r => r.categorie === 'reglement').length > 0 ? (
+                                    <a 
+                                        href={ressources.find(r => r.categorie === 'reglement').url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="bg-[#187840] hover:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider flex items-center gap-2 shadow-sm transition-all hover:scale-105 shrink-0"
+                                    >
+                                        <FileText size={14} /> Télécharger le Règlement (PDF)
+                                    </a>
+                                ) : (
+                                    <span className="text-xs text-slate-400 italic font-medium bg-slate-50 border border-slate-100 px-4 py-2 rounded-xl shrink-0">
+                                        Document indisponible en ligne
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </section>
