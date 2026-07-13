@@ -7,7 +7,7 @@ const CATEGORIES = [
     { id: 'maquette', label: 'Maquettes de Filière' },
     { id: 'reglement', label: 'Règlements Intérieurs' },
     { id: 'rapports', label: 'Rapports d\'Activité' },
-    { id: 'comptes_rendus', label: 'Comptes Rendus d\'AG' }
+    { id: 'comptes_rendus', label: 'Comptes Rendus ' }
 ];
 
 export default function Resources() {
@@ -73,8 +73,8 @@ export default function Resources() {
     }, []);
 
     const filtrés = docs.filter(doc => {
-        const matchRecherche = doc.nom.toLowerCase().includes(recherche.toLowerCase()) || 
-                             (doc.description && doc.description.toLowerCase().includes(recherche.toLowerCase()));
+        const matchRecherche = doc.nom.toLowerCase().includes(recherche.toLowerCase()) ||
+            (doc.description && doc.description.toLowerCase().includes(recherche.toLowerCase()));
         const matchCat = catActive === 'all' || doc.categorie === catActive;
         return matchRecherche && matchCat;
     });
