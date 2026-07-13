@@ -1,0 +1,178 @@
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../config/supabaseClient';
+import { Users, Phone, Linkedin, Loader2, AlertCircle, Award } from 'lucide-react';
+
+const POSTE_ORDER = {
+    "Président": 1,
+    "Vice-Président": 2,
+    "Secrétaire Général": 3,
+    "Secrétaire Générale": 3,
+    "Secrétaire Général(e)": 3,
+};
+
+const getPosteOrder = (poste) => {
+    if (POSTE_ORDER[poste]) return POSTE_ORDER[poste];
+    if (poste.toLowerCase().includes('responsable')) return 4;
+    if (poste.toLowerCase().includes('adjoint')) return 5;
+    return 10;
+};
+
+export default function Bureau() {
+    const [bureau, setBureau] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [activeTab, setActiveTab] = useState('actuels'); // 'actuels' or 'anciens'
+
+    useEffect(() => {
+        let active = true;
+
+        const fetchBureau = async () => {
+            try {
+                const { data, error: fetchErr } = await supabase
+                    .from('bureau')
+                    .select('*')
+                    .order('createdAt', { ascending: false });
+
+                if (fetchErr) throw fetchErr;
+                if (active) {
+                    setBureau(data || []);
+                    setLoading(false);
+                }
+            } catch (err) {
+                console.error("Erreur chargement bureau:", err);
+                if (active) {
+                    setError("Impossible de charger les membres du bureau.");
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchBureau();
+
+        const channel = supabase.channel('student-bureau-changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'bureau' }, fetchBureau)
+            .subscribe();
+
+        return () => {
+            active = false;
+            supabase.removeChannel(channel);
+        };
+    }, []);
+
+    const membresActuels = bureau
+        .filter(m => !m.estAncien)
+        .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
+
+    const membresAnciens = bureau
+        .filter(m => m.estAncien)
+        .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
+
+    // Fallback anciens membres si la table est vide
+    const anciensMembresAAfficher = membresAnciens.length > 0 ? membresAnciens : [
+        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true },
+        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true },
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true }
+    ];
+
+    const currentList = activeTab === 'actuels' ? membresActuels : anciensMembresAAfficher;
+
+    return (
+        <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
+            {/* Header */}
+            <div>
+                <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">
+                    <Users className="text-[#187840] w-8 h-8" /> Organes de Direction du Club
+                </h1>
+                <p className="text-sm text-slate-500 mt-2">
+                    Découvrez les membres dirigeants du Club-MET, mandats en cours et promotions précédentes.
+                </p>
+            </div>
+
+            {/* Onglets de filtres */}
+            <div className="flex justify-center mb-6">
+                <div className="bg-white p-1.5 rounded-2xl border border-gray-200/60 shadow-sm flex gap-2 w-full md:w-auto">
+                    <button
+                        onClick={() => setActiveTab('actuels')}
+                        className={`flex-1 md:flex-initial px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'actuels' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        <Award size={15} /> Membres Actuels
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('anciens')}
+                        className={`flex-1 md:flex-initial px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'anciens' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        <Users size={15} /> Anciens Membres
+                    </button>
+                </div>
+            </div>
+
+            {/* Contenu */}
+            {loading ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-4">
+                    <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chargement des membres...</p>
+                </div>
+            ) : error ? (
+                <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center text-red-600">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500" />
+                    <p className="text-sm font-semibold">{error}</p>
+                </div>
+            ) : currentList.length === 0 ? (
+                <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                    <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                    <p className="text-sm font-bold text-slate-500">Aucun membre enregistré dans cette section.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {currentList.map(m => (
+                        <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
+                            <div>
+                                <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                                    {m.imageUrl ? (
+                                        <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                    ) : (
+                                        <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-2xl font-black">
+                                            {m.nom?.[0]}
+                                        </div>
+                                    )}
+                                </div>
+                                <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
+                            </div>
+
+                            <div className="mt-4">
+                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                    {m.classe}
+                                </span>
+
+                                {/* Social Links always visible */}
+                                <div className="flex justify-center gap-2 mt-3.5">
+                                    {m.whatsapp ? (
+                                        <a href={m.whatsapp} target="_blank" rel="noopener noreferrer" 
+                                           className="w-7 h-7 rounded-full bg-green-50 hover:bg-green-500 hover:text-white flex items-center justify-center text-green-600 border border-green-100 transition-all duration-200 shadow-sm" title="WhatsApp">
+                                            <Phone size={13} />
+                                        </a>
+                                    ) : (
+                                        <span className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100 cursor-not-allowed">
+                                            <Phone size={13} />
+                                        </span>
+                                    )}
+                                    {m.linkedin ? (
+                                        <a href={m.linkedin} target="_blank" rel="noopener noreferrer" 
+                                           className="w-7 h-7 rounded-full bg-blue-50 hover:bg-blue-600 hover:text-white flex items-center justify-center text-blue-600 border border-blue-100 transition-all duration-200 shadow-sm" title="LinkedIn">
+                                            <Linkedin size={13} />
+                                        </a>
+                                    ) : (
+                                        <span className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100 cursor-not-allowed">
+                                            <Linkedin size={13} />
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
