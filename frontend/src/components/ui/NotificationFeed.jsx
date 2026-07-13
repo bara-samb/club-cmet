@@ -50,7 +50,7 @@ export default function NotificationFeed() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Alerte Live</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Message Live</span>
                 </div>
 
                 <button onClick={() => setIsVisible(false)} className="absolute top-4 right-4 p-1.5 bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 rounded-full transition">
@@ -77,7 +77,7 @@ export default function NotificationFeed() {
                         {notification.image_url && (
                             <div className="mt-4 pt-4 border-t border-slate-100">
                                 <a href={notification.image_url} target="_blank" rel="noopener noreferrer" className="inline-block group relative overflow-hidden rounded-2xl border-4 border-white shadow-lg">
-                                    <img src={notification.image_url} alt="Illustration de l'alerte" className="max-w-xs h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
+                                    <img src={notification.image_url} alt="Illustration du message" className="max-w-xs h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
                                 </a>
                             </div>
                         )}

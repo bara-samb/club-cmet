@@ -70,7 +70,7 @@ export default function ManageNotifications() {
 
             if (insertError) throw insertError;
 
-            alert("✅ Alerte diffusée avec succès !");
+            alert("✅ Message diffusé avec succès !");
             setMessage('');
             removeImage();
 
@@ -85,7 +85,7 @@ export default function ManageNotifications() {
     return (
         <div className="p-6 md:p-8 max-w-3xl mx-auto space-y-8 animate-in fade-in duration-500">
             <div>
-                <h1 className="text-2xl font-black text-[#003058] tracking-tight">Diffuser une alerte</h1>
+                <h1 className="text-2xl font-black text-[#003058] tracking-tight">Diffuser un message</h1>
                 <p className="text-sm text-slate-500 mt-1">Envoyez un message important à tous les étudiants en temps réel.</p>
             </div>
 
@@ -98,7 +98,7 @@ export default function ManageNotifications() {
 
             <form onSubmit={handleSend} className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-lg shadow-[#003058]/5 space-y-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-700 ml-1 uppercase tracking-wider">Message de l'alerte</label>
+                    <label className="text-xs font-bold text-slate-700 ml-1 uppercase tracking-wider">Contenu du message</label>
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
@@ -151,7 +151,7 @@ export default function ManageNotifications() {
                         className="flex items-center gap-2.5 bg-[#187840] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-[#125e31] transition-all duration-150 shadow-md shadow-[#187840]/20 disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-[0.98]"
                     >
                         {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
-                        {loading ? "Diffusion en cours..." : "Diffuser l'alerte"}
+                        {loading ? "Diffusion en cours..." : "Diffuser le message"}
                     </button>
                 </div>
             </form>

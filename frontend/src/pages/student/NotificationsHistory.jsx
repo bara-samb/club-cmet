@@ -71,11 +71,11 @@ export default function NotificationsHistory() {
                 </div>
                 <div>
                     <h1 className="text-xl font-bold text-[#003058] tracking-tight">Historique des notifications</h1>
-                    <p className="text-xs text-slate-400 mt-0.5">Toutes les alertes diffusées par le Club-MET</p>
+                    <p className="text-xs text-slate-400 mt-0.5">Tous les messages diffusés par le Club-MET</p>
                 </div>
                 {!loading && notifications.length > 0 && (
                     <span className="ml-auto bg-blue-100 text-blue-600 text-xs font-black px-3 py-1 rounded-full">
-                        {notifications.length} alerte{notifications.length > 1 ? 's' : ''}
+                        {notifications.length} message{notifications.length > 1 ? 's' : ''}
                     </span>
                 )}
             </div>
@@ -96,7 +96,7 @@ export default function NotificationsHistory() {
                         <Bell className="text-slate-300" size={28} />
                     </div>
                     <p className="text-sm font-semibold text-slate-400">Aucune notification reçue pour le moment.</p>
-                    <p className="text-xs text-slate-300 mt-1">Les alertes du bureau apparaîtront ici.</p>
+                    <p className="text-xs text-slate-300 mt-1">Les messages du bureau apparaîtront ici.</p>
                 </motion.div>
             ) : (
                 <div className="space-y-3">

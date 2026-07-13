@@ -59,7 +59,7 @@ export default function Dashboard() {
     const actions = [
         { label: 'Bibliothèque', desc: 'Accéder aux ressources pédagogiques', path: '/student/library', Icon: BookOpen, color: '#187840' },
         { label: 'Messages', desc: 'Communiquer avec le bureau du club', path: '/student/tutorat', Icon: MessageSquare, color: '#003058' },
-        { label: 'Notifications', desc: 'Alertes et messages du bureau', path: '/student/notifications', Icon: Bell, color: '#1d4ed8' },
+        { label: 'Notifications', desc: 'Messages importants du bureau', path: '/student/notifications', Icon: Bell, color: '#1d4ed8' },
         { label: 'Mon Profil', desc: 'Consulter et modifier mes informations', path: '/student/profile', Icon: User, color: '#7c3aed' },
     ];
 
