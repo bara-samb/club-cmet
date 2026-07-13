@@ -379,52 +379,6 @@ export default function Home() {
                         <GraduationCap size={14} /> L'UFR MET
                     </a>
 
-                    <div className="relative">
-                        <button onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="hover:text-[#187840] transition-colors flex items-center gap-1.5 font-semibold text-[#187840]">
-                            <FileText size={14} /> Règlement Intérieur
-                            <svg className="w-2.5 h-2.5 fill-current transition-transform duration-200"
-                                style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                                viewBox="0 0 20 20">
-                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                            </svg>
-                        </button>
-
-                        {dropdownOpen && (
-                            <div className="absolute left-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 text-slate-800 z-50">
-                                <div className="px-4 pb-2 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-gray-100">
-                                    Documents Officiels
-                                </div>
-                                <div className="flex flex-col mt-2 px-2 max-h-60 overflow-y-auto">
-                                    {ressources.filter(r => r.categorie === 'reglement').length === 0 ? (
-                                        <p className="text-[11px] text-slate-400 italic text-center py-4">Aucun document disponible.</p>
-                                    ) : ressources.filter(r => r.categorie === 'reglement').map(file => (
-                                        <div key={file.id} className="flex items-center justify-between gap-3 p-2 hover:bg-[#F8F0F0] rounded-xl transition-colors">
-                                            <span className="flex items-center gap-2 text-xs text-slate-700 font-semibold truncate max-w-[150px]" title={file.nom}>
-                                                <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                </svg>
-                                                <span className="truncate">{file.nom}</span>
-                                            </span>
-                                            <div className="flex items-center gap-1.5 shrink-0">
-                                                <button onClick={() => { ouvrirFichier(file.url, file.nom); setDropdownOpen(false); }}
-                                                    className="flex items-center gap-1 bg-[#003058] hover:bg-[#002850] text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-sm transition-colors">
-                                                    Voir
-                                                </button>
-                                                <button onClick={() => déclencherTéléchargement(file.url, file.nom)}
-                                                    className="flex items-center justify-center bg-[#187840]/10 hover:bg-[#187840]/20 text-[#187840] w-7 h-7 rounded-lg transition-colors border border-[#187840]/20">
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
                     <a href="#contact" className="hover:text-[#187840] transition-colors flex items-center gap-1.5">
                         <Mail size={14} /> Contact
                     </a>
@@ -474,29 +428,6 @@ export default function Home() {
                         <a href="#contact" onClick={() => setMobileNavOpen(false)} className="flex items-center gap-3">
                             <Mail size={20} /> Contact
                         </a>
-
-                        <div className="border-t border-slate-700 my-2 pt-4">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Règlement Intérieur</p>
-                            <div className="flex flex-col gap-2 pl-2 text-xs text-slate-300">
-                                {ressources.filter(r => r.categorie === 'reglement').length === 0 ? (
-                                    <span className="text-[10px] text-slate-500 italic">- Aucun document disponible</span>
-                                ) : ressources.filter(r => r.categorie === 'reglement').map(file => (
-                                    <div key={file.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-slate-700/50 last:border-0">
-                                        <a href={file.url} target="_blank" rel="noopener noreferrer" className="hover:text-white truncate flex items-center gap-2 max-w-[70%]">
-                                            <svg className="w-3.5 h-3.5 text-red-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                            </svg>
-                                            <span className="truncate">{file.nom}</span>
-                                        </a>
-                                        <button onClick={() => déclencherTéléchargement(file.url, file.nom)} className="text-[#187840] hover:text-green-400 p-1">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
 
                         <div className="border-t border-slate-700 my-2 pt-4">
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Connexion</p>
