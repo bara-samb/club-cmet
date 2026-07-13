@@ -139,35 +139,10 @@ export default function Bureau() {
                                 <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
                                 <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                             </div>
-
                             <div className="mt-4">
                                 <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
                                     {m.classe}
                                 </span>
-
-                                {/* Social Links always visible */}
-                                <div className="flex justify-center gap-2 mt-3.5">
-                                    {m.whatsapp ? (
-                                        <a href={m.whatsapp} target="_blank" rel="noopener noreferrer" 
-                                           className="w-7 h-7 rounded-full bg-green-50 hover:bg-green-500 hover:text-white flex items-center justify-center text-green-600 border border-green-100 transition-all duration-200 shadow-sm" title="WhatsApp">
-                                            <Phone size={13} />
-                                        </a>
-                                    ) : (
-                                        <span className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100 cursor-not-allowed">
-                                            <Phone size={13} />
-                                        </span>
-                                    )}
-                                    {m.linkedin ? (
-                                        <a href={m.linkedin} target="_blank" rel="noopener noreferrer" 
-                                           className="w-7 h-7 rounded-full bg-blue-50 hover:bg-blue-600 hover:text-white flex items-center justify-center text-blue-600 border border-blue-100 transition-all duration-200 shadow-sm" title="LinkedIn">
-                                            <Linkedin size={13} />
-                                        </a>
-                                    ) : (
-                                        <span className="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100 cursor-not-allowed">
-                                            <Linkedin size={13} />
-                                        </span>
-                                    )}
-                                </div>
                             </div>
                         </div>
                     ))}

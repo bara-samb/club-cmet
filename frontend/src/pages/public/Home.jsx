@@ -23,7 +23,7 @@ const LinkedInIcon = () => (
 );
 const WhatsAppIcon = () => (
     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.019-5.114-2.877-6.974-1.858-1.859-4.325-2.883-6.963-2.885-5.437 0-9.86 4.422-9.864 9.865-.001 1.73.454 3.42 1.32 4.925l-.995 3.635 3.71-.973zm11.514-5.29c-.07-.117-.258-.187-.54-.327-.281-.14-1.661-.82-1.919-.914-.258-.094-.446-.14-.633.14-.187.28-.725.914-.889 1.101-.164.186-.327.21-.609.07-.28-.14-1.187-.437-2.261-1.396-.836-.746-1.4-1.667-1.564-1.948-.164-.282-.018-.434.122-.574.127-.127.282-.328.422-.492.141-.164.188-.28.282-.469.094-.187.046-.351-.023-.49-.07-.14-.633-1.523-.867-2.086-.228-.547-.46-.473-.633-.482-.164-.008-.351-.01-.54-.01-.187 0-.491.07-.749.351-.258.282-.983.961-.983 2.343 0 1.382 1.006 2.719 1.147 2.907.14.187 1.98 3.024 4.797 4.237.67.289 1.192.462 1.6.593.673.214 1.287.184 1.77.112.54-.08 1.661-.68 1.896-1.336.234-.656.234-1.22.164-1.336z"/>
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.019-5.114-2.877-6.974-1.858-1.859-4.325-2.883-6.963-2.885-5.437 0-9.86 4.422-9.864 9.865-.001 1.73.454 3.42 1.32 4.925l-.995 3.635 3.71-.973zm11.514-5.29c-.07-.117-.258-.187-.54-.327-.281-.14-1.661-.82-1.919-.914-.258-.094-.446-.14-.633.14-.187.28-.725.914-.889 1.101-.164.186-.327.21-.609.07-.28-.14-1.187-.437-2.261-1.396-.836-.746-1.4-1.667-1.564-1.948-.164-.282-.018-.434.122-.574.127-.127.282-.328.422-.492.141-.164.188-.28.282-.469.094-.187.046-.351-.023-.49-.07-.14-.633-1.523-.867-2.086-.228-.547-.46-.473-.633-.482-.164-.008-.351-.01-.54-.01-.187 0-.491.07-.749.351-.258.282-.983.961-.983 2.343 0 1.382 1.006 2.719 1.147 2.907.14.187 1.98 3.024 4.797 4.237.67.289 1.192.462 1.6.593.673.214 1.287.184 1.77.112.54-.08 1.661-.68 1.896-1.336.234-.656.234-1.22.164-1.336z" />
     </svg>
 );
 const TikTokIcon = () => (
@@ -59,7 +59,22 @@ const CATEGORIES_STATIQUES = [
     { id: 'reglement', nomDossier: 'Règlement Intérieur' },
 ];
 
-/* ── Helpers date ── */
+const POSTE_ORDER = {
+    "Président": 1,
+    "Vice-Président": 2,
+    "Secrétaire Général": 3,
+    "Secrétaire Générale": 3,
+    "Secrétaire Général(e)": 3,
+};
+
+const getPosteOrder = (poste) => {
+    if (!poste) return 10;
+    if (POSTE_ORDER[poste]) return POSTE_ORDER[poste];
+    if (poste.toLowerCase().includes('responsable')) return 4;
+    if (poste.toLowerCase().includes('adjoint')) return 5;
+    return 10;
+};
+
 const formatDateEvenement = (dateStr) => {
     if (!dateStr) return '';
     const d = new Date(`${dateStr}T00:00:00`);
@@ -103,6 +118,18 @@ export default function Home() {
     const [medias, setMedias] = useState([]);
     const [loadingEvenements, setLoadingEvenements] = useState(true);
     const [loadingMedias, setLoadingMedias] = useState(true);
+
+    const membresActuels = bureau
+        .filter(m => !m.estAncien)
+        .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
+
+    const dbAnciens = bureau.filter(m => m.estAncien);
+    const fallbacksAnciens = [
+        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true },
+        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true },
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true }
+    ];
+    const anciensMembresAAfficher = dbAnciens.length > 0 ? dbAnciens : fallbacksAnciens;
 
     useEffect(() => {
         let active = true;
@@ -575,10 +602,10 @@ export default function Home() {
 
                         <div className="relative border-l-2 border-dashed border-[#187840]/40 pl-6 md:pl-10 ml-4 md:ml-10 space-y-12">
                             {[
-                                { year: '2021', title: 'Fondation & Vision', desc: "Lancement du Club-MET à l'UFR Métiers & Technologies pour briser les barrières inter-filières et créer une synergie d'entraide." },
-                                { year: '2023', title: 'Structuration du Tutorat', desc: "Mise en place d'un réseau structuré de tutorat par les pairs, dispensant des séances hebdomadaires à plus de 300 étudiants." },
+                                { year: '2024', title: 'Fondation & Vision', desc: "Lancement du Club-MET à l'UFR Métiers & Technologies pour briser les barrières inter-filières et créer une synergie d'entraide." },
+                                { year: '2024', title: 'Structuration du Tutorat', desc: "Mise en place d'un réseau structuré de tutorat par les pairs, dispensant des séances hebdomadaires aux étudiants." },
                                 { year: '2024', title: 'Essor Technologique', desc: "Création des premiers outils numériques de partage, d'annales de cours et de maquettes, et premières participations aux hackathons régionaux." },
-                                { year: '2026', title: 'Modernisation & Plateforme Web', desc: "Déploiement de notre portail interactif connecté avec Supabase, offrant un espace étudiant avec messagerie instantanée, bibliothèque partagée et notifications en direct." }
+                                { year: '2026', title: 'Modernisation & Plateforme Web', desc: "Déploiement de notre portail interactif, offrant un espace étudiant , bibliothèque partagée et notifications en direct." }
                             ].map((item, index) => (
                                 <div key={index} className="relative group">
                                     {/* Timeline dot */}
@@ -648,9 +675,9 @@ export default function Home() {
                                     </p>
                                 </div>
                                 {ressources.filter(r => r.categorie === 'reglement').length > 0 ? (
-                                    <a 
-                                        href={ressources.find(r => r.categorie === 'reglement').url} 
-                                        target="_blank" 
+                                    <a
+                                        href={ressources.find(r => r.categorie === 'reglement').url}
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         className="bg-[#187840] hover:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider flex items-center gap-2 shadow-sm transition-all hover:scale-105 shrink-0"
                                     >
@@ -676,11 +703,11 @@ export default function Home() {
                         initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}
                         variants={{ show: { transition: { staggerChildren: 0.1 } } }}
                         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                        {bureau.length === 0 ? (
+                        {membresActuels.length === 0 ? (
                             <div className="col-span-full text-center py-12 text-sm text-slate-400">
                                 Aucun membre enregistré pour le moment.
                             </div>
-                        ) : bureau.map((m) => (
+                        ) : membresActuels.map((m) => (
                             <motion.div key={m.id}
                                 variants={{
                                     hidden: { opacity: 0, y: 40, scale: 0.95 },
@@ -710,14 +737,6 @@ export default function Home() {
                                             {m.classe}
                                         </span>
                                     </div>
-                                    <div className="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">
-                                        <a href="#contact" className="w-7 h-7 rounded-full bg-[#003058]/10 hover:bg-[#003058] hover:text-white flex items-center justify-center text-[#003058] transition-all duration-200">
-                                            <FacebookIcon />
-                                        </a>
-                                        <a href="#contact" className="w-7 h-7 rounded-full bg-[#187840]/10 hover:bg-[#187840] hover:text-white flex items-center justify-center text-[#187840] transition-all duration-200">
-                                            <LinkedInIcon />
-                                        </a>
-                                    </div>
                                 </div>
                             </motion.div>
                         ))}
@@ -737,18 +756,18 @@ export default function Home() {
                     {/* Modal Anciens Membres */}
                     <AnimatePresence>
                         {isAnciensOpen && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" 
+                                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
                                 onClick={() => setIsAnciensOpen(false)}
                             >
-                                <motion.div 
+                                <motion.div
                                     initial={{ scale: 0.95, y: 20 }}
                                     animate={{ scale: 1, y: 0 }}
                                     exit={{ scale: 0.95, y: 20 }}
-                                    className="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800" 
+                                    className="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800"
                                     onClick={e => e.stopPropagation()}
                                 >
                                     <button onClick={() => setIsAnciensOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-100 rounded-full">
@@ -758,43 +777,26 @@ export default function Home() {
                                         <h3 className="text-xl font-black text-[#003058]">Anciens Membres du Bureau</h3>
                                         <p className="text-xs text-slate-400 mt-1">Les promotions précédentes qui ont fait grandir le Club-MET.</p>
                                     </div>
-                                    <div className="space-y-6">
-                                        {[
-                                            {
-                                                mandat: 'Mandat 2024 - 2025',
-                                                membres: [
-                                                    { nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT' },
-                                                    { nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC' },
-                                                    { nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT' }
-                                                ]
-                                            },
-                                            {
-                                                mandat: 'Mandat 2023 - 2024',
-                                                membres: [
-                                                    { nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT' },
-                                                    { nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC' }
-                                                ]
-                                            },
-                                            {
-                                                mandat: 'Mandat 2022 - 2023',
-                                                membres: [
-                                                    { nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT' },
-                                                    { nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC' }
-                                                ]
-                                            }
-                                        ].map((m, idx) => (
-                                            <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                                                <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider mb-3 border-b border-slate-200/60 pb-1.5">{m.mandat}</h4>
-                                                <div className="space-y-2">
-                                                    {m.membres.map((mem, i) => (
-                                                        <div key={i} className="flex justify-between items-center gap-3 text-xs">
-                                                            <div>
-                                                                <span className="font-bold text-slate-700">{mem.nom}</span>
-                                                                <span className="text-[10px] text-slate-400 ml-2">({mem.classe})</span>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[55vh] overflow-y-auto p-1">
+                                        {anciensMembresAAfficher.map((m) => (
+                                            <div key={m.id || m.nom} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
+                                                <div>
+                                                    <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                        {m.imageUrl ? (
+                                                            <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-lg font-black">
+                                                                {m.nom?.[0]}
                                                             </div>
-                                                            <span className="font-black text-[10px] uppercase text-[#003058] bg-[#003058]/5 px-2 py-0.5 rounded">{mem.poste}</span>
-                                                        </div>
-                                                    ))}
+                                                        )}
+                                                    </div>
+                                                    <h4 className="font-bold text-xs text-[#003058] truncate">{m.nom}</h4>
+                                                    <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
+                                                </div>
+                                                <div className="mt-3">
+                                                    <span className="inline-block text-[8px] font-black text-slate-500 bg-[#F8F0F0] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                        {m.classe}
+                                                    </span>
                                                 </div>
                                             </div>
                                         ))}
