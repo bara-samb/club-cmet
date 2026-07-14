@@ -78,16 +78,16 @@ export default function Bureau() {
     }, []);
 
     const membresActuels = bureau
-        .filter(m => !m.annee || m.annee.trim() === "")
+        .filter(m => !m.estAncien)
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
     const anciensMembresAAfficher = bureau
-        .filter(m => m.annee && m.annee.trim() !== "")
+        .filter(m => m.estAncien)
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
     // Grouping anciens by year
     const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
-        const year = member.annee;
+        const year = member.annee || "Mandat précédent";
         if (!groups[year]) {
             groups[year] = [];
         }
