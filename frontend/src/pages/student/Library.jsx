@@ -12,13 +12,31 @@ const CATEGORIES = [
     { id: 'autres',        label: 'Autres documents' },
 ];
 
-const NIVEAUX = ['Tous', 'L1', 'L2', 'L3', 'M1', 'M2', 'Commun'];
+const NIVEAUX = [
+    'Tous', 
+    'L1', 
+    'L2', 
+    'L3', 
+    'L3IT - DAR', 
+    'L3IT - ASR', 
+    'L3IT - RT', 
+    'L3HEC - Entrepreneuriat & Création d\'Entreprise', 
+    'L3HEC - Comptabilité & Gestion', 
+    'M1', 
+    'M2', 
+    'Commun'
+];
 
 const LEVELS_ORDER = [
     { id: 'Commun', label: 'Tronc Commun & Général', color: '#003058' },
     { id: 'L1', label: 'Licence 1', color: '#187840' },
     { id: 'L2', label: 'Licence 2', color: '#187840' },
-    { id: 'L3', label: 'Licence 3', color: '#187840' },
+    { id: 'L3', label: 'Licence 3 (Général)', color: '#187840' },
+    { id: 'L3IT - DAR', label: 'L3IT - Développement d\'Applications Réseaux (DAR)', color: '#187840' },
+    { id: 'L3IT - ASR', label: 'L3IT - Administration Systèmes & Réseaux (ASR)', color: '#187840' },
+    { id: 'L3IT - RT', label: 'L3IT - Réseaux & Télécoms (RT)', color: '#187840' },
+    { id: 'L3HEC - Entrepreneuriat & Création d\'Entreprise', label: 'L3HEC - Entrepreneuriat & Création d\'Entreprise', color: '#187840' },
+    { id: 'L3HEC - Comptabilité & Gestion', label: 'L3HEC - Comptabilité & Gestion', color: '#187840' },
     { id: 'M1', label: 'Master 1', color: '#003058' },
     { id: 'M2', label: 'Master 2', color: '#003058' },
 ];
@@ -32,7 +50,11 @@ export default function Library() {
     
     // Niveaux dépliés par défaut
     const [expandedLevels, setExpandedLevels] = useState({
-        Commun: true, L1: true, L2: true, L3: true, M1: true, M2: true
+        Commun: true, L1: true, L2: true, L3: true,
+        'L3IT - DAR': true, 'L3IT - ASR': true, 'L3IT - RT': true,
+        'L3HEC - Entrepreneuriat & Création d\'Entreprise': true,
+        'L3HEC - Comptabilité & Gestion': true,
+        M1: true, M2: true
     });
 
     useEffect(() => {

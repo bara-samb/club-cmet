@@ -308,7 +308,12 @@ export default function ManageDocs() {
                                     <option value="Commun">Tronc Commun / Général</option>
                                     <option value="L1">Licence 1</option>
                                     <option value="L2">Licence 2</option>
-                                    <option value="L3">Licence 3</option>
+                                    <option value="L3">Licence 3 (Général)</option>
+                                    <option value="L3IT - DAR">L3IT - Développement d'Applications Réseaux (DAR)</option>
+                                    <option value="L3IT - ASR">L3IT - Administration Systèmes & Réseaux (ASR)</option>
+                                    <option value="L3IT - RT">L3IT - Réseaux & Télécoms (RT)</option>
+                                    <option value="L3HEC - Entrepreneuriat & Création d'Entreprise">L3HEC - Entrepreneuriat & Création d'Entreprise</option>
+                                    <option value="L3HEC - Comptabilité & Gestion">L3HEC - Comptabilité & Gestion</option>
                                     <option value="M1">Master 1</option>
                                     <option value="M2">Master 2</option>
                                 </select>

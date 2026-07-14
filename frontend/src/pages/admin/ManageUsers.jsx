@@ -51,7 +51,25 @@ export default function ManageUsers() {
         const fetchMembres = async () => {
             const { data } = await supabase.from("bureau").select("*").order("createdAt", { ascending: false });
             if (data && active) {
-                setMembres(data);
+                const parsed = data.map(m => {
+                    const match = m.classe.match(/\s*\(?(\d{4}-\d{4})\)?/);
+                    if (match) {
+                        const annee = match[1];
+                        const classeSansAnnee = m.classe.replace(/\s*\(?\d{4}-\d{4}\)?/, "").trim();
+                        return {
+                            ...m,
+                            estAncien: true,
+                            annee: annee,
+                            classe: classeSansAnnee || "Ancien"
+                        };
+                    }
+                    return {
+                        ...m,
+                        estAncien: false,
+                        annee: ""
+                    };
+                });
+                setMembres(parsed);
             }
             if (active) setLoading(false);
         };
@@ -113,13 +131,17 @@ export default function ManageUsers() {
         try {
             const imageUrl = await uploadImage();
             const isAncien = !!(form.annee && form.annee.trim() !== "");
+            
+            let finalClasse = form.classe;
+            if (isAncien) {
+                finalClasse = `${form.classe} (${form.annee.trim()})`;
+            }
+
             const data = {
                 nom: form.nom,
                 poste: form.poste,
-                classe: form.classe,
-                imageUrl,
-                estAncien: isAncien,
-                annee: isAncien ? form.annee.trim() : null
+                classe: finalClasse,
+                imageUrl
             };
             if (editId) {
                 const { error } = await safeUpdate("bureau", data, q => q.eq("id", editId));

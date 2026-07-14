@@ -141,13 +141,25 @@ export default function Home() {
         const fetchBureau = async () => {
             const { data } = await supabase.from('bureau').select('*');
             if (data && active) {
-                const patched = data.map(m => {
-                    if (m.nom === 'Mame Bara Samb') {
-                        return { ...m, estAncien: true, annee: '2025-2026' };
+                const parsed = data.map(m => {
+                    const match = m.classe.match(/\s*\(?(\d{4}-\d{4})\)?/);
+                    if (match) {
+                        const annee = match[1];
+                        const classeSansAnnee = m.classe.replace(/\s*\(?\d{4}-\d{4}\)?/, "").trim();
+                        return {
+                            ...m,
+                            estAncien: true,
+                            annee: annee,
+                            classe: classeSansAnnee || "Ancien"
+                        };
                     }
-                    return m;
+                    return {
+                        ...m,
+                        estAncien: false,
+                        annee: ""
+                    };
                 });
-                setBureau(patched);
+                setBureau(parsed);
             }
         };
         const fetchRessources = async () => {
