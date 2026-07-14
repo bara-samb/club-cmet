@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -90,8 +91,8 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#003058] flex items-center justify-center px-4 py-10">
-            <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="min-h-screen bg-[#F8F0F0] flex items-center justify-center px-4 py-10">
+            <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
                 <div className="bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
@@ -137,20 +138,26 @@ export default function Register() {
 
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Niveau / Classe *</label>
-                            <select required value={form.niveau} onChange={e => setForm({ ...form, niveau: e.target.value })}
-                                    className="input-field bg-white">
-                                <option value="">— Sélectionner votre niveau —</option>
-                                {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
-                            </select>
+                            <div className="relative">
+                                <select required value={form.niveau} onChange={e => setForm({ ...form, niveau: e.target.value })}
+                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
+                                    <option value="">— Sélectionner votre niveau —</option>
+                                    {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Rôle *</label>
-                            <select required value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
-                                    className="input-field bg-white">
-                                <option value="student">Étudiant (Espace Étudiant)</option>
-                                <option value="admin">Administrateur (Espace Admin)</option>
-                            </select>
+                            <div className="relative">
+                                <select required value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
+                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
+                                    <option value="student">Étudiant (Espace Étudiant)</option>
+                                    <option value="admin">Administrateur (Espace Admin)</option>
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         <div>

@@ -114,7 +114,7 @@ export default function Dashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {stats.map((s, i) => (
-                    <div key={i} className="anim-fade-up card p-4 md:p-5 cursor-default hover:shadow-md transition-all duration-200" style={{ animationDelay: `${i * 0.07}s` }}>
+                    <div key={i} className="anim-fade-up card p-4 md:p-5 cursor-default hover-lift" style={{ animationDelay: `${i * 0.05}s` }}>
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: s.accentBg }}>
                             <s.Icon size={18} style={{ color: s.accent }} />
                         </div>
@@ -129,7 +129,7 @@ export default function Dashboard() {
                 <h2 className="text-sm font-semibold text-slate-800 tracking-tight">Accès rapide</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                     {actions.map((a, i) => (
-                        <button key={i} onClick={() => navigate(a.path)} className="group relative overflow-hidden text-left rounded-2xl p-4 md:p-5 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]" style={{ backgroundColor: a.color, boxShadow: `0 4px 12px -3px ${a.color}45` }}>
+                        <button key={i} onClick={() => navigate(a.path)} className="group relative overflow-hidden text-left rounded-2xl p-4 md:p-5 hover-lift shadow-sm active:scale-[0.98]" style={{ backgroundColor: a.color, boxShadow: `0 4px 12px -3px ${a.color}45`, animationDelay: `${i * 0.05}s` }}>
                             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.06] transition-opacity duration-200" />
                             <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center mb-3 md:mb-4"><a.Icon size={16} className="text-white" /></div>
                             <p className="font-semibold text-xs md:text-sm text-white tracking-tight">{a.label}</p>

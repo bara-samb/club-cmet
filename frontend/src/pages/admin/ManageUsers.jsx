@@ -1,7 +1,7 @@
 // src/pages/admin/ManageUsers.jsx
 import React, { useState, useEffect } from "react";
 import { supabase, safeInsert, safeUpdate } from "../../config/supabaseClient";
-import { Pencil, Trash2, AlertTriangle, UserPlus, Image as ImageIcon, Save, Loader2, Users } from "lucide-react";
+import { Pencil, Trash2, AlertTriangle, UserPlus, Image as ImageIcon, Save, Loader2, Users, ChevronDown } from "lucide-react";
 
 const POSTES = [
     "Président", "Vice-Président", "Secrétaire Général(e)",
@@ -256,31 +256,40 @@ export default function ManageUsers() {
                         {/* Poste */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Poste *</label>
-                            <select value={form.poste} onChange={e => setForm({ ...form, poste: e.target.value })}
-                                className="input-field">
-                                <option value="">— Sélectionner un poste —</option>
-                                {POSTES.map(p => <option key={p} value={p}>{p}</option>)}
-                            </select>
+                            <div className="relative">
+                                <select value={form.poste} onChange={e => setForm({ ...form, poste: e.target.value })}
+                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    <option value="">— Sélectionner un poste —</option>
+                                    {POSTES.map(p => <option key={p} value={p}>{p}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         {/* Niveau */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
-                            <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
-                                className="input-field">
-                                <option value="">— Sélectionner un niveau —</option>
-                                {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
-                            </select>
+                            <div className="relative">
+                                <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
+                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    <option value="">— Sélectionner un niveau —</option>
+                                    {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         {/* Statut Membre */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Statut du membre *</label>
-                            <select value={form.estAncien ? "ancien" : "actuel"} onChange={e => setForm({ ...form, estAncien: e.target.value === "ancien" })}
-                                className="input-field">
-                                <option value="actuel">Membre Actuel (Bureau en cours)</option>
-                                <option value="ancien">Ancien Membre (Mandats passés)</option>
-                            </select>
+                            <div className="relative">
+                                <select value={form.estAncien ? "ancien" : "actuel"} onChange={e => setForm({ ...form, estAncien: e.target.value === "ancien" })}
+                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    <option value="actuel">Membre Actuel (Bureau en cours)</option>
+                                    <option value="ancien">Ancien Membre (Mandats passés)</option>
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         {/* Année (uniquement si Ancien) */}

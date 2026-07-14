@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Plus, Pencil, Trash2, X, Upload, Loader2, ImageOff } from 'lucide-react';
+import { Calendar, Plus, Pencil, Trash2, X, Upload, Loader2, ImageOff, ChevronDown } from 'lucide-react';
 
 /* ── Types d'activités gérés par le club ── */
 const TYPES_EVENEMENT = [
@@ -263,10 +263,13 @@ export default function Evenements() {
                                         <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                                             Type d'activité
                                         </label>
-                                        <select value={type} onChange={e => setType(e.target.value)}
-                                            className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold">
-                                            {TYPES_EVENEMENT.map(t => <option key={t} value={t}>{t}</option>)}
-                                        </select>
+                                        <div className="relative">
+                                            <select value={type} onChange={e => setType(e.target.value)}
+                                                className="w-full appearance-none px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold pr-10 cursor-pointer">
+                                                {TYPES_EVENEMENT.map(t => <option key={t} value={t}>{t}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                                        </div>
                                     </div>
                                 </div>
 

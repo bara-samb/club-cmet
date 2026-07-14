@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { Camera, Save, Loader2, User } from 'lucide-react';
+import { Camera, Save, Loader2, User, ChevronDown } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import { NIVEAUX } from '../../config/constants';
 
@@ -133,16 +133,19 @@ export default function Profile() {
 
                     <div className="space-y-1.5">
                         <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau d'études</label>
-                        <select 
-                            value={niveau} 
-                            onChange={e => setNiveau(e.target.value)}
-                            className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
-                        >
-                            <option value="">Sélectionnez un niveau</option>
-                            {NIVEAUX.map(niv => (
-                                <option key={niv} value={niv}>{niv}</option>
-                            ))}
-                        </select>
+                        <div className="relative">
+                            <select 
+                                value={niveau} 
+                                onChange={e => setNiveau(e.target.value)}
+                                className="w-full appearance-none px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold pr-10 cursor-pointer"
+                            >
+                                <option value="">Sélectionnez un niveau</option>
+                                {NIVEAUX.map(niv => (
+                                    <option key={niv} value={niv}>{niv}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                        </div>
                     </div>
                 </div>
 

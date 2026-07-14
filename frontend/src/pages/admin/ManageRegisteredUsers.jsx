@@ -1,7 +1,7 @@
 // src/pages/admin/ManageRegisteredUsers.jsx
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../config/supabaseClient";
-import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail, Check } from "lucide-react";
+import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail, Check, ChevronDown } from "lucide-react";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -247,24 +247,25 @@ export default function ManageRegisteredUsers() {
                     </div>
 
                     {/* Role Filter */}
-                    <div className="w-full md:w-48">
+                    <div className="w-full md:w-48 relative">
                         <select
                             value={roleFilter}
                             onChange={(e) => setRoleFilter(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840]"
+                            className="w-full appearance-none bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
                         >
                             <option value="all">Tous les rôles</option>
                             <option value="student">Étudiants</option>
                             <option value="admin">Administrateurs</option>
                         </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                     </div>
 
                     {/* Level Filter */}
-                    <div className="w-full md:w-56">
+                    <div className="w-full md:w-56 relative">
                         <select
                             value={levelFilter}
                             onChange={(e) => setLevelFilter(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840]"
+                            className="w-full appearance-none bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
                         >
                             <option value="all">Tous les niveaux</option>
                             {NIVEAUX.map((l) => (
@@ -273,6 +274,7 @@ export default function ManageRegisteredUsers() {
                                 </option>
                             ))}
                         </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                     </div>
                 </div>
 

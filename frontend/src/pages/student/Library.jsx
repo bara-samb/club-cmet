@@ -158,73 +158,66 @@ export default function Library() {
     return (
         <div className="anim-fade-up p-6 max-w-6xl mx-auto">
             {/* Titre */}
-            <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-black text-[#003058] flex items-center gap-3">
-                        <BookOpen className="text-[#187840] w-8 h-8" /> Bibliothèque Académique
-                    </h1>
-                    <p className="text-sm text-slate-500 mt-2">
-                        Retrouvez vos cours, TD et examens classés par niveau pour vos filières.
-                    </p>
-                </div>
-                
-                {/* Barre de recherche */}
-                <div className="relative w-full md:w-96 shrink-0">
-                    <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="mb-8">
+                <h1 className="text-3xl font-black text-[#003058] flex items-center gap-3">
+                    <BookOpen className="text-[#187840] w-8 h-8" /> Bibliothèque Académique
+                </h1>
+                <p className="text-sm text-slate-500 mt-2">
+                    Retrouvez vos cours, TD et examens classés par niveau pour vos filières.
+                </p>
+            </div>
+
+            {/* Filters Row */}
+            <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center mb-8">
+                {/* Search Bar */}
+                <div className="relative w-full md:flex-1">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                     <input
                         type="text"
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un document..."
-                        className="w-full pl-12 pr-4 py-3 bg-white border border-[#C8C8C8] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium"
+                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
                     />
                     {recherche && (
                         <button onClick={() => setRecherche('')}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                            <X size={16} />
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <X size={14} />
                         </button>
                     )}
                 </div>
-            </div>
 
-            {/* Barre de Filtres */}
-            <div className="bg-white p-5 rounded-2xl border border-gray-200/60 shadow-sm mb-8 space-y-4">
-                <div className="flex items-center gap-2 text-[#003058] font-bold text-sm mb-1">
-                    <Filter size={16} className="text-[#187840]" /> Filtrer la bibliothèque
-                </div>
-                
-                {/* Ligne Niveau */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                    <span className="text-xs font-bold text-slate-400 sm:w-20">Niveau :</span>
-                    <div className="flex gap-2 flex-wrap">
-                        {NIVEAUX.map(niv => (
-                            <button key={niv} onClick={() => setFiltreNiveau(niv)}
-                                className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all
-                                ${filtreNiveau === niv
-                                    ? 'bg-[#187840] text-white border-[#187840] shadow-sm'
-                                    : 'bg-[#F8F0F0] text-slate-600 border-[#C8C8C8]/50 hover:border-[#187840] hover:text-[#187840]'
-                                }`}>
-                                {niv === 'Tous' ? 'Tous les niveaux' : niv}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Ligne Catégorie */}
-                <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
-                    <span className="text-xs font-bold text-slate-400 sm:w-20 sm:pt-2">Catégorie :</span>
-                    <div className="flex gap-2 flex-wrap flex-1">
+                {/* Catégories Filter */}
+                <div className="w-full md:w-56 relative">
+                    <select
+                        value={filtreCat}
+                        onChange={e => setFiltreCat(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
+                    >
                         {CATEGORIES.map(cat => (
-                            <button key={cat.id} onClick={() => setFiltreCat(cat.id)}
-                                    className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all
-                                ${filtreCat === cat.id
-                                        ? 'bg-[#003058] text-white border-[#003058] shadow-sm'
-                                        : 'bg-[#F8F0F0] text-slate-600 border-[#C8C8C8]/50 hover:border-[#003058] hover:text-[#003058]'
-                                    }`}>
+                            <option key={cat.id} value={cat.id}>
                                 {cat.label}
-                            </button>
+                            </option>
                         ))}
-                    </div>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                </div>
+
+                {/* Niveau Filter */}
+                <div className="w-full md:w-64 relative">
+                    <select
+                        value={filtreNiveau}
+                        onChange={e => setFiltreNiveau(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
+                    >
+                        <option value="Tous">Tous les niveaux</option>
+                        {LEVELS_ORDER.map(level => (
+                            <option key={level.id} value={level.id}>
+                                {level.label}
+                            </option>
+                        ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
                 </div>
             </div>
 

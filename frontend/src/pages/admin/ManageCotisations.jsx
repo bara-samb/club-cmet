@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
-import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus } from 'lucide-react';
+import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus, ChevronDown } from 'lucide-react';
 
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
@@ -250,25 +250,28 @@ export default function ManageCotisations() {
                         <form onSubmit={handleAddManualPayment} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1.5 sm:col-span-2">
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Associer à un compte étudiant</label>
-                                <select 
-                                    value={selectedEtudiantId}
-                                    onChange={e => {
-                                        setSelectedEtudiantId(e.target.value);
-                                        if (e.target.value) {
-                                            const selected = etudiants.find(et => et.id === e.target.value);
-                                            if (selected) {
-                                                setManualNom(`${selected.prenom} ${selected.nom}`);
-                                                setManualClasse(selected.classe || '');
+                                <div className="relative">
+                                    <select 
+                                        value={selectedEtudiantId}
+                                        onChange={e => {
+                                            setSelectedEtudiantId(e.target.value);
+                                            if (e.target.value) {
+                                                const selected = etudiants.find(et => et.id === e.target.value);
+                                                if (selected) {
+                                                    setManualNom(`${selected.prenom} ${selected.nom}`);
+                                                    setManualClasse(selected.classe || '');
+                                                }
                                             }
-                                        }
-                                    }}
-                                    className="input-field bg-white"
-                                >
-                                    <option value="">— Sélectionner un étudiant inscrit (Optionnel) —</option>
-                                    {etudiants.map(et => (
-                                        <option key={et.id} value={et.id}>{et.prenom} {et.nom} ({et.classe || 'Non défini'})</option>
-                                    ))}
-                                </select>
+                                        }}
+                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                    >
+                                        <option value="">— Sélectionner un étudiant inscrit (Optionnel) —</option>
+                                        {etudiants.map(et => (
+                                            <option key={et.id} value={et.id}>{et.prenom} {et.nom} ({et.classe || 'Non défini'})</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                                </div>
                             </div>
 
                             <div className="space-y-1.5">

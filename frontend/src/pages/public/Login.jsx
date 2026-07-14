@@ -52,8 +52,8 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#003058] flex items-center justify-center px-4">
-            <div className="anim-fade-up w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="min-h-screen bg-[#F8F0F0] flex items-center justify-center px-4">
+            <div className="anim-fade-up w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
                 <div className="bg-[#003058] px-8 py-8 text-center border-b border-slate-700">

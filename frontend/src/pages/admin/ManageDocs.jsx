@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
-import { FolderOpen, Plus, Trash2, Eye, FileText, Loader2, AlertTriangle, Save, X } from 'lucide-react';
+import { FolderOpen, Plus, Trash2, Eye, FileText, Loader2, AlertTriangle, Save, X, ChevronDown } from 'lucide-react';
 
 const CATEGORIES = [
     { id: 'reglement', label: 'Règlement Intérieur (Espace Documents)' },
@@ -272,27 +272,33 @@ export default function ManageDocs() {
                         {/* Catégorie */}
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Catégorie *</label>
-                            <select 
-                                value={form.categorie} 
-                                onChange={e => setForm({ ...form, categorie: e.target.value })}
-                                className="input-field bg-white"
-                            >
-                                {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
-                            </select>
+                            <div className="relative">
+                                <select 
+                                    value={form.categorie} 
+                                    onChange={e => setForm({ ...form, categorie: e.target.value })}
+                                    className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                >
+                                    {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         {/* Filière (seulement pour les maquettes) */}
                         {form.categorie === 'maquette' && (
                             <div className="space-y-1.5 animate-in fade-in duration-200">
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Filière *</label>
-                                <select 
-                                    value={form.filiere} 
-                                    onChange={e => setForm({ ...form, filiere: e.target.value })}
-                                    className="input-field bg-white"
-                                >
-                                    <option value="IT">Informatique & Télécommunications (IT)</option>
-                                    <option value="HEC">Hautes Études Commerciales (HEC)</option>
-                                </select>
+                                <div className="relative">
+                                    <select 
+                                        value={form.filiere} 
+                                        onChange={e => setForm({ ...form, filiere: e.target.value })}
+                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                    >
+                                        <option value="IT">Informatique & Télécommunications (IT)</option>
+                                        <option value="HEC">Hautes Études Commerciales (HEC)</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                                </div>
                             </div>
                         )}
 
@@ -300,24 +306,27 @@ export default function ManageDocs() {
                         {['cours', 'td', 'examens', 'projets', 'autres'].includes(form.categorie) && (
                             <div className="space-y-1.5 animate-in fade-in duration-200">
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
-                                <select 
-                                    value={form.niveau} 
-                                    onChange={e => setForm({ ...form, niveau: e.target.value })}
-                                    className="input-field bg-white"
-                                >
-                                    <option value="L1IT">L1IT - Technologies de l'Information</option>
-                                    <option value="L1HEC">L1HEC - Hautes Études Commerciales</option>
-                                    <option value="L2IT">L2IT - Technologies de l'Information</option>
-                                    <option value="L2HEC">L2HEC - Hautes Études Commerciales</option>
-                                    <option value="L3">Licence 3 (Général)</option>
-                                    <option value="L3IT - DAR">L3IT - Développement d'Applications Réseaux (DAR)</option>
-                                    <option value="L3IT - ASR">L3IT - Administration Systèmes & Réseaux (ASR)</option>
-                                    <option value="L3IT - RT">L3IT - Réseaux & Télécoms (RT)</option>
-                                    <option value="L3HEC - Entrepreneuriat & Création d'Entreprise">L3HEC - Entrepreneuriat & Création d'Entreprise</option>
-                                    <option value="L3HEC - Comptabilité & Gestion">L3HEC - Comptabilité & Gestion</option>
-                                    <option value="M1">Master 1</option>
-                                    <option value="M2">Master 2</option>
-                                </select>
+                                <div className="relative">
+                                    <select 
+                                        value={form.niveau} 
+                                        onChange={e => setForm({ ...form, niveau: e.target.value })}
+                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                    >
+                                        <option value="L1IT">L1IT - Technologies de l'Information</option>
+                                        <option value="L1HEC">L1HEC - Hautes Études Commerciales</option>
+                                        <option value="L2IT">L2IT - Technologies de l'Information</option>
+                                        <option value="L2HEC">L2HEC - Hautes Études Commerciales</option>
+                                        <option value="L3">Licence 3 (Général)</option>
+                                        <option value="L3IT - DAR">L3IT - Développement d'Applications Réseaux (DAR)</option>
+                                        <option value="L3IT - ASR">L3IT - Administration Systèmes & Réseaux (ASR)</option>
+                                        <option value="L3IT - RT">L3IT - Réseaux & Télécoms (RT)</option>
+                                        <option value="L3HEC - Entrepreneuriat & Création d'Entreprise">L3HEC - Entrepreneuriat & Création d'Entreprise</option>
+                                        <option value="L3HEC - Comptabilité & Gestion">L3HEC - Comptabilité & Gestion</option>
+                                        <option value="M1">Master 1</option>
+                                        <option value="M2">Master 2</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                                </div>
                             </div>
                         )}
 
