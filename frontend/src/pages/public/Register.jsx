@@ -54,6 +54,29 @@ export default function Register() {
             }
             
             if (form.role === 'admin') {
+                // Fetch emails of all currently approved admins to notify them
+                try {
+                    const { data: admins } = await supabase
+                        .from('users')
+                        .select('email')
+                        .eq('role', 'admin')
+                        .eq('approuve', true);
+
+                    if (admins && admins.length > 0) {
+                        const adminEmails = admins.map(a => a.email);
+                        await supabase.functions.invoke('send-approval-email', {
+                            body: {
+                                prenom: form.prenom,
+                                nom: form.nom,
+                                email: form.email,
+                                adminEmails
+                            }
+                        });
+                    }
+                } catch (fnErr) {
+                    console.warn("Échec de l'envoi du mail de notification aux admins (l'Edge Function n'est peut-être pas déployée) :", fnErr);
+                }
+
                 await supabase.auth.signOut();
                 navigate("/login", { state: { info: "Votre inscription en tant qu'administrateur a été enregistrée. Elle doit être approuvée par un administrateur existant avant de pouvoir vous connecter." } });
             } else {
