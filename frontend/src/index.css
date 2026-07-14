@@ -214,3 +214,12 @@
 .anim-logo:hover {
   animation-play-state: paused;
 }
+
+/* ── Utility to hide scrollbars ── */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

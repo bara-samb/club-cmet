@@ -121,11 +121,26 @@ export default function Home() {
 
     const dbAnciens = bureau.filter(m => m.estAncien);
     const fallbacksAnciens = [
-        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true },
-        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true }
+        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
+        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' },
+        { id: 'f4', nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2023-2024' },
+        { id: 'f5', nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC', estAncien: true, annee: '2023-2024' },
+        { id: 'f6', nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2022-2023' },
+        { id: 'f7', nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC', estAncien: true, annee: '2022-2023' }
     ];
     const anciensMembresAAfficher = dbAnciens.length > 0 ? dbAnciens : fallbacksAnciens;
+
+    // Grouping anciens by year
+    const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
+        const year = member.annee || "Mandat précédent";
+        if (!groups[year]) {
+            groups[year] = [];
+        }
+        groups[year].push(member);
+        return groups;
+    }, {});
+    const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     useEffect(() => {
         let active = true;
@@ -698,7 +713,7 @@ export default function Home() {
                     <motion.div
                         initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}
                         variants={{ show: { transition: { staggerChildren: 0.1 } } }}
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-6 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-6 px-6 md:mx-0 md:px-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                         {membresActuels.length === 0 ? (
                             <div className="col-span-full text-center py-12 text-sm text-slate-400">
                                 Aucun membre enregistré pour le moment.
@@ -710,7 +725,7 @@ export default function Home() {
                                     show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 15 } }
                                 }}
                                 whileHover={{ y: -8, scale: 1.03 }}
-                                className="group relative bg-white border border-[#C8C8C8]/40 rounded-3xl p-6 text-center shadow-sm transition-all duration-300 overflow-hidden select-none">
+                                className="group relative bg-white border border-[#C8C8C8]/40 rounded-3xl p-6 text-center shadow-sm transition-all duration-300 overflow-hidden select-none snap-start shrink-0 w-[240px] sm:w-[280px] md:w-auto">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-[#187840] to-[#003058] rounded-3xl blur opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
                                 <div className="absolute inset-0 bg-white rounded-3xl z-0" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F8F0F0]/50 rounded-3xl pointer-events-none z-0" />
@@ -773,26 +788,36 @@ export default function Home() {
                                         <h3 className="text-xl font-black text-[#003058]">Anciens Membres du Bureau</h3>
                                         <p className="text-xs text-slate-400 mt-1">Les promotions précédentes qui ont fait grandir le Club-MET.</p>
                                     </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[55vh] overflow-y-auto p-1">
-                                        {anciensMembresAAfficher.map((m) => (
-                                            <div key={m.id || m.nom} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
-                                                <div>
-                                                    <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 shadow-inner bg-slate-100 flex items-center justify-center">
-                                                        {m.imageUrl ? (
-                                                            <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-lg font-black">
-                                                                {m.nom?.[0]}
+                                    <div className="space-y-8 max-h-[55vh] overflow-y-auto p-1">
+                                        {sortedAnciensYears.map((year) => (
+                                            <div key={year} className="space-y-3">
+                                                <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-1.5 flex items-center gap-2">
+                                                    <span>Mandat {year}</span>
+                                                    <span className="bg-[#187840]/10 text-[#187840] text-[9px] px-2 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
+                                                </h4>
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                                    {groupedAnciens[year].map((m) => (
+                                                        <div key={m.id || m.nom} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
+                                                            <div>
+                                                                <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                                    {m.imageUrl ? (
+                                                                        <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
+                                                                    ) : (
+                                                                        <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-lg font-black">
+                                                                            {m.nom?.[0]}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <h4 className="font-bold text-xs text-[#003058] truncate">{m.nom}</h4>
+                                                                <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                                             </div>
-                                                        )}
-                                                    </div>
-                                                    <h4 className="font-bold text-xs text-[#003058] truncate">{m.nom}</h4>
-                                                    <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
-                                                </div>
-                                                <div className="mt-3">
-                                                    <span className="inline-block text-[8px] font-black text-slate-500 bg-[#F8F0F0] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
-                                                        {m.classe}
-                                                    </span>
+                                                            <div className="mt-3">
+                                                                <span className="inline-block text-[8px] font-black text-slate-500 bg-[#F8F0F0] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                                    {m.classe}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         ))}
@@ -905,12 +930,12 @@ export default function Home() {
                                         Aucun média publié pour le moment.
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                    <div className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-6 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-6 px-6 md:mx-0 md:px-0 grid-cols-2 md:grid-cols-3">
                                         {medias.map((media) => (
                                             <motion.div key={media.id}
                                                 whileHover={{ scale: 1.02 }}
                                                 onClick={() => media.type !== 'Vidéo' && setLightboxImage(media)}
-                                                className={`relative rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 aspect-[4/3] group ${media.type !== 'Vidéo' ? 'cursor-pointer' : ''}`}>
+                                                className={`relative rounded-2xl overflow-hidden shadow-sm border border-gray-200/80 aspect-[4/3] group ${media.type !== 'Vidéo' ? 'cursor-pointer' : ''} snap-start shrink-0 w-[240px] sm:w-[300px] md:w-auto`}>
                                                 {media.type === 'Vidéo' ? (
                                                     <video src={media.url} className="w-full h-full object-cover" muted loop playsInline
                                                         onMouseEnter={e => e.target.play()}
@@ -919,7 +944,7 @@ export default function Home() {
                                                 ) : (
                                                     <img src={media.url} alt={media.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                 )}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:opacity-0 opacity-100 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                                                     <span className="text-[9px] uppercase font-black tracking-widest text-[#187840] mb-1 bg-white px-2 py-0.5 rounded-full w-max">{media.type}</span>
                                                     <h4 className="font-extrabold text-xs tracking-wide truncate">{media.titre}</h4>
                                                 </div>

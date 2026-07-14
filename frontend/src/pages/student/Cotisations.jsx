@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
-import { CreditCard, TrendingUp, CheckCircle, Loader2, ArrowUpRight, DollarSign, Calendar, Users, Eye } from 'lucide-react';
+import { CreditCard, TrendingUp, CheckCircle, Loader2, ArrowUpRight, DollarSign, Calendar, Users, Clock } from 'lucide-react';
 
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
@@ -12,57 +12,57 @@ export default function Cotisations() {
     const [toutesCotisations, setToutesCotisations] = useState([]);
     const [stats, setStats] = useState({ totalCollecte: 0, contributorsCount: 0 });
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('mes-versements'); // 'mes-versements' or 'tous-versements'
+    const [activeTab, setActiveTab] = useState('mes-cotisations'); // 'mes-cotisations' or 'toutes-cotisations'
+
+    const [montantDeclaration, setMontantDeclaration] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+
+    const fetchData = async () => {
+        try {
+            // 1. Charger le lien Wave depuis la config
+            const { data: configData } = await supabase
+                .from('config')
+                .select('valeur')
+                .eq('cle', 'wave_link')
+                .single();
+            if (configData && configData.valeur) {
+                setWaveLink(configData.valeur);
+            }
+
+            // 2. Charger toutes les cotisations (validées et en attente) de l'étudiant connecté
+            const { data: userCotisations } = await supabase
+                .from('cotisations')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+            if (userCotisations) {
+                setMesCotisations(userCotisations);
+            }
+
+            // 3. Charger toutes les cotisations validées (transparence collective)
+            const { data: allValidated } = await supabase
+                .from('cotisations')
+                .select('*')
+                .eq('statut', 'valide')
+                .order('created_at', { ascending: false });
+            
+            if (allValidated) {
+                setToutesCotisations(allValidated);
+                const total = allValidated.reduce((sum, item) => sum + Number(item.montant), 0);
+                const uniqueContributors = new Set(allValidated.map(item => item.user_id).filter(Boolean)).size;
+                setStats({
+                    totalCollecte: total,
+                    contributorsCount: uniqueContributors
+                });
+            }
+        } catch (err) {
+            console.error("Erreur de chargement des cotisations:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        let active = true;
-
-        const fetchData = async () => {
-            try {
-                // 1. Charger le lien Wave depuis la config
-                const { data: configData } = await supabase
-                    .from('config')
-                    .select('valeur')
-                    .eq('cle', 'wave_link')
-                    .single();
-                if (configData && configData.valeur && active) {
-                    setWaveLink(configData.valeur);
-                }
-
-                // 2. Charger les cotisations validées de l'étudiant connecté
-                const { data: userCotisations } = await supabase
-                    .from('cotisations')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .eq('statut', 'valide')
-                    .order('created_at', { ascending: false });
-                if (userCotisations && active) {
-                    setMesCotisations(userCotisations);
-                }
-
-                // 3. Charger toutes les cotisations validées (transparence collective)
-                const { data: allValidated } = await supabase
-                    .from('cotisations')
-                    .select('*')
-                    .eq('statut', 'valide')
-                    .order('created_at', { ascending: false });
-                
-                if (allValidated && active) {
-                    setToutesCotisations(allValidated);
-                    const total = allValidated.reduce((sum, item) => sum + Number(item.montant), 0);
-                    const uniqueContributors = new Set(allValidated.map(item => item.user_id).filter(Boolean)).size;
-                    setStats({
-                        totalCollecte: total,
-                        contributorsCount: uniqueContributors
-                    });
-                }
-            } catch (err) {
-                console.error("Erreur de chargement des cotisations:", err);
-            } finally {
-                if (active) setLoading(false);
-            }
-        };
-
         fetchData();
 
         const channel = supabase.channel('student-cotisations-changes')
@@ -70,12 +70,49 @@ export default function Cotisations() {
             .subscribe();
 
         return () => {
-            active = false;
             supabase.removeChannel(channel);
         };
     }, [user.id]);
 
-    const monTotalValide = mesCotisations.reduce((sum, item) => sum + Number(item.montant), 0);
+    const handleDeclareCotisation = async (e) => {
+        e.preventDefault();
+        if (!montantDeclaration || Number(montantDeclaration) <= 0) {
+            alert("Veuillez saisir un montant valide.");
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            const nomComplet = `${user?.prenom || ''} ${user?.nom || ''}`.trim() || user?.email || 'Étudiant';
+            const classeInfo = user?.niveau || 'Licence';
+
+            const payload = {
+                user_id: user.id,
+                nom: nomComplet,
+                classe: classeInfo,
+                montant: Number(montantDeclaration),
+                date_paiement: new Date().toLocaleDateString('fr-FR'),
+                statut: 'en_attente',
+                enregistre_par: 'Déclaration Étudiant'
+            };
+
+            const { error } = await supabase.from('cotisations').insert([payload]);
+            if (error) throw error;
+
+            alert("✅ Votre déclaration de cotisation a bien été transmise à l'administration pour validation.");
+            setMontantDeclaration('');
+            fetchData();
+        } catch (err) {
+            console.error("Erreur de déclaration:", err);
+            alert("Erreur lors de la déclaration : " + err.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const monTotalValide = mesCotisations
+        .filter(c => c.statut === 'valide')
+        .reduce((sum, item) => sum + Number(item.montant), 0);
 
     return (
         <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-8">
@@ -85,7 +122,7 @@ export default function Cotisations() {
                     <CreditCard className="text-[#187840] w-8 h-8" /> Cotisations du Club-MET
                 </h1>
                 <p className="text-sm text-slate-500 mt-2">
-                    Participez au financement des activités du club, suivez vos versements enregistrés et accédez au registre transparent de la collecte globale.
+                    Participez au financement des activités du club, déclarez votre cotisation et accédez au registre transparent de la collecte globale.
                 </p>
             </div>
 
@@ -106,7 +143,7 @@ export default function Cotisations() {
                                 <CheckCircle size={22} />
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ma contribution totale</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cotisation Validée</p>
                                 <p className="text-xl font-black text-[#003058] mt-0.5">{monTotalValide.toLocaleString()} FCFA</p>
                             </div>
                         </div>
@@ -122,53 +159,80 @@ export default function Cotisations() {
                             </div>
                         </div>
 
-                        {/* Payer ma cotisation */}
+                        {/* Déclarer ma cotisation */}
                         <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
                             <h3 className="font-extrabold text-base text-[#003058] flex items-center gap-2">
-                                <DollarSign className="text-[#187840]" size={20} /> Règlement de la cotisation
+                                <DollarSign className="text-[#187840]" size={20} /> Déclarer ma cotisation
                             </h3>
-                            <div className="p-4 bg-amber-50 border border-amber-200/60 rounded-2xl text-xs text-amber-800 leading-relaxed text-justify">
-                                Cliquez sur le bouton ci-dessous pour régler votre cotisation via le portail de paiement sécurisé **Wave Marchand**. Les versements validés par l'administration apparaîtront automatiquement dans votre historique ci-contre.
+                            <p className="text-xs text-slate-500 leading-relaxed text-justify font-medium">
+                                Après avoir effectué votre paiement sur Wave Marchand (via le lien ci-dessous) ou directement en espèces, déclarez la somme ci-dessous. L'administration vérifiera puis validera votre cotisation.
+                            </p>
+                            
+                            <form onSubmit={handleDeclareCotisation} className="space-y-4 pt-2">
+                                <div className="space-y-1.5">
+                                    <label className="block text-[11px] font-bold text-slate-700 ml-1 uppercase tracking-wider">Somme versée (FCFA) *</label>
+                                    <input 
+                                        type="number" 
+                                        required 
+                                        min="1"
+                                        value={montantDeclaration}
+                                        onChange={e => setMontantDeclaration(e.target.value)}
+                                        placeholder="Ex: 5000"
+                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
+                                    />
+                                </div>
+                                <button 
+                                    type="submit" 
+                                    disabled={submitting || !montantDeclaration}
+                                    className="w-full bg-[#187840] hover:bg-[#125e31] disabled:opacity-50 text-white py-3.5 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.01]"
+                                >
+                                    {submitting ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle size={16} />}
+                                    Déclarer ma cotisation
+                                </button>
+                            </form>
+
+                            <div className="border-t border-slate-100 pt-4 space-y-3">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Lien de paiement direct</p>
+                                <a 
+                                    href={waveLink} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="w-full bg-blue-50 text-blue-600 hover:bg-blue-100 py-3 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] border border-blue-200/50"
+                                >
+                                    Ouvrir Wave Marchand <ArrowUpRight size={16} />
+                                </a>
                             </div>
-                            <a 
-                                href={waveLink} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="w-full bg-[#187840] hover:bg-[#125e31] text-white py-3.5 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 shadow-md shadow-[#187840]/25 transition-all hover:scale-[1.01]"
-                            >
-                                Effectuer le paiement Wave <ArrowUpRight size={16} />
-                            </a>
                         </div>
 
                     </div>
 
-                    {/* COLONNE DROITE: Registres Transparent des Cotisations */}
+                    {/* COLONNE DROITE: Registre Transparent des Cotisations */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 space-y-6">
                             
                             {/* Onglets navigation */}
                             <div className="flex border-b border-slate-100 pb-1">
                                 <button 
-                                    onClick={() => setActiveTab('mes-versements')}
-                                    className={`pb-3 text-xs font-black uppercase tracking-wider border-b-2 transition-all mr-6 ${activeTab === 'mes-versements' ? 'border-[#187840] text-[#187840]' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+                                    onClick={() => setActiveTab('mes-cotisations')}
+                                    className={`pb-3 text-xs font-black uppercase tracking-wider border-b-2 transition-all mr-6 ${activeTab === 'mes-cotisations' ? 'border-[#187840] text-[#187840]' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
                                 >
-                                    Mes Versements ({mesCotisations.length})
+                                    Mes Cotisations ({mesCotisations.length})
                                 </button>
                                 <button 
-                                    onClick={() => setActiveTab('tous-versements')}
-                                    className={`pb-3 text-xs font-black uppercase tracking-wider border-b-2 transition-all ${activeTab === 'tous-versements' ? 'border-[#187840] text-[#187840]' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+                                    onClick={() => setActiveTab('toutes-cotisations')}
+                                    className={`pb-3 text-xs font-black uppercase tracking-wider border-b-2 transition-all ${activeTab === 'toutes-cotisations' ? 'border-[#187840] text-[#187840]' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
                                 >
-                                    Tous les Versements ({toutesCotisations.length})
+                                    Toutes les Cotisations ({toutesCotisations.length})
                                 </button>
                             </div>
 
-                            {/* Contenu de l'onglet : Mes Versements */}
-                            {activeTab === 'mes-versements' && (
+                            {/* Contenu de l'onglet : Mes Cotisations */}
+                            {activeTab === 'mes-cotisations' && (
                                 <div className="space-y-4">
-                                    <h3 className="font-extrabold text-sm text-[#003058]">Historique de mes versements</h3>
+                                    <h3 className="font-extrabold text-sm text-[#003058]">Historique de mes cotisations</h3>
                                     {mesCotisations.length === 0 ? (
                                         <div className="text-center py-10 text-slate-400 text-xs font-semibold leading-relaxed">
-                                            Aucun versement enregistré à votre nom pour le moment.
+                                            Aucune cotisation enregistrée à votre nom pour le moment.
                                         </div>
                                     ) : (
                                         <div className="space-y-2.5 max-h-[400px] overflow-y-auto pr-1">
@@ -178,9 +242,15 @@ export default function Cotisations() {
                                                         <p className="font-bold text-[#003058]">{Number(c.montant).toLocaleString()} FCFA</p>
                                                         <p className="text-[10px] text-slate-400 flex items-center gap-1 font-medium"><Calendar size={10} /> {c.date_paiement}</p>
                                                     </div>
-                                                    <span className="flex items-center gap-1 text-[9px] font-black text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                                        <CheckCircle size={10} /> Enregistré
-                                                    </span>
+                                                    {c.statut === 'valide' ? (
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-green-600 bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                                            <CheckCircle size={10} /> Validée
+                                                        </span>
+                                                    ) : (
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+                                                            <Clock size={10} /> En attente
+                                                        </span>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -189,7 +259,7 @@ export default function Cotisations() {
                             )}
 
                             {/* Contenu de l'onglet : Toutes les Cotisations (Transparence) */}
-                            {activeTab === 'tous-versements' && (
+                            {activeTab === 'toutes-cotisations' && (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center bg-[#F8F0F0] rounded-xl p-3 border border-slate-100">
                                         <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5"><Users size={14} /> Total des contributeurs</span>
@@ -198,7 +268,7 @@ export default function Cotisations() {
 
                                     {toutesCotisations.length === 0 ? (
                                         <div className="text-center py-10 text-slate-400 text-xs font-semibold leading-relaxed">
-                                            Aucune cotisation enregistrée pour le moment.
+                                            Aucune cotisation validée enregistrée pour le moment.
                                         </div>
                                     ) : (
                                         <div className="overflow-x-auto max-h-[400px] overflow-y-auto pr-1">

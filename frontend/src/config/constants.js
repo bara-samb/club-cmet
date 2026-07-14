@@ -1,6 +1,4 @@
 export const NIVEAUX = [
-    "TC1",
-    "TC2",
     "Licence 1 IT",
     "Licence 2 IT",
     "Licence 3 IT",

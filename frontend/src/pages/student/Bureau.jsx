@@ -69,12 +69,25 @@ export default function Bureau() {
 
     // Fallback anciens membres si la table est vide
     const anciensMembresAAfficher = membresAnciens.length > 0 ? membresAnciens : [
-        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true },
-        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true }
+        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
+        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' },
+        { id: 'f4', nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2023-2024' },
+        { id: 'f5', nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC', estAncien: true, annee: '2023-2024' },
+        { id: 'f6', nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2022-2023' },
+        { id: 'f7', nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC', estAncien: true, annee: '2022-2023' }
     ];
 
-    const currentList = activeTab === 'actuels' ? membresActuels : anciensMembresAAfficher;
+    // Grouping anciens by year
+    const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
+        const year = member.annee || "Mandat précédent";
+        if (!groups[year]) {
+            groups[year] = [];
+        }
+        groups[year].push(member);
+        return groups;
+    }, {});
+    const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     return (
         <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
@@ -117,36 +130,80 @@ export default function Bureau() {
                     <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500" />
                     <p className="text-sm font-semibold">{error}</p>
                 </div>
-            ) : currentList.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
-                    <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-sm font-bold text-slate-500">Aucun membre enregistré dans cette section.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {currentList.map(m => (
-                        <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
-                            <div>
-                                <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
-                                    {m.imageUrl ? (
-                                        <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                                    ) : (
-                                        <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-2xl font-black">
-                                            {m.nom?.[0]}
-                                        </div>
-                                    )}
+            ) : activeTab === 'actuels' ? (
+                membresActuels.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                        <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <p className="text-sm font-bold text-slate-500">Aucun membre enregistré dans cette section.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 animate-in fade-in duration-300">
+                        {membresActuels.map(m => (
+                            <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
+                                <div>
+                                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                                        {m.imageUrl ? (
+                                            <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-2xl font-black">
+                                                {m.nom?.[0]}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                    <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                 </div>
-                                <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
-                                <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
+                                <div className="mt-4">
+                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                        {m.classe}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="mt-4">
-                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
-                                    {m.classe}
-                                </span>
+                        ))}
+                    </div>
+                )
+            ) : (
+                sortedAnciensYears.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                        <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-10 animate-in fade-in duration-300">
+                        {sortedAnciensYears.map(year => (
+                            <div key={year} className="space-y-4">
+                                <h3 className="font-black text-sm text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">
+                                    <span>Mandat {year}</span>
+                                    <span className="bg-[#187840]/10 text-[#187840] text-[10px] px-2.5 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
+                                </h3>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                    {groupedAnciens[year].map(m => (
+                                        <div key={m.id || m.nom} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
+                                            <div>
+                                                <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                    {m.imageUrl ? (
+                                                        <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                    ) : (
+                                                        <div className="w-full h-full bg-gradient-to-tr from-[#003058] to-[#187840] flex items-center justify-center text-white text-2xl font-black">
+                                                            {m.nom?.[0]}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                                <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
+                                            </div>
+                                            <div className="mt-4">
+                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                    {m.classe}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )
             )}
         </div>
     );

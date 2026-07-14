@@ -15,7 +15,7 @@ const POSTES = [
 
 ];
 import { NIVEAUX } from "../../config/constants";
-const VIDE = { nom: "", poste: "", classe: "", imageUrl: "", whatsapp: "", linkedin: "", estAncien: false };
+const VIDE = { nom: "", poste: "", classe: "", imageUrl: "", estAncien: false, annee: "" };
 
 export default function ManageUsers() {
     const [membres, setMembres] = useState([]);
@@ -94,6 +94,9 @@ export default function ManageUsers() {
         if (!form.nom.trim() || !form.poste || !form.classe) {
             showToast("Remplis tous les champs obligatoires.", "error"); return;
         }
+        if (form.estAncien && !form.annee) {
+            showToast("Veuillez renseigner l'année pour un ancien membre.", "error"); return;
+        }
         setUploading(true);
         try {
             const imageUrl = await uploadImage();
@@ -102,9 +105,8 @@ export default function ManageUsers() {
                 poste: form.poste,
                 classe: form.classe,
                 imageUrl,
-                whatsapp: form.whatsapp,
-                linkedin: form.linkedin,
-                estAncien: form.estAncien
+                estAncien: form.estAncien,
+                annee: form.estAncien ? form.annee : null
             };
             if (editId) {
                 const { error } = await safeUpdate("bureau", data, q => q.eq("id", editId));
@@ -240,21 +242,15 @@ export default function ManageUsers() {
                             </select>
                         </div>
 
-                        {/* WhatsApp Link */}
-                        <div className="space-y-1.5">
-                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Lien WhatsApp</label>
-                            <input type="url" value={form.whatsapp} onChange={e => setForm({ ...form, whatsapp: e.target.value })}
-                                placeholder="Ex: https://wa.me/221xxxxxxxxx"
-                                className="input-field" />
-                        </div>
-
-                        {/* LinkedIn Link */}
-                        <div className="space-y-1.5">
-                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Lien LinkedIn</label>
-                            <input type="url" value={form.linkedin} onChange={e => setForm({ ...form, linkedin: e.target.value })}
-                                placeholder="Ex: https://linkedin.com/in/username"
-                                className="input-field" />
-                        </div>
+                        {/* Année (uniquement si Ancien) */}
+                        {form.estAncien && (
+                            <div className="space-y-1.5 animate-in fade-in duration-200">
+                                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Année de Mandat *</label>
+                                <input type="text" value={form.annee || ""} onChange={e => setForm({ ...form, annee: e.target.value })}
+                                    placeholder="Ex: 2024 ou 2023-2024"
+                                    className="input-field" />
+                            </div>
+                        )}
 
                         {uploading && (
                             <div className="md:col-span-2 bg-[#F8F0F0] p-4 rounded-xl border border-slate-100">
@@ -309,7 +305,7 @@ export default function ManageUsers() {
                             {membres.map(m => (
                                 <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                     <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", whatsapp: m.whatsapp || "", linkedin: m.linkedin || "", estAncien: m.estAncien || false }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                                             className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
                                             <Pencil size={14} strokeWidth={2.5} />
                                         </button>
@@ -329,7 +325,9 @@ export default function ManageUsers() {
                                     <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
                                         <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
                                         {m.estAncien && (
-                                            <span className="text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">Ancien</span>
+                                            <span className="text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">
+                                                Ancien {m.annee ? `(${m.annee})` : ""}
+                                            </span>
                                         )}
                                     </div>
                                 </div>

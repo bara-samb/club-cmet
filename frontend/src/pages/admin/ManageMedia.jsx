@@ -246,29 +246,33 @@ export default function Medias() {
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                     {medias.map(m => (
-                        <div key={m.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group">
-                            <div className="aspect-[4/3] bg-slate-100 relative">
-                                {m.type === 'Vidéo' ? (
-                                    <video src={m.url} className="w-full h-full object-cover" muted preload="metadata" />
-                                ) : (
-                                    <img src={m.url} alt={m.titre} className="w-full h-full object-cover" />
-                                )}
-                                <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[#0a1628] text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest shadow-sm flex items-center gap-1">
-                                    {m.type === 'Vidéo' ? <Video size={10} /> : <ImageIcon size={10} />} {m.type}
-                                </span>
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                                    <button onClick={() => ouvrirEdition(m)}
-                                        className="p-2 rounded-lg bg-white/90 hover:bg-white text-slate-700 transition-colors">
-                                        <Pencil size={14} />
-                                    </button>
-                                    <button onClick={() => handleDelete(m)}
-                                        className="p-2 rounded-lg bg-white/90 hover:bg-white text-red-500 transition-colors">
-                                        <Trash2 size={14} />
-                                    </button>
+                        <div key={m.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group flex flex-col justify-between">
+                            <div>
+                                <div className="aspect-[4/3] bg-slate-100 relative">
+                                    {m.type === 'Vidéo' ? (
+                                        <video src={m.url} className="w-full h-full object-cover" muted preload="metadata" />
+                                    ) : (
+                                        <img src={m.url} alt={m.titre} className="w-full h-full object-cover" />
+                                    )}
+                                    <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[#0a1628] text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest shadow-sm flex items-center gap-1">
+                                        {m.type === 'Vidéo' ? <Video size={10} /> : <ImageIcon size={10} />} {m.type}
+                                    </span>
                                 </div>
                             </div>
-                            <div className="p-3">
-                                <h4 className="text-xs font-extrabold text-[#0a1628] truncate">{m.titre}</h4>
+                            <div className="p-3 flex items-center justify-between gap-2 border-t border-slate-50 bg-slate-50/20">
+                                <h4 className="text-xs font-extrabold text-[#0a1628] truncate flex-grow" title={m.titre}>{m.titre}</h4>
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                    <button onClick={() => ouvrirEdition(m)}
+                                        className="w-7 h-7 bg-white border border-[#C8C8C8]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        title="Modifier">
+                                        <Pencil size={12} />
+                                    </button>
+                                    <button onClick={() => handleDelete(m)}
+                                        className="w-7 h-7 bg-white border border-[#C8C8C8]/60 hover:border-red-500 hover:text-red-500 text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        title="Supprimer">
+                                        <Trash2 size={12} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}

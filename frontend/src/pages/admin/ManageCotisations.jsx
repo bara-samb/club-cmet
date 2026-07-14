@@ -213,7 +213,7 @@ export default function ManageCotisations() {
             <div className="max-w-5xl mx-auto space-y-8">
                 <div>
                     <h1 className="text-3xl font-black text-[#003058] tracking-tight">Gestion des Cotisations</h1>
-                    <p className="text-sm text-slate-500 mt-1 font-medium">Configurez le lien de paiement marchand Wave, validez les transferts des étudiants ou saisissez des cotisations manuelles.</p>
+                    <p className="text-sm text-slate-500 mt-1 font-medium">Configurez le lien de paiement marchand Wave, validez les déclarations des étudiants ou saisissez des cotisations manuelles.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -245,7 +245,7 @@ export default function ManageCotisations() {
                     {/* ENREGISTRER UNE COTISATION MANUELLE (2/3) */}
                     <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:col-span-2 space-y-6">
                         <h2 className="font-bold text-base text-[#003058] flex items-center gap-2">
-                            <Plus className="text-[#187840]" size={18} /> Enregistrer un versement (Espèces / Wave direct)
+                            <Plus className="text-[#187840]" size={18} /> Enregistrer une cotisation (Espèces / Wave direct)
                         </h2>
                         <form onSubmit={handleAddManualPayment} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1.5 sm:col-span-2">
@@ -312,7 +312,7 @@ export default function ManageCotisations() {
                             <div className="sm:col-span-2 flex justify-end">
                                 <button type="submit" disabled={submittingPayment} className="btn-primary px-6 py-2.5">
                                     {submittingPayment ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                                    Enregistrer le versement
+                                    Enregistrer la cotisation
                                 </button>
                             </div>
                         </form>
@@ -324,7 +324,7 @@ export default function ManageCotisations() {
                 <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
                     <h2 className="font-black text-xl text-[#003058] flex items-center gap-3 mb-8">
                         <Users className="text-[#187840]" size={24} />
-                        Déclarations & Versements
+                        Déclarations & Cotisations
                         <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{cotisations.length}</span>
                     </h2>
 
