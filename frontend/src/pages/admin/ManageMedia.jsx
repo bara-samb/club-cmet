@@ -173,8 +173,8 @@ export default function Medias() {
                                     <div className="flex gap-2">
                                         {['Photo', 'Vidéo'].map(t => (
                                             <button key={t} type="button" onClick={() => setType(t)}
-                                                className={`px-5 py-2.5 rounded-xl text-xs font-bold border transition-all ${type === t ? 'bg-[#16a34a] text-white border-[#16a34a] shadow-sm' : 'bg-[#F8F0F0] text-slate-500 border-[#C8C8C8]/60 hover:border-[#16a34a] hover:text-[#16a34a]'}`}>
-                                                {t === 'Photo' ? '🖼️ Photo' : '🎬 Vidéo'}
+                                                className={`px-5 py-2.5 rounded-xl text-xs font-bold border transition-all ${type === t ? 'bg-[#16a34a] text-white border-[#16a34a] shadow-sm' : 'bg-[#f1f5f9] text-slate-500 border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a]'}`}>
+                                                {t}
                                             </button>
                                         ))}
                                     </div>
@@ -186,7 +186,7 @@ export default function Medias() {
                                     </label>
                                     <input type="text" required value={titre} onChange={e => setTitre(e.target.value)}
                                         placeholder="Ex: Hackathon 2026 - Finale"
-                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
                                 </div>
 
                                 <div>
@@ -194,7 +194,7 @@ export default function Medias() {
                                         Fichier {type === 'Photo' ? '(image)' : '(vidéo)'}
                                     </label>
                                     <div onClick={() => fileInputRef.current?.click()}
-                                        className="border-2 border-dashed border-[#C8C8C8] rounded-2xl py-8 px-4 text-center cursor-pointer hover:border-[#16a34a] hover:bg-[#16a34a]/5 transition-colors">
+                                        className="border-2 border-dashed border-[#e2e8f0] rounded-2xl py-8 px-4 text-center cursor-pointer hover:border-[#16a34a] hover:bg-[#16a34a]/5 transition-colors">
                                         <Upload className="w-6 h-6 mx-auto mb-2 text-slate-400" />
                                         <p className="text-xs font-bold text-slate-500">
                                             Cliquez pour {existingUrl || preview ? 'remplacer' : 'choisir'} un fichier
@@ -263,12 +263,12 @@ export default function Medias() {
                                 <h4 className="text-xs font-extrabold text-[#0a1628] truncate flex-grow" title={m.titre}>{m.titre}</h4>
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     <button onClick={() => ouvrirEdition(m)}
-                                        className="w-7 h-7 bg-white border border-[#C8C8C8]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        className="w-7 h-7 bg-white border border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                         title="Modifier">
                                         <Pencil size={12} />
                                     </button>
                                     <button onClick={() => handleDelete(m)}
-                                        className="w-7 h-7 bg-white border border-[#C8C8C8]/60 hover:border-red-500 hover:text-red-500 text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        className="w-7 h-7 bg-white border border-[#e2e8f0]/60 hover:border-red-500 hover:text-red-500 text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                         title="Supprimer">
                                         <Trash2 size={12} />
                                     </button>

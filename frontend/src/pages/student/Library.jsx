@@ -261,7 +261,7 @@ export default function Library() {
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.3 }}
-                                        className="overflow-hidden bg-[#F8F0F0]/20">
+                                        className="overflow-hidden bg-[#f1f5f9]/20">
                                         
                                         {group.docs.length === 0 ? (
                                             <div className="p-6 text-center text-xs text-slate-400 italic">
@@ -271,10 +271,10 @@ export default function Library() {
                                             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                                                 {group.docs.map(doc => (
                                                     <div key={doc.id}
-                                                         className="bg-white border border-[#C8C8C8]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+                                                         className="bg-white border border-[#e2e8f0]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                                                         <div>
                                                             <div className="flex items-start gap-3 mb-3">
-                                                                <div className="w-10 h-10 bg-[#F8F0F0] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                                                <div className="w-10 h-10 bg-[#f1f5f9] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
                                                                     <FileText size={20} className="text-[#003058]" />
                                                                 </div>
                                                                 <div className="flex-grow min-w-0">
@@ -296,8 +296,8 @@ export default function Library() {
 
                                                             {/* Infos complémentaires */}
                                                             <div className="flex gap-2 flex-wrap mb-4 pl-1 border-l-2 border-[#187840]/30 text-[10px] text-slate-400 font-semibold">
-                                                                {doc.date && <span>📅 {doc.date}</span>}
-                                                                {doc.typeDoc && <span>📄 {doc.typeDoc}</span>}
+                                                                {doc.date && <span>{doc.date}</span>}
+                                                                {doc.typeDoc && <span>{doc.typeDoc}</span>}
                                                             </div>
 
                                                             {doc.description && (

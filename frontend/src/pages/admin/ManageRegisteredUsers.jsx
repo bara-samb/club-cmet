@@ -132,7 +132,7 @@ export default function ManageRegisteredUsers() {
     const studentCount = users.filter((u) => u.role === "student").length;
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-4 md:p-8">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-4 md:p-8">
             {/* Toast Alerts */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all transform translate-y-0 ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -332,7 +332,7 @@ export default function ManageRegisteredUsers() {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#F8F0F0] border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
+                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#f1f5f9] border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
                                                         {user.niveau || "Non spécifié"}
                                                     </span>
                                                 </td>

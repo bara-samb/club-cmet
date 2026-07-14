@@ -92,7 +92,7 @@ export default function ManageCotisations() {
                 .upsert({ cle: 'wave_link', valeur: waveLink }, { onConflict: 'cle' });
             
             if (error) throw error;
-            showToast("Lien Wave marchand mis à jour avec succès ! ✓");
+            showToast("Lien Wave marchand mis à jour.");
         } catch (err) {
             showToast("Erreur : " + err.message, "error");
         } finally {
@@ -111,7 +111,7 @@ export default function ManageCotisations() {
                 .eq('id', id);
             
             if (error) throw error;
-            showToast("Cotisation validée ✓");
+            showToast("Cotisation validée.");
         } catch (err) {
             showToast("Erreur : " + err.message, "error");
         }
@@ -160,7 +160,7 @@ export default function ManageCotisations() {
             const { error } = await supabase.from('cotisations').insert(payload);
             if (error) throw error;
 
-            showToast("Cotisation enregistrée avec succès ! ✓");
+            showToast("Cotisation enregistrée avec succès.");
             setSelectedEtudiantId('');
             setManualNom('');
             setManualClasse('');
@@ -185,7 +185,7 @@ export default function ManageCotisations() {
     };
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-6">
             {/* Toast */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -337,7 +337,7 @@ export default function ManageCotisations() {
                             <p className="text-sm font-medium text-slate-500">Chargement des cotisations...</p>
                         </div>
                     ) : cotisations.length === 0 ? (
-                        <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
                             <CreditCard className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucune cotisation enregistrée pour le moment.</p>
                         </div>
@@ -386,7 +386,7 @@ export default function ManageCotisations() {
                                                     {c.statut === 'en_attente' && (
                                                         <button 
                                                             onClick={() => handleValidate(c.id)}
-                                                            className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-green-500 hover:text-green-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                            className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-green-500 hover:text-green-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                             title="Valider la cotisation"
                                                         >
                                                             <Check size={14} />
@@ -394,7 +394,7 @@ export default function ManageCotisations() {
                                                     )}
                                                     <button 
                                                         onClick={() => setConfirmDel(c)}
-                                                        className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                        className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                         title="Supprimer la déclaration"
                                                     >
                                                         <Trash2 size={14} />

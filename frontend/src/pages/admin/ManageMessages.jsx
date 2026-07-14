@@ -144,7 +144,7 @@ export default function ManageMessages() {
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un expéditeur ou mot-clé..."
-                        className="w-full pl-12 pr-4 py-3 bg-white border border-[#C8C8C8] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-700"
+                        className="w-full pl-12 pr-4 py-3 bg-white border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-700"
                     />
                     {recherche && (
                         <button onClick={() => setRecherche('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -171,7 +171,7 @@ export default function ManageMessages() {
                             className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
                                 filtreStatut === f.id
                                     ? 'bg-[#003058] text-white border-[#003058] shadow-sm'
-                                    : 'bg-[#F8F0F0] text-slate-600 border-[#C8C8C8]/50 hover:border-[#003058] hover:text-[#003058]'
+                                    : 'bg-[#f1f5f9] text-slate-600 border-[#e2e8f0]/50 hover:border-[#003058] hover:text-[#003058]'
                             }`}>
                             {f.label}
                         </button>
@@ -211,7 +211,7 @@ export default function ManageMessages() {
                                     <tr 
                                         key={msg.id} 
                                         onClick={() => lireMessage(msg)}
-                                        className={`hover:bg-[#F8F0F0]/50 transition-colors cursor-pointer ${
+                                        className={`hover:bg-[#f1f5f9]/50 transition-colors cursor-pointer ${
                                             msg.statut === 'non_lu' ? 'font-bold bg-green-50/20' : 'text-slate-500'
                                         }`}>
                                         
@@ -289,7 +289,7 @@ export default function ManageMessages() {
                             </div>
 
                             {/* Contenu Expéditeur */}
-                            <div className="bg-[#F8F0F0]/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100">
+                            <div className="bg-[#f1f5f9]/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100">
                                 <div className="flex items-center gap-2 text-xs">
                                     <User size={14} className="text-[#003058]" />
                                     <span className="font-bold text-slate-700">{activeMessage.nom}</span>
@@ -373,7 +373,7 @@ export default function ManageMessages() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 50 }}
                         className="fixed bottom-6 right-6 z-55 bg-[#003058] text-white px-5 py-3.5 rounded-2xl shadow-xl font-bold text-xs border border-white/10 flex items-center gap-2">
-                        <span>💡 {toastMsg}</span>
+                        <span>{toastMsg}</span>
                     </motion.div>
                 )}
             </AnimatePresence>

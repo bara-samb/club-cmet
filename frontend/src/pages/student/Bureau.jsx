@@ -169,7 +169,7 @@ export default function Bureau() {
                                     <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                 </div>
                                 <div className="mt-4">
-                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
                                         {m.classe}
                                     </span>
                                 </div>
@@ -208,7 +208,7 @@ export default function Bureau() {
                                                 <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                             </div>
                                             <div className="mt-4">
-                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
                                                     {m.classe}
                                                 </span>
                                             </div>

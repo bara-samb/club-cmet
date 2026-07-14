@@ -152,11 +152,11 @@ export default function ManageUsers() {
             if (editId) {
                 const { error } = await safeUpdate("bureau", data, q => q.eq("id", editId));
                 if (error) throw error;
-                showToast("Membre mis à jour ✓");
+                showToast("Membre mis à jour.");
             } else {
                 const { error } = await safeInsert("bureau", data);
                 if (error) throw error;
-                showToast("Membre ajouté ✓");
+                showToast("Membre ajouté.");
             }
             resetForm();
         } catch (err) { showToast("Erreur : " + err.message, "error"); }
@@ -183,7 +183,7 @@ export default function ManageUsers() {
     const resetForm = () => { setForm(VIDE); setEditId(null); setImageFile(null); setPreview(null); };
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-6">
 
             {/* Toast */}
             {toast && (
@@ -227,7 +227,7 @@ export default function ManageUsers() {
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         {/* Photo */}
-                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#F8F0F0] rounded-2xl border border-slate-100">
+                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] rounded-2xl border border-slate-100">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
                                 {preview
                                     ? <img src={preview} alt="preview" className="w-full h-full object-cover" />
@@ -236,7 +236,7 @@ export default function ManageUsers() {
                             </div>
                             <div>
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Photo du membre</label>
-                                <label className="cursor-pointer bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
+                                <label className="cursor-pointer bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
                                     <ImageIcon size={16} />
                                     {imageFile ? imageFile.name : "Choisir une photo"}
                                     <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden" />
@@ -303,7 +303,7 @@ export default function ManageUsers() {
                         )}
 
                         {uploading && (
-                            <div className="md:col-span-2 bg-[#F8F0F0] p-4 rounded-xl border border-slate-100">
+                            <div className="md:col-span-2 bg-[#f1f5f9] p-4 rounded-xl border border-slate-100">
                                 <div className="flex justify-between text-[11px] font-bold text-[#003058] mb-2">
                                     <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#187840]" /> Upload en cours...</span>
                                     <span className="text-[#187840]">{progress}%</span>
@@ -340,7 +340,7 @@ export default function ManageUsers() {
                         </h2>
                         
                         {/* Onglets d'administration */}
-                        <div className="flex gap-2 bg-[#F8F0F0] p-1 rounded-xl border border-slate-200/50">
+                        <div className="flex gap-2 bg-[#f1f5f9] p-1 rounded-xl border border-slate-200/50">
                             <button type="button" onClick={() => setActiveTab('actuels')}
                                 className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'actuels' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
                                 Actuels ({membresActuels.length})
@@ -359,7 +359,7 @@ export default function ManageUsers() {
                         </div>
                     ) : activeTab === 'actuels' ? (
                         membresActuels.length === 0 ? (
-                            <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun membre actuel enregistré.</p>
                             </div>
@@ -369,12 +369,12 @@ export default function ManageUsers() {
                                     <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                 title="Modifier">
                                                 <Pencil size={14} strokeWidth={2.5} />
                                             </button>
                                             <button onClick={() => setConfirmDel(m)}
-                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                 title="Supprimer">
                                                 <Trash2 size={14} strokeWidth={2.5} />
                                             </button>
@@ -388,7 +388,7 @@ export default function ManageUsers() {
                                         <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                         <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                            <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -396,7 +396,7 @@ export default function ManageUsers() {
                         )
                     ) : (
                         membresAnciens.length === 0 ? (
-                            <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
                             </div>
@@ -414,12 +414,12 @@ export default function ManageUsers() {
                                                     <div>
                                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                                 title="Modifier">
                                                                 <Pencil size={14} strokeWidth={2.5} />
                                                             </button>
                                                             <button onClick={() => setConfirmDel(m)}
-                                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                                 title="Supprimer">
                                                                 <Trash2 size={14} strokeWidth={2.5} />
                                                             </button>
@@ -434,7 +434,7 @@ export default function ManageUsers() {
                                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                                     </div>
                                                     <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
                                                     </div>
                                                 </div>
                                             ))}

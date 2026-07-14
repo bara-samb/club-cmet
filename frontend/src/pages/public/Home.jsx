@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon, Image } from 'lucide-react';
+import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon, Image, ChevronDown, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (
@@ -81,7 +81,6 @@ export default function Home() {
     const navigate = useNavigate();
 
     /* ── State UI ── */
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [isAnciensOpen, setIsAnciensOpen] = useState(false);
     const [openArticle, setOpenArticle] = useState('bureau-exec');
@@ -359,28 +358,11 @@ export default function Home() {
             {/* ── Animations CSS ── */}
             <style dangerouslySetInnerHTML={{
                 __html: `
-        @keyframes spin-slow   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes pulse-ring  {
-          0%,100%{box-shadow:0 0 0 0 rgba(24,120,64,.5),0 0 0 4px rgba(24,120,64,.15)}
-          50%    {box-shadow:0 0 0 6px rgba(24,120,64,0), 0 0 0 10px rgba(24,120,64,0)}
-        }
         @keyframes ken-burns {
           0%  {transform:scale(1)    translateX(0)   translateY(0)}
           33% {transform:scale(1.08) translateX(-1%) translateY(-1%)}
           66% {transform:scale(1.05) translateX(1%)  translateY(.5%)}
           100%{transform:scale(1)    translateX(0)   translateY(0)}
-        }
-        @keyframes light-sweep {
-          0%  {opacity:0;transform:translateX(-100%) skewX(-20deg)}
-          20% {opacity:1}
-          80% {opacity:1}
-          100%{opacity:0;transform:translateX(200%) skewX(-20deg)}
-        }
-        @keyframes float-up {
-          0%  {opacity:0;  transform:translateY(0)     scale(.8)}
-          20% {opacity:.6}
-          80% {opacity:.4}
-          100%{opacity:0;  transform:translateY(-120px) scale(1.1)}
         }
         @keyframes fade-in-up {
           from{opacity:0;transform:translateY(24px)}
@@ -391,28 +373,19 @@ export default function Home() {
           60% {transform:scale(1.05)}
           100%{opacity:1;transform:scale(1)  translateY(0)}
         }
-        .anim-logo       {animation:spin-slow 18s linear infinite,pulse-ring 2.5s ease-in-out infinite}
-        .anim-logo:hover {animation-play-state:paused}
         .anim-bg         {animation:ken-burns 20s ease-in-out infinite}
-        .anim-sweep      {animation:light-sweep 6s ease-in-out infinite 1.5s}
         .anim-badge      {animation:badge-pop  .7s cubic-bezier(.34,1.56,.64,1) both}
         .anim-h1         {animation:fade-in-up  .9s ease both .3s}
         .anim-p          {animation:fade-in-up  .9s ease both .55s}
         .anim-btns       {animation:fade-in-up  .9s ease both .75s}
-        .particle        {animation:float-up linear infinite}
       ` }} />
 
             {/* ════════ NAVBAR ════════ */}
             <nav className="bg-[#003058]/95 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
                     <div className="relative w-10 h-10 shrink-0">
-                        <span style={{
-                            position: 'absolute', inset: '-4px', borderRadius: '9999px',
-                            border: '2px dashed rgba(0,48,88,.5)',
-                            animation: 'spin-slow 10s linear infinite'
-                        }} />
                         <img src="/images/logo-CMET.png" alt="Logo Club-MET"
-                            className="anim-logo w-10 h-10 rounded-full object-cover border-2 border-[#003058]/60 relative z-10" />
+                            className="w-10 h-10 rounded-full object-cover border-2 border-white/20" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-bold text-base tracking-wide leading-none">CLUB-MET</span>
@@ -505,7 +478,7 @@ export default function Home() {
             )}
 
             {/* ════════ MAIN ════════ */}
-            <main className="flex-grow" onClick={() => setDropdownOpen(false)}>
+            <main className="flex-grow">
 
                 {/* ── HERO ── */}
                 <section className="relative bg-[#003058] text-white py-16 md:py-24 px-6 overflow-hidden">
@@ -515,22 +488,6 @@ export default function Home() {
                             style={{ transformOrigin: 'center center' }} />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-b from-[#003058]/60 via-[#003058]/40 to-[#003058]/80" />
-                    <div className="anim-sweep absolute inset-0 pointer-events-none"
-                        style={{ background: 'linear-gradient(105deg,transparent 30%,rgba(24,120,64,.07) 50%,transparent 70%)', width: '60%', left: 0 }} />
-
-                    {[
-                        { left: '8%', delay: '0s', dur: '5s', size: 6, op: .5 },
-                        { left: '20%', delay: '1.2s', dur: '7s', size: 4, op: .35 },
-                        { left: '35%', delay: '0.6s', dur: '6s', size: 5, op: .4 },
-                        { left: '55%', delay: '2s', dur: '8s', size: 3, op: .3 },
-                        { left: '70%', delay: '0.3s', dur: '5.5s', size: 6, op: .45 },
-                        { left: '82%', delay: '1.8s', dur: '7.5s', size: 4, op: .35 },
-                        { left: '92%', delay: '0.9s', dur: '6.5s', size: 5, op: .4 },
-                    ].map((p, i) => (
-                        <span key={i} className="particle absolute bottom-0 rounded-full bg-[#187840] pointer-events-none"
-                            style={{ left: p.left, width: p.size, height: p.size, opacity: p.op, animationDuration: p.dur, animationDelay: p.delay }} />
-                    ))}
-
                     <div className="relative max-w-5xl mx-auto text-center z-10">
                         <span className="anim-badge inline-block bg-[#002850] text-[#187840] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
                             Club de l'UFR Métiers et Technologies
@@ -543,7 +500,7 @@ export default function Home() {
                         </p>
                         <div className="anim-btns flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer"
-                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white text-[green] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
+                                className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white text-[#187840] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" />
                                 </svg>
@@ -621,7 +578,7 @@ export default function Home() {
                 </section>
 
                 {/* ── PARCOURS & HISTOIRE ── */}
-                <section id="parcours" className="py-20 bg-gradient-to-b from-white to-[#F8F0F0] px-6 border-t border-gray-100 overflow-hidden">
+                <section id="parcours" className="py-20 bg-gradient-to-b from-white to-[#f1f5f9] px-6 border-t border-gray-100 overflow-hidden">
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-16">
                             <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/25">
@@ -643,7 +600,7 @@ export default function Home() {
                                     <div className="absolute -left-[35px] md:-left-[51px] top-1 w-6 h-6 rounded-full bg-[#187840] border-4 border-white group-hover:scale-110 transition-transform flex items-center justify-center shadow-md">
                                         <div className="w-1.5 h-1.5 rounded-full bg-white" />
                                     </div>
-                                    <div className="bg-white border border-[#C8C8C8]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
+                                    <div className="bg-white border border-[#e2e8f0]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                                             <h3 className="font-extrabold text-sm md:text-base text-[#003058]">{item.title}</h3>
                                             <span className="text-xs font-black text-white bg-[#187840] px-3 py-1 rounded-full">{item.year}</span>
@@ -657,13 +614,13 @@ export default function Home() {
                 </section>
 
                 {/* ── FONCTIONNEMENT ── */}
-                <section id="fonctionnement" className="py-16 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20">
+                <section id="fonctionnement" className="py-16 bg-[#f1f5f9] border-t border-b border-gray-100 px-6 scroll-mt-20">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-10">
                             <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Régime Interne</span>
                             <h2 className="text-2xl font-bold text-[#003058] mt-3">Règles de Fonctionnement Exécutif</h2>
                         </div>
-                        <div className="bg-white border border-[#C8C8C8]/60 rounded-2xl shadow-sm p-6 space-y-4">
+                        <div className="bg-white border border-[#e2e8f0]/60 rounded-2xl shadow-sm p-6 space-y-4">
                             {[
                                 {
                                     id: 'bureau-exec', label: 'Composition des Organes Légaux du Club',
@@ -686,12 +643,12 @@ export default function Home() {
                             ].map(item => (
                                 <div key={item.id} className="border border-gray-100 rounded-xl overflow-hidden">
                                     <button onClick={() => setOpenArticle(openArticle === item.id ? null : item.id)}
-                                        className="w-full bg-[#F8F0F0] px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
+                                        className="w-full bg-[#f1f5f9] px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
                                         <span className="text-xs font-bold text-slate-700 flex items-start gap-2 pr-4 flex-1">
                                             <svg className="w-4 h-4 text-[#187840]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
                                             {item.label}
                                         </span>
-                                        <span className="text-xs text-gray-400">{openArticle === item.id ? '▲' : '▼'}</span>
+                                        <ChevronDown size={14} className={`text-gray-400 shrink-0 transition-transform duration-200 ${openArticle === item.id ? 'rotate-180' : ''}`} />
                                     </button>
                                     {openArticle === item.id && item.content}
                                 </div>
@@ -745,10 +702,10 @@ export default function Home() {
                                     show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 15 } }
                                 }}
                                 whileHover={{ y: -8, scale: 1.03 }}
-                                className="group relative bg-white border border-[#C8C8C8]/40 rounded-3xl p-6 text-center shadow-sm transition-all duration-300 overflow-hidden select-none snap-start shrink-0 w-[240px] sm:w-[280px] md:w-auto">
+                                className="group relative bg-white border border-[#e2e8f0]/40 rounded-3xl p-6 text-center shadow-sm transition-all duration-300 overflow-hidden select-none snap-start shrink-0 w-[240px] sm:w-[280px] md:w-auto">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-[#187840] to-[#003058] rounded-3xl blur opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
                                 <div className="absolute inset-0 bg-white rounded-3xl z-0" />
-                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F8F0F0]/50 rounded-3xl pointer-events-none z-0" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#f1f5f9]/50 rounded-3xl pointer-events-none z-0" />
                                 <div className="relative z-10">
                                     <div className="relative w-28 h-28 mx-auto mb-6">
                                         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#187840] to-[#003058] opacity-50 group-hover:rotate-180 transition-transform duration-700 ease-out" style={{ padding: '2px' }}>
@@ -764,7 +721,7 @@ export default function Home() {
                                     <h4 className="font-extrabold text-base text-[#003058] truncate mb-1 group-hover:text-[#187840] transition-colors">{m.nom}</h4>
                                     <p className="text-xs text-[#187840] font-black uppercase tracking-wider mb-4 h-5 flex items-center justify-center">{m.poste}</p>
                                     <div className="mb-4">
-                                        <span className="inline-block text-[9px] font-black text-slate-500 bg-[#F8F0F0] px-3.5 py-1.5 rounded-full border border-[#C8C8C8]/50 uppercase tracking-widest shadow-sm group-hover:bg-[#187840]/10 group-hover:text-[#187840] transition-colors">
+                                        <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-3.5 py-1.5 rounded-full border border-[#e2e8f0]/50 uppercase tracking-widest shadow-sm group-hover:bg-[#187840]/10 group-hover:text-[#187840] transition-colors">
                                             {m.classe}
                                         </span>
                                     </div>
@@ -836,7 +793,7 @@ export default function Home() {
                                                                 <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                                             </div>
                                                             <div className="mt-3">
-                                                                <span className="inline-block text-[8px] font-black text-slate-500 bg-[#F8F0F0] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                                <span className="inline-block text-[8px] font-black text-slate-500 bg-[#f1f5f9] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
                                                                     {m.classe}
                                                                 </span>
                                                             </div>
@@ -856,7 +813,7 @@ export default function Home() {
                 </section>
 
                 {/* ── ACTIVITÉS & MÉDIAS ── */}
-                <section id="activites-medias" className="py-20 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20 overflow-hidden">
+                <section id="activites-medias" className="py-20 bg-[#f1f5f9] border-t border-b border-gray-100 px-6 scroll-mt-20 overflow-hidden">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-10">
                             <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058]">Actualités, Activités & Médias</h2>
@@ -885,7 +842,7 @@ export default function Home() {
                                         <button
                                             key={f}
                                             onClick={() => setFiltreAct(f)}
-                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${filtreAct === f ? 'bg-[#187840] text-white border-[#187840] shadow-sm' : 'bg-white text-slate-500 border-[#C8C8C8]/60 hover:border-[#187840] hover:text-[#187840]'}`}>
+                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${filtreAct === f ? 'bg-[#187840] text-white border-[#187840] shadow-sm' : 'bg-white text-slate-500 border-[#e2e8f0]/60 hover:border-[#187840] hover:text-[#187840]'}`}>
                                             {f === 'tous' ? 'Tous' : f}
                                         </button>
                                     ))}
@@ -982,7 +939,7 @@ export default function Home() {
                 </section>
 
                 {/* ── UFR MET — MAQUETTES ── */}
-                <section id="ufr-met" className="py-20 bg-[#F8F0F0] border-t border-b border-gray-100 px-6 scroll-mt-20">
+                <section id="ufr-met" className="py-20 bg-[#f1f5f9] border-t border-b border-gray-100 px-6 scroll-mt-20">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-14">
                             <span className="inline-block text-[10px] font-black text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/20 mb-4">
@@ -1132,7 +1089,7 @@ export default function Home() {
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
                                         className={`p-4 rounded-xl border text-xs font-semibold leading-relaxed flex items-start gap-2.5 overflow-hidden ${contactStatus.type === 'success' ? 'bg-green-50 text-[#125e31] border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
-                                        <span className="mt-0.5 select-none shrink-0">{contactStatus.type === 'success' ? '✅' : '⚠️'}</span>
+                                        <span className="mt-0.5 select-none shrink-0">{contactStatus.type === 'success' ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}</span>
                                         <span>{contactStatus.msg}</span>
                                     </motion.div>
                                 )}
@@ -1144,7 +1101,7 @@ export default function Home() {
                                     onChange={e => { setNomContact(e.target.value); if (contactErrors.nom) setContactErrors(p => ({ ...p, nom: null })); }}
                                     disabled={contactSubmitting} placeholder="Fatou Diop"
                                     className={`input-field ${contactErrors.nom ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                {contactErrors.nom && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.nom}</p>}
+                                {contactErrors.nom && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.nom}</p>}
                             </div>
 
                             <div>
@@ -1153,7 +1110,7 @@ export default function Home() {
                                     onChange={e => { setEmailContact(e.target.value); if (contactErrors.email) setContactErrors(p => ({ ...p, email: null })); }}
                                     disabled={contactSubmitting} placeholder="votre.nom@ucak.edu.sn"
                                     className={`input-field ${contactErrors.email ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                {contactErrors.email && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.email}</p>}
+                                {contactErrors.email && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.email}</p>}
                             </div>
 
                             <div>
@@ -1162,7 +1119,7 @@ export default function Home() {
                                     onChange={e => { setTelContact(e.target.value); if (contactErrors.telephone) setContactErrors(p => ({ ...p, telephone: null })); }}
                                     disabled={contactSubmitting} placeholder="+221 77 000 00 00"
                                     className={`input-field ${contactErrors.telephone ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                {contactErrors.telephone && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.telephone}</p>}
+                                {contactErrors.telephone && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.telephone}</p>}
                             </div>
 
                             <div>
@@ -1171,7 +1128,7 @@ export default function Home() {
                                     onChange={e => { setMsgContact(e.target.value); if (contactErrors.message) setContactErrors(p => ({ ...p, message: null })); }}
                                     disabled={contactSubmitting} placeholder="Décrivez votre demande ou suggestion..."
                                     className={`input-field resize-none ${contactErrors.message ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                {contactErrors.message && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">⚠️ {contactErrors.message}</p>}
+                                {contactErrors.message && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.message}</p>}
                             </div>
 
                             <button type="submit" disabled={contactSubmitting}
@@ -1242,7 +1199,7 @@ export default function Home() {
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#25D366]/20 flex items-center justify-center transition-colors shrink-0"><WhatsAppIcon /></span>
                                 <span>WhatsApp</span>
                             </a>
-                            <a href="https://www.instagram.com/cmet_officiel?igsh=c2hqN2EwaXgyazV5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#ff0050] transition-colors group">
+                            <a href="https://www.tiktok.com/@cmet_officiel" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#ff0050] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#ff0050]/20 flex items-center justify-center transition-colors shrink-0"><TikTokIcon /></span>
                                 <span>TikTok</span>
                             </a>
@@ -1297,13 +1254,13 @@ export default function Home() {
                                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nom Complet</label>
                                     <input type="text" required value={nomInscrit} onChange={e => setNomInscrit(e.target.value)}
                                         placeholder="Ex: Fatou Diop"
-                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
                                 </div>
                                 <div className="text-left">
                                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Adresse Email Pro</label>
                                     <input type="email" required value={emailInscrit} onChange={e => setEmailInscrit(e.target.value)}
                                         placeholder="Ex: fatou.diop@ucak.edu.sn"
-                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
                                 </div>
                                 <button type="submit"
                                     className="w-full bg-[#187840] hover:bg-green-600 text-white py-3.5 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-colors shadow-md mt-6 flex items-center justify-center gap-2">

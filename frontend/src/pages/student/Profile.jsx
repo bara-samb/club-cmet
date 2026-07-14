@@ -123,11 +123,11 @@ export default function Profile() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Prénom</label>
-                            <input className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom" />
+                            <input className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Nom</label>
-                            <input className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom" />
+                            <input className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom" />
                         </div>
                     </div>
 
@@ -137,7 +137,7 @@ export default function Profile() {
                             <select 
                                 value={niveau} 
                                 onChange={e => setNiveau(e.target.value)}
-                                className="w-full appearance-none px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold pr-10 cursor-pointer"
+                                className="w-full appearance-none px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold pr-10 cursor-pointer"
                             >
                                 <option value="">Sélectionnez un niveau</option>
                                 {NIVEAUX.map(niv => (

@@ -116,7 +116,7 @@ export default function ManageNotifications() {
 
             if (insertError) throw insertError;
 
-            alert("✅ Message diffusé avec succès !");
+            alert("Message diffusé avec succès.");
             setMessage('');
             removeImage();
             fetchNotifications();
@@ -179,7 +179,7 @@ export default function ManageNotifications() {
                             <button
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
-                                className="flex items-center gap-2.5 px-5 py-3 bg-[#F8F0F0] text-[#003058] rounded-xl border border-slate-100 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
+                                className="flex items-center gap-2.5 px-5 py-3 bg-[#f1f5f9] text-[#003058] rounded-xl border border-slate-100 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
                             >
                                 <ImageIcon size={18} />
                                 Ajouter une photo
@@ -234,7 +234,7 @@ export default function ManageNotifications() {
                         <p className="text-sm font-medium text-slate-500">Chargement de l'historique...</p>
                     </div>
                 ) : notifications.length === 0 ? (
-                    <div className="text-center py-12 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                    <div className="text-center py-12 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
                         <Bell className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-sm font-bold text-slate-500">Aucun message diffusé pour le moment.</p>
                     </div>

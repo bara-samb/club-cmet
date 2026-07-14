@@ -131,7 +131,7 @@ export default function Resources() {
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un document..."
-                        className="w-full pl-12 pr-4 py-2.5 bg-white border border-[#C8C8C8] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-800"
+                        className="w-full pl-12 pr-4 py-2.5 bg-white border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-800"
                     />
                 </div>
             </div>
@@ -171,7 +171,7 @@ export default function Resources() {
                         <div key={doc.id} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="w-10 h-10 bg-[#F8F0F0] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                    <div className="w-10 h-10 bg-[#f1f5f9] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
                                         <FileText size={20} className="text-[#003058]" />
                                     </div>
                                     <div className="flex-grow min-w-0">
