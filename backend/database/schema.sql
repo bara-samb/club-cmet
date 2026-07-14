@@ -9,6 +9,7 @@ CREATE TABLE public.users (
     niveau TEXT NOT NULL, -- Class levels, e.g. TC1, Licence 1 IT, etc.
     role TEXT DEFAULT 'student', -- 'student' or 'admin'
     avatar_url TEXT,
+    approuve BOOLEAN DEFAULT true,
     "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

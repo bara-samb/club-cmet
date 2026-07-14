@@ -1,8 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Remplace ces valeurs par celles que tu as récupérées sur ton dashboard Supabase
-const supabaseUrl = "https://znqctltzyvwmhwbhqvvk.supabase.co";
-const supabaseAnonKey = "sb_publishable_8aQegfNcLYwZNsoGQj9bgQ_sCioRIdS";
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://znqctltzyvwmhwbhqvvk.supabase.co";
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_8aQegfNcLYwZNsoGQj9bgQ_sCioRIdS";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 

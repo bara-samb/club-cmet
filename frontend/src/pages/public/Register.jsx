@@ -47,13 +47,15 @@ export default function Register() {
                         prenom: form.prenom,
                         email: form.email,
                         niveau: form.niveau,
-                        role: form.role
+                        role: form.role,
+                        approuve: form.role !== 'admin'
                     });
                 if (insertErr) throw insertErr;
             }
             
             if (form.role === 'admin') {
-                navigate("/admin/panel");
+                await supabase.auth.signOut();
+                navigate("/login", { state: { info: "Votre inscription en tant qu'administrateur a été enregistrée. Elle doit être approuvée par un administrateur existant avant de pouvoir vous connecter." } });
             } else {
                 navigate("/student/dashboard");
             }

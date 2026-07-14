@@ -35,7 +35,13 @@ export default function Bureau() {
 
                 if (fetchErr) throw fetchErr;
                 if (active) {
-                    setBureau(data || []);
+                    const patched = (data || []).map(m => {
+                        if (m.nom === 'Mame Bara Samb') {
+                            return { ...m, estAncien: true, annee: '2025-2026' };
+                        }
+                        return m;
+                    });
+                    setBureau(patched);
                     setLoading(false);
                 }
             } catch (err) {
@@ -68,15 +74,12 @@ export default function Bureau() {
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
     // Fallback anciens membres si la table est vide
-    const anciensMembresAAfficher = membresAnciens.length > 0 ? membresAnciens : [
+    const fallbacksAnciens = [
         { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
         { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' },
-        { id: 'f4', nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2023-2024' },
-        { id: 'f5', nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC', estAncien: true, annee: '2023-2024' },
-        { id: 'f6', nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2022-2023' },
-        { id: 'f7', nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC', estAncien: true, annee: '2022-2023' }
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' }
     ];
+    const anciensMembresAAfficher = [...membresAnciens, ...fallbacksAnciens];
 
     // Grouping anciens by year
     const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {

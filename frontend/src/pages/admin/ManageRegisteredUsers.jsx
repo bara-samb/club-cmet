@@ -1,7 +1,7 @@
 // src/pages/admin/ManageRegisteredUsers.jsx
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../config/supabaseClient";
-import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail } from "lucide-react";
+import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail, Check } from "lucide-react";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -62,7 +62,10 @@ export default function ManageRegisteredUsers() {
         try {
             const { error } = await supabase
                 .from("users")
-                .update({ role: targetRole })
+                .update({ 
+                    role: targetRole,
+                    approuve: targetRole === "admin" ? true : user.approuve
+                })
                 .eq("id", user.id);
 
             if (error) throw error;
@@ -70,6 +73,24 @@ export default function ManageRegisteredUsers() {
         } catch (err) {
             console.error("Erreur mise à jour rôle:", err);
             showToast("Échec de la modification du rôle.", "error");
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleApproveAdmin = async (user) => {
+        setActionLoading(user.id);
+        try {
+            const { error } = await supabase
+                .from("users")
+                .update({ approuve: true })
+                .eq("id", user.id);
+
+            if (error) throw error;
+            showToast(`L'administrateur ${user.prenom} ${user.nom} a été approuvé avec succès.`);
+        } catch (err) {
+            console.error("Erreur approbation administrateur:", err);
+            showToast("Échec de l'approbation.", "error");
         } finally {
             setActionLoading(null);
         }
@@ -314,9 +335,18 @@ export default function ManageRegisteredUsers() {
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={user.role === "admin" ? "badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20 text-[9px] px-2.5 py-1 rounded-full uppercase font-black" : "badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10 text-[9px] px-2.5 py-1 rounded-full uppercase font-black"}>
-                                                        {user.role === "admin" ? "Administrateur" : "Étudiant"}
-                                                    </span>
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <span className={user.role === "admin" ? "badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max" : "badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max"}>
+                                                            {user.role === "admin" ? "Administrateur" : "Étudiant"}
+                                                        </span>
+                                                        {user.role === "admin" && (
+                                                            user.approuve ? (
+                                                                <span className="text-[8px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-wider w-max">Approuvé</span>
+                                                            ) : (
+                                                                <span className="text-[8px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100 uppercase tracking-wider w-max animate-pulse">En attente</span>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right">
                                                     <div className="flex items-center justify-end gap-2">
@@ -324,6 +354,15 @@ export default function ManageRegisteredUsers() {
                                                             <Loader2 size={16} className="animate-spin text-[#187840]" />
                                                         ) : (
                                                             <>
+                                                                {user.role === "admin" && !user.approuve && (
+                                                                    <button
+                                                                        onClick={() => handleApproveAdmin(user)}
+                                                                        title="Approuver l'administrateur"
+                                                                        className="px-3 py-1.5 bg-emerald-50 hover:bg-[#187840] hover:text-white text-[#187840] border border-emerald-200 hover:border-[#187840] rounded-xl transition-all shadow-sm text-[9px] font-black uppercase flex items-center gap-1"
+                                                                    >
+                                                                        <Check size={11} strokeWidth={3} /> Approuver
+                                                                    </button>
+                                                                )}
                                                                 <button
                                                                     onClick={() => setConfirmRoleUser(user)}
                                                                     title={user.role === "admin" ? "Rétrograder en Étudiant" : "Promouvoir en Administrateur"}

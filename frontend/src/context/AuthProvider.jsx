@@ -31,7 +31,15 @@ export function AuthProvider({ children }) {
                 if (currentSession && active) {
                     setSession(currentSession);
                     const profile = await fetchProfile(currentSession.user.id);
-                    if (active) setUser(profile);
+                    if (profile && profile.role === 'admin' && profile.approuve === false) {
+                        await supabase.auth.signOut();
+                        if (active) {
+                            setSession(null);
+                            setUser(null);
+                        }
+                    } else {
+                        if (active) setUser(profile);
+                    }
                 }
             } catch (err) {
                 console.error("Error initializing session:", err);
@@ -48,9 +56,18 @@ export function AuthProvider({ children }) {
             if (newSession) {
                 setLoading(true);
                 const profile = await fetchProfile(newSession.user.id);
-                if (active) {
-                    setUser(profile);
-                    setLoading(false);
+                if (profile && profile.role === 'admin' && profile.approuve === false) {
+                    await supabase.auth.signOut();
+                    if (active) {
+                        setSession(null);
+                        setUser(null);
+                        setLoading(false);
+                    }
+                } else {
+                    if (active) {
+                        setUser(profile);
+                        setLoading(false);
+                    }
                 }
             } else {
                 setUser(null);

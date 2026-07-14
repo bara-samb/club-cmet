@@ -123,13 +123,9 @@ export default function Home() {
     const fallbacksAnciens = [
         { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
         { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' },
-        { id: 'f4', nom: 'Amadou DIALLO', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2023-2024' },
-        { id: 'f5', nom: 'Fatou BINETOU', poste: 'Secrétaire Générale', classe: 'Licence 3 HEC', estAncien: true, annee: '2023-2024' },
-        { id: 'f6', nom: 'Ousmane SY', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2022-2023' },
-        { id: 'f7', nom: 'Moussa NDIAYE', poste: 'Vice-Président', classe: 'Licence 2 HEC', estAncien: true, annee: '2022-2023' }
+        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' }
     ];
-    const anciensMembresAAfficher = dbAnciens.length > 0 ? dbAnciens : fallbacksAnciens;
+    const anciensMembresAAfficher = [...dbAnciens, ...fallbacksAnciens];
 
     // Grouping anciens by year
     const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
@@ -148,7 +144,15 @@ export default function Home() {
 
         const fetchBureau = async () => {
             const { data } = await supabase.from('bureau').select('*');
-            if (data && active) setBureau(data);
+            if (data && active) {
+                const patched = data.map(m => {
+                    if (m.nom === 'Mame Bara Samb') {
+                        return { ...m, estAncien: true, annee: '2025-2026' };
+                    }
+                    return m;
+                });
+                setBureau(patched);
+            }
         };
         const fetchRessources = async () => {
             const { data } = await supabase.from('ressources').select('*');
@@ -1200,13 +1204,7 @@ export default function Home() {
                         </ul>
                     </div>
 
-                    <div className="space-y-1.5">
-                        <h5 className="font-bold text-slate-300 uppercase tracking-wider">Espace Maquettes</h5>
-                        <ul className="space-y-1 text-slate-400">
-                            <li><a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer" className="hover:text-[#187840]">Portail UCAK ↗</a></li>
-                            <li><button onClick={() => navigate('/login')} className="hover:text-[#187840] text-left">Accéder aux maquettes (Connexion requise)</button></li>
-                        </ul>
-                    </div>
+
 
                     <div className="space-y-2">
                         <h5 className="font-bold text-slate-300 uppercase tracking-wider">Réseaux Officiels</h5>
@@ -1215,16 +1213,16 @@ export default function Home() {
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#1877F2]/20 flex items-center justify-center transition-colors shrink-0"><FacebookIcon /></span>
                                 <span>Facebook</span>
                             </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#E1306C] transition-colors group">
+                            <a href="https://www.instagram.com/cmet_officiel?igsh=c2hqN2EwaXgyazV5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#E1306C] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#E1306C]/20 flex items-center justify-center transition-colors shrink-0"><InstagramIcon /></span>
                                 <span>Instagram</span>
                             </a>
 
-                            <a href="https://wa.me/221770000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#25D366] transition-colors group">
+                            <a href="https://wa.me/221780171688" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#25D366] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#25D366]/20 flex items-center justify-center transition-colors shrink-0"><WhatsAppIcon /></span>
                                 <span>WhatsApp</span>
                             </a>
-                            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#ff0050] transition-colors group">
+                            <a href="https://www.instagram.com/cmet_officiel?igsh=c2hqN2EwaXgyazV5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#ff0050] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#ff0050]/20 flex items-center justify-center transition-colors shrink-0"><TikTokIcon /></span>
                                 <span>TikTok</span>
                             </a>

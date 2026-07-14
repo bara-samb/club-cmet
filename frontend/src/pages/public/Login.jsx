@@ -1,7 +1,7 @@
 // src/pages/public/Login.jsx
 import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const ERRORS = {
     "Invalid login credentials": "Email ou mot de passe incorrect.",
@@ -13,6 +13,8 @@ export default function Login() {
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const infoMessage = location.state?.info;
 
     const handle = async (e) => {
         e.preventDefault();
@@ -25,12 +27,17 @@ export default function Login() {
             });
             if (err) throw err;
 
-            // Fetch role to redirect correctly
+            // Fetch role and approval status to redirect correctly
             const { data: profile } = await supabase
                 .from('users')
-                .select('role')
+                .select('role, approuve')
                 .eq('id', data.user.id)
                 .single();
+
+            if (profile?.role === 'admin' && profile?.approuve === false) {
+                await supabase.auth.signOut();
+                throw new Error("Votre compte administrateur est en attente d'approbation par un administrateur existant.");
+            }
 
             if (profile?.role === 'admin') {
                 navigate("/admin/panel");
@@ -60,6 +67,15 @@ export default function Login() {
                 <div className="px-8 py-8">
                     <h2 className="text-[#003058] font-bold text-lg mb-1">Connexion</h2>
                     <p className="text-slate-400 text-xs mb-6">Accédez à votre espace personnel Club-MET.</p>
+
+                    {infoMessage && (
+                        <div className="flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-xl px-4 py-3 mb-5 font-medium">
+                            <svg className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {infoMessage}
+                        </div>
+                    )}
 
                     {error && (
                         <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-4 py-3 mb-5">

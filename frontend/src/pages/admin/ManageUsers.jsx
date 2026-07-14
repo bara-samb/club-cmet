@@ -28,6 +28,21 @@ export default function ManageUsers() {
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState(null);
     const [confirmDel, setConfirmDel] = useState(null);
+    const [activeTab, setActiveTab] = useState('actuels');
+
+    const membresActuels = membres.filter(m => !m.estAncien);
+    const membresAnciens = membres.filter(m => m.estAncien);
+
+    // Grouping anciens by year
+    const groupedAnciens = membresAnciens.reduce((groups, member) => {
+        const year = member.annee || "Mandat précédent";
+        if (!groups[year]) {
+            groups[year] = [];
+        }
+        groups[year].push(member);
+        return groups;
+    }, {});
+    const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     useEffect(() => {
         let active = true;
@@ -282,12 +297,24 @@ export default function ManageUsers() {
 
                 {/* Liste */}
                 <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-2 border-b border-slate-100">
                         <h2 className="font-black text-xl text-[#003058] flex items-center gap-3">
                             <Users className="text-[#187840]" size={24} />
                             Membres enregistrés
                             <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{membres.length}</span>
                         </h2>
+                        
+                        {/* Onglets d'administration */}
+                        <div className="flex gap-2 bg-[#F8F0F0] p-1 rounded-xl border border-slate-200/50">
+                            <button type="button" onClick={() => setActiveTab('actuels')}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'actuels' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                                Actuels ({membresActuels.length})
+                            </button>
+                            <button type="button" onClick={() => setActiveTab('anciens')}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'anciens' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                                Anciens ({membresAnciens.length})
+                            </button>
+                        </div>
                     </div>
 
                     {loading ? (
@@ -295,44 +322,92 @@ export default function ManageUsers() {
                             <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
                             <p className="text-sm font-medium text-slate-500">Chargement...</p>
                         </div>
-                    ) : membres.length === 0 ? (
-                        <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
-                            <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                            <p className="text-sm font-bold text-slate-500">Aucun membre enregistré.</p>
-                        </div>
+                    ) : activeTab === 'actuels' ? (
+                        membresActuels.length === 0 ? (
+                            <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                                <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                                <p className="text-sm font-bold text-slate-500">Aucun membre actuel enregistré.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 animate-in fade-in duration-300">
+                                {membresActuels.map(m => (
+                                    <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
+                                        <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                title="Modifier">
+                                                <Pencil size={14} strokeWidth={2.5} />
+                                            </button>
+                                            <button onClick={() => setConfirmDel(m)}
+                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                title="Supprimer">
+                                                <Trash2 size={14} strokeWidth={2.5} />
+                                            </button>
+                                        </div>
+                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
+                                            {m.imageUrl
+                                                ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
+                                                : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
+                                            }
+                                        </div>
+                                        <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                        <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
+                                        <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
+                                            <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )
                     ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {membres.map(m => (
-                                <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
-                                    <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                            className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
-                                            <Pencil size={14} strokeWidth={2.5} />
-                                        </button>
-                                        <button onClick={() => setConfirmDel(m)}
-                                            className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm">
-                                            <Trash2 size={14} strokeWidth={2.5} />
-                                        </button>
+                        membresAnciens.length === 0 ? (
+                            <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                                <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                                <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-10 animate-in fade-in duration-300">
+                                {sortedAnciensYears.map(year => (
+                                    <div key={year} className="space-y-4">
+                                        <h3 className="font-black text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">
+                                            <span>Mandat {year}</span>
+                                            <span className="bg-[#187840]/10 text-[#187840] text-[10px] px-2.5 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
+                                        </h3>
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                            {groupedAnciens[year].map(m => (
+                                                <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative flex flex-col justify-between">
+                                                    <div>
+                                                        <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                                            <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                title="Modifier">
+                                                                <Pencil size={14} strokeWidth={2.5} />
+                                                            </button>
+                                                            <button onClick={() => setConfirmDel(m)}
+                                                                className="w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                title="Supprimer">
+                                                                <Trash2 size={14} strokeWidth={2.5} />
+                                                            </button>
+                                                        </div>
+                                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
+                                                            {m.imageUrl
+                                                                ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
+                                                                : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
+                                                            }
+                                                        </div>
+                                                        <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                                        <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
+                                                    </div>
+                                                    <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
+                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
-                                        {m.imageUrl
-                                            ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
-                                            : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
-                                        }
-                                    </div>
-                                    <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
-                                    <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
-                                    <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                        <span className="text-[9px] font-bold text-slate-500 bg-[#F8F0F0] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
-                                        {m.estAncien && (
-                                            <span className="text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded uppercase tracking-wider">
-                                                Ancien {m.annee ? `(${m.annee})` : ""}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )
                     )}
                 </div>
             </div>
