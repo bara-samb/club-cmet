@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon } from 'lucide-react';
+import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon, Image } from 'lucide-react';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (
@@ -687,7 +687,7 @@ export default function Home() {
                                 <div key={item.id} className="border border-gray-100 rounded-xl overflow-hidden">
                                     <button onClick={() => setOpenArticle(openArticle === item.id ? null : item.id)}
                                         className="w-full bg-[#F8F0F0] px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
-                                        <span className="text-xs font-bold text-slate-700 flex items-center gap-2">
+                                        <span className="text-xs font-bold text-slate-700 flex items-start gap-2 pr-4 flex-1">
                                             <svg className="w-4 h-4 text-[#187840]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
                                             {item.label}
                                         </span>
@@ -867,13 +867,13 @@ export default function Home() {
                             <div className="bg-white p-1.5 rounded-2xl border border-gray-200/60 shadow-sm flex gap-2">
                                 <button
                                     onClick={() => setActiveTab('activites')}
-                                    className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'activites' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
-                                    🚀 Événements & Activités
+                                    className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1.5 sm:gap-2 ${activeTab === 'activites' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
+                                    <Calendar size={14} className="shrink-0" /> Événements & Activités
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('medias')}
-                                    className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === 'medias' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
-                                    📸 Galerie Médias
+                                    className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1.5 sm:gap-2 ${activeTab === 'medias' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
+                                    <Image size={14} className="shrink-0" /> Galerie Médias
                                 </button>
                             </div>
                         </div>

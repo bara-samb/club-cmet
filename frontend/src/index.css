@@ -31,11 +31,15 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   body {
     color: #1e293b;
     background: #f8fafc;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   h1,

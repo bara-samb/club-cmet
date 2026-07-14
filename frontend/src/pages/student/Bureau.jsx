@@ -152,9 +152,9 @@ export default function Bureau() {
                         <p className="text-sm font-bold text-slate-500">Aucun membre enregistré dans cette section.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 animate-in fade-in duration-300">
+                    <div className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-4 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-4 px-4 md:mx-0 md:px-0 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 animate-in fade-in duration-300">
                         {membresActuels.map(m => (
-                            <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
+                            <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                 <div>
                                     <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
                                         {m.imageUrl ? (
@@ -191,9 +191,9 @@ export default function Bureau() {
                                     <span>Mandat {year}</span>
                                     <span className="bg-[#187840]/10 text-[#187840] text-[10px] px-2.5 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
                                 </h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                <div className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-4 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-4 px-4 md:mx-0 md:px-0 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                                     {groupedAnciens[year].map(m => (
-                                        <div key={m.id || m.nom} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between">
+                                        <div key={m.id || m.nom} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                             <div>
                                                 <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
                                                     {m.imageUrl ? (

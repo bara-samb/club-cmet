@@ -306,8 +306,12 @@ export default function ManageDocs() {
                                     className="input-field bg-white"
                                 >
                                     <option value="Commun">Tronc Commun / Général</option>
-                                    <option value="L1">Licence 1</option>
-                                    <option value="L2">Licence 2</option>
+                                    <option value="L1">Licence 1 (Général)</option>
+                                    <option value="L1IT">L1IT - Technologies de l'Information</option>
+                                    <option value="L1HEC">L1HEC - Hautes Études Commerciales</option>
+                                    <option value="L2">Licence 2 (Général)</option>
+                                    <option value="L2IT">L2IT - Technologies de l'Information</option>
+                                    <option value="L2HEC">L2HEC - Hautes Études Commerciales</option>
                                     <option value="L3">Licence 3 (Général)</option>
                                     <option value="L3IT - DAR">L3IT - Développement d'Applications Réseaux (DAR)</option>
                                     <option value="L3IT - ASR">L3IT - Administration Systèmes & Réseaux (ASR)</option>
