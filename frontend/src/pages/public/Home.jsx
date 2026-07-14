@@ -142,10 +142,18 @@ export default function Home() {
             const { data } = await supabase.from('bureau').select('*');
             if (data && active) {
                 const parsed = data.map(m => {
-                    const match = m.classe.match(/\s*\(?(\d{4}-\d{4})\)?/);
+                    // Check if database has the new columns and they are populated
+                    if (m.estAncien !== undefined && m.estAncien !== null) {
+                        return {
+                            ...m,
+                            estAncien: !!m.estAncien,
+                            annee: m.annee || ""
+                        };
+                    }
+                    const match = m.classe.match(/\s*\(?(\d{4}-\d{4}|\d{4})\)?/);
                     if (match) {
                         const annee = match[1];
-                        const classeSansAnnee = m.classe.replace(/\s*\(?\d{4}-\d{4}\)?/, "").trim();
+                        const classeSansAnnee = m.classe.replace(/\s*\(?(\d{4}-\d{4}|\d{4})\)?/, "").trim();
                         return {
                             ...m,
                             estAncien: true,
