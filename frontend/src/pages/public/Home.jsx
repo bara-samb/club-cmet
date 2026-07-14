@@ -116,20 +116,16 @@ export default function Home() {
     const [loadingMedias, setLoadingMedias] = useState(true);
 
     const membresActuels = bureau
-        .filter(m => !m.estAncien)
+        .filter(m => !m.annee || m.annee.trim() === "")
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
-    const dbAnciens = bureau.filter(m => m.estAncien);
-    const fallbacksAnciens = [
-        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
-        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' }
-    ];
-    const anciensMembresAAfficher = [...dbAnciens, ...fallbacksAnciens];
+    const anciensMembresAAfficher = bureau
+        .filter(m => m.annee && m.annee.trim() !== "")
+        .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
     // Grouping anciens by year
     const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
-        const year = member.annee || "Mandat précédent";
+        const year = member.annee;
         if (!groups[year]) {
             groups[year] = [];
         }
@@ -793,7 +789,11 @@ export default function Home() {
                                         <p className="text-xs text-slate-400 mt-1">Les promotions précédentes qui ont fait grandir le Club-MET.</p>
                                     </div>
                                     <div className="space-y-8 max-h-[55vh] overflow-y-auto p-1">
-                                        {sortedAnciensYears.map((year) => (
+                                        {sortedAnciensYears.length === 0 ? (
+                                            <div className="text-center py-10 bg-slate-50 border border-slate-100 border-dashed rounded-2xl text-slate-400 text-xs font-bold">
+                                                Aucun ancien membre enregistré pour le moment.
+                                            </div>
+                                        ) : sortedAnciensYears.map((year) => (
                                             <div key={year} className="space-y-3">
                                                 <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-1.5 flex items-center gap-2">
                                                     <span>Mandat {year}</span>
@@ -1218,7 +1218,7 @@ export default function Home() {
                                 <span>Instagram</span>
                             </a>
 
-                            <a href="https://wa.me/221780171688" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#25D366] transition-colors group">
+                            <a href="https://wa.me/221787941004" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#25D366] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#25D366]/20 flex items-center justify-center transition-colors shrink-0"><WhatsAppIcon /></span>
                                 <span>WhatsApp</span>
                             </a>

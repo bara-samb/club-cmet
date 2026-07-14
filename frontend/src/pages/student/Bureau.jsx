@@ -66,24 +66,16 @@ export default function Bureau() {
     }, []);
 
     const membresActuels = bureau
-        .filter(m => !m.estAncien)
+        .filter(m => !m.annee || m.annee.trim() === "")
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
 
-    const membresAnciens = bureau
-        .filter(m => m.estAncien)
+    const anciensMembresAAfficher = bureau
+        .filter(m => m.annee && m.annee.trim() !== "")
         .sort((a, b) => getPosteOrder(a.poste) - getPosteOrder(b.poste));
-
-    // Fallback anciens membres si la table est vide
-    const fallbacksAnciens = [
-        { id: 'f1', nom: 'Babacar SOW', poste: 'Président', classe: 'Licence 3 IT', estAncien: true, annee: '2024-2025' },
-        { id: 'f2', nom: 'Awa DIOP', poste: 'Vice-Présidente', classe: 'Licence 3 HEC', estAncien: true, annee: '2024-2025' },
-        { id: 'f3', nom: 'Cheikh TIDIANE', poste: 'Secrétaire Général', classe: 'Licence 2 IT', estAncien: true, annee: '2024-2025' }
-    ];
-    const anciensMembresAAfficher = [...membresAnciens, ...fallbacksAnciens];
 
     // Grouping anciens by year
     const groupedAnciens = anciensMembresAAfficher.reduce((groups, member) => {
-        const year = member.annee || "Mandat précédent";
+        const year = member.annee;
         if (!groups[year]) {
             groups[year] = [];
         }

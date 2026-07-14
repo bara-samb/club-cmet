@@ -30,12 +30,12 @@ export default function ManageUsers() {
     const [confirmDel, setConfirmDel] = useState(null);
     const [activeTab, setActiveTab] = useState('actuels');
 
-    const membresActuels = membres.filter(m => !m.estAncien);
-    const membresAnciens = membres.filter(m => m.estAncien);
+    const membresActuels = membres.filter(m => !m.annee || m.annee.trim() === "");
+    const membresAnciens = membres.filter(m => m.annee && m.annee.trim() !== "");
 
     // Grouping anciens by year
     const groupedAnciens = membresAnciens.reduce((groups, member) => {
-        const year = member.annee || "Mandat précédent";
+        const year = member.annee;
         if (!groups[year]) {
             groups[year] = [];
         }
@@ -109,19 +109,17 @@ export default function ManageUsers() {
         if (!form.nom.trim() || !form.poste || !form.classe) {
             showToast("Remplis tous les champs obligatoires.", "error"); return;
         }
-        if (form.estAncien && !form.annee) {
-            showToast("Veuillez renseigner l'année pour un ancien membre.", "error"); return;
-        }
         setUploading(true);
         try {
             const imageUrl = await uploadImage();
+            const isAncien = !!(form.annee && form.annee.trim() !== "");
             const data = {
                 nom: form.nom,
                 poste: form.poste,
                 classe: form.classe,
                 imageUrl,
-                estAncien: form.estAncien,
-                annee: form.estAncien ? form.annee : null
+                estAncien: isAncien,
+                annee: isAncien ? form.annee.trim() : null
             };
             if (editId) {
                 const { error } = await safeUpdate("bureau", data, q => q.eq("id", editId));
@@ -247,25 +245,13 @@ export default function ManageUsers() {
                             </select>
                         </div>
 
-                        {/* Statut Membre */}
-                        <div className="space-y-1.5">
-                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Statut du membre *</label>
-                            <select value={form.estAncien ? "ancien" : "actuel"} onChange={e => setForm({ ...form, estAncien: e.target.value === "ancien" })}
-                                className="input-field">
-                                <option value="actuel">Membre Actuel (Bureau en cours)</option>
-                                <option value="ancien">Ancien Membre (Mandats passés)</option>
-                            </select>
+                        {/* Année de Mandat (Optionnel — classifie comme ancien membre si renseigné) */}
+                        <div className="space-y-1.5 md:col-span-2">
+                            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Année de Mandat (Optionnel)</label>
+                            <input type="text" value={form.annee || ""} onChange={e => setForm({ ...form, annee: e.target.value })}
+                                placeholder="Ex: 2024 (laisser vide pour le Bureau Actuel)"
+                                className="input-field" />
                         </div>
-
-                        {/* Année (uniquement si Ancien) */}
-                        {form.estAncien && (
-                            <div className="space-y-1.5 animate-in fade-in duration-200">
-                                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Année de Mandat *</label>
-                                <input type="text" value={form.annee || ""} onChange={e => setForm({ ...form, annee: e.target.value })}
-                                    placeholder="Ex: 2024 ou 2023-2024"
-                                    className="input-field" />
-                            </div>
-                        )}
 
                         {uploading && (
                             <div className="md:col-span-2 bg-[#F8F0F0] p-4 rounded-xl border border-slate-100">
