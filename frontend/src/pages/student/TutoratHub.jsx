@@ -98,7 +98,7 @@ export default function MessagesHub() {
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto animate-in fade-in duration-500">
+        <div className="anim-fade-up p-6 max-w-6xl mx-auto">
 
             {/* Toast */}
             {toast && (

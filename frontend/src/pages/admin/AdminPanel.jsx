@@ -43,7 +43,7 @@ export default function AdminPanel() {
     ];
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto p-4 md:p-6">
+        <div className="anim-fade-up space-y-8 max-w-5xl mx-auto p-4 md:p-6">
             {/* Header Admin */}
             <div className="bg-[#003058] p-8 md:p-10 rounded-3xl text-white relative overflow-hidden shadow-lg shadow-[#003058]/10">
                 <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04]">

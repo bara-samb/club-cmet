@@ -123,7 +123,7 @@ export default function ManageMessages() {
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto animate-in fade-in duration-500 relative">
+        <div className="anim-fade-up p-6 max-w-6xl mx-auto relative">
             
             {/* Header */}
             <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">

@@ -78,7 +78,7 @@ export default function Profile() {
     }
 
     return (
-        <div className="p-4 md:p-6 max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="anim-fade-up p-4 md:p-6 max-w-2xl mx-auto space-y-8">
             {/* En-tête */}
             <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">

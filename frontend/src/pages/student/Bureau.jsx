@@ -105,7 +105,7 @@ export default function Bureau() {
     const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     return (
-        <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
+        <div className="anim-fade-up p-4 md:p-6 max-w-5xl mx-auto space-y-6">
             {/* Header */}
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">

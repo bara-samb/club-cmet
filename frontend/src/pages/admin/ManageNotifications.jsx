@@ -130,7 +130,7 @@ export default function ManageNotifications() {
     };
 
     return (
-        <div className="p-6 md:p-8 max-w-3xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="anim-fade-up p-6 md:p-8 max-w-3xl mx-auto space-y-8">
             {/* Modal suppression */}
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">

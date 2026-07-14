@@ -185,7 +185,7 @@ export default function ManageCotisations() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] p-6 animate-in fade-in duration-500">
+        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
             {/* Toast */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>

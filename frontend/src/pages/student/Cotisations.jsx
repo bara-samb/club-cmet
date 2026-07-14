@@ -115,7 +115,7 @@ export default function Cotisations() {
         .reduce((sum, item) => sum + Number(item.montant), 0);
 
     return (
-        <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-8">
+        <div className="anim-fade-up p-4 md:p-6 max-w-5xl mx-auto space-y-8">
             {/* Header */}
             <div>
                 <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">

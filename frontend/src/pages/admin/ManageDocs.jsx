@@ -21,7 +21,7 @@ export default function ManageDocs() {
     const [toast, setToast] = useState(null);
     const [confirmDel, setConfirmDel] = useState(null);
 
-    const [form, setForm] = useState({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "Commun" });
+    const [form, setForm] = useState({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "L1IT" });
     const [docFile, setDocFile] = useState(null);
 
     useEffect(() => {
@@ -165,7 +165,7 @@ export default function ManageDocs() {
             if (error) throw error;
 
             showToast("Document ajouté avec succès ! ✓");
-            setForm({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "Commun" });
+            setForm({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "L1IT" });
             setDocFile(null);
         } catch (err) {
             showToast("Erreur : " + err.message, "error");
@@ -195,7 +195,7 @@ export default function ManageDocs() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] p-6 animate-in fade-in duration-500">
+        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
             {/* Toast */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -305,11 +305,8 @@ export default function ManageDocs() {
                                     onChange={e => setForm({ ...form, niveau: e.target.value })}
                                     className="input-field bg-white"
                                 >
-                                    <option value="Commun">Tronc Commun / Général</option>
-                                    <option value="L1">Licence 1 (Général)</option>
                                     <option value="L1IT">L1IT - Technologies de l'Information</option>
                                     <option value="L1HEC">L1HEC - Hautes Études Commerciales</option>
-                                    <option value="L2">Licence 2 (Général)</option>
                                     <option value="L2IT">L2IT - Technologies de l'Information</option>
                                     <option value="L2HEC">L2HEC - Hautes Études Commerciales</option>
                                     <option value="L3">Licence 3 (Général)</option>

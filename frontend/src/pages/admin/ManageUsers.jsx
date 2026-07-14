@@ -183,7 +183,7 @@ export default function ManageUsers() {
     const resetForm = () => { setForm(VIDE); setEditId(null); setImageFile(null); setPreview(null); };
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] p-6 animate-in fade-in duration-500">
+        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
 
             {/* Toast */}
             {toast && (

@@ -215,7 +215,7 @@ export default function Evenements() {
     };
 
     return (
-        <div className="p-6 md:p-10">
+        <div className="anim-fade-up p-6 md:p-10">
             {/* ── En-tête ── */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <div>

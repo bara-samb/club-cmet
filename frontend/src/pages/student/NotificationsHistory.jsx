@@ -80,7 +80,7 @@ export default function NotificationsHistory() {
     }, []);
 
     return (
-        <div className="p-4 md:p-6 max-w-3xl mx-auto">
+        <div className="anim-fade-up p-4 md:p-6 max-w-3xl mx-auto">
             {/* ── En-tête ── */}
             <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">

@@ -91,7 +91,7 @@ export default function Register() {
 
     return (
         <div className="min-h-screen bg-[#003058] flex items-center justify-center px-4 py-10">
-            <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
 
                 {/* Header */}
                 <div className="bg-[#003058] px-8 py-7 text-center border-b border-slate-700">

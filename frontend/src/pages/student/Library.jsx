@@ -14,10 +14,8 @@ const CATEGORIES = [
 
 const NIVEAUX = [
     'Tous', 
-    'L1', 
     'L1IT',
     'L1HEC',
-    'L2', 
     'L2IT',
     'L2HEC',
     'L3', 
@@ -27,16 +25,12 @@ const NIVEAUX = [
     'L3HEC - Entrepreneuriat & Création d\'Entreprise', 
     'L3HEC - Comptabilité & Gestion', 
     'M1', 
-    'M2', 
-    'Commun'
+    'M2'
 ];
 
 const LEVELS_ORDER = [
-    { id: 'Commun', label: 'Tronc Commun & Général', color: '#003058' },
-    { id: 'L1', label: 'Licence 1 (Général)', color: '#187840' },
     { id: 'L1IT', label: 'L1IT - Technologies de l\'Information', color: '#187840' },
     { id: 'L1HEC', label: 'L1HEC - Hautes Études Commerciales', color: '#187840' },
-    { id: 'L2', label: 'Licence 2 (Général)', color: '#187840' },
     { id: 'L2IT', label: 'L2IT - Technologies de l\'Information', color: '#187840' },
     { id: 'L2HEC', label: 'L2HEC - Hautes Études Commerciales', color: '#187840' },
     { id: 'L3', label: 'Licence 3 (Général)', color: '#187840' },
@@ -58,7 +52,7 @@ export default function Library() {
     
     // Niveaux dépliés par défaut
     const [expandedLevels, setExpandedLevels] = useState({
-        Commun: true, L1: true, L1IT: true, L1HEC: true, L2: true, L2IT: true, L2HEC: true, L3: true,
+        L1IT: true, L1HEC: true, L2IT: true, L2HEC: true, L3: true,
         'L3IT - DAR': true, 'L3IT - ASR': true, 'L3IT - RT': true,
         'L3HEC - Entrepreneuriat & Création d\'Entreprise': true,
         'L3HEC - Comptabilité & Gestion': true,
@@ -162,7 +156,7 @@ export default function Library() {
     };
 
     return (
-        <div className="p-6 max-w-6xl mx-auto animate-in fade-in duration-500">
+        <div className="anim-fade-up p-6 max-w-6xl mx-auto">
             {/* Titre */}
             <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
