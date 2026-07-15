@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { HomeIcon, Info, BookOpen, Users, GraduationCap, Mail, X, Menu } from '../ui/Icons';
+import { HomeIcon, Users, GraduationCap, Mail } from '../ui/Icons';
 
 const FacebookIcon = () => (
     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -26,7 +26,6 @@ const TikTokIcon = () => (
 export default function PublicLayout() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     const isActive = (path) => location.pathname === path;
 
@@ -39,99 +38,70 @@ export default function PublicLayout() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col justify-between antialiased text-slate-800">
-            {/* ════════ NAVBAR ════════ */}
-            <nav className="bg-[#003058]/95 text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
-                <Link to="/" className="flex items-center gap-3 cursor-pointer">
-                    <div className="relative w-10 h-10 shrink-0">
+            {/* ════════ NAVBAR (Desktop & Mobile header) ════════ */}
+            <nav className="bg-[#003058]/95 text-white px-6 md:px-10 py-5 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
+                <Link to="/" className="flex items-center gap-3.5 cursor-pointer">
+                    <div className="relative w-11 h-11 md:w-12 md:h-12 shrink-0">
                         <img src="/images/logo-CMET.png" alt="Logo Club-MET"
-                            className="w-10 h-10 rounded-full object-cover border-2 border-white/20" />
+                            className="w-full h-full rounded-full object-cover border-2 border-white/20" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-bold text-base tracking-wide leading-none">CLUB-MET</span>
-                        <span className="text-[10px] text-gray-400 tracking-wider mt-0.5">UFR MET • UCAK</span>
+                        <span className="font-bold text-base md:text-lg tracking-wide leading-none">CLUB-MET</span>
+                        <span className="text-[10px] md:text-[11px] text-gray-400 tracking-wider mt-1">UFR MET • UCAK</span>
                     </div>
                 </Link>
 
-                <div className="hidden md:flex gap-6 text-[13px] font-medium items-center">
+                {/* Nav Links - Desktop only */}
+                <div className="hidden md:flex gap-8 text-sm font-semibold items-center">
                     {navLinks.map((link) => {
                         const IconComponent = link.Icon;
+                        const active = isActive(link.path);
                         return (
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className={`hover:text-[#187840] transition-colors flex items-center gap-1.5 ${
-                                    isActive(link.path) ? 'text-[#187840]' : ''
+                                className={`hover:text-[#187840] transition-colors flex items-center gap-2 ${
+                                    active ? 'text-[#187840]' : 'text-slate-200'
                                 }`}
                             >
-                                <IconComponent size={14} /> {link.label}
+                                <IconComponent size={16} /> {link.label}
                             </Link>
                         );
                     })}
                 </div>
 
-                <div className="hidden md:flex items-center gap-5 text-xs">
+                {/* Connexion Button */}
+                <div className="flex items-center gap-4 text-xs md:text-sm">
                     <button onClick={() => navigate('/login')}
-                        className="font-semibold text-gray-300 hover:text-white transition-colors tracking-wide">
-                        Se connecter
-                    </button>
-                    <button onClick={() => navigate('/register')}
-                        className="bg-[#187840] text-white px-5 py-2 rounded-lg font-bold tracking-wide hover:bg-green-600 transition-colors shadow-md">
-                        S'inscrire
+                        className="bg-[#187840] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold tracking-wide hover:bg-green-600 transition-all hover:scale-105 shadow-md">
+                        Espace Étudiant
                     </button>
                 </div>
-
-                <button onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                    className="md:hidden p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
-                    aria-label="Menu"
-                >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        {mobileNavOpen
-                            ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        }
-                    </svg>
-                </button>
             </nav>
 
-            {/* Menu Mobile */}
-            {mobileNavOpen && (
-                <div className="md:hidden fixed inset-0 z-40 bg-[#003058] pt-24 px-6 pb-6 overflow-y-auto">
-                    <div className="flex flex-col gap-6 text-lg font-medium text-white">
-                        {navLinks.map((link) => {
-                            const IconComponent = link.Icon;
-                            return (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    onClick={() => setMobileNavOpen(false)}
-                                    className={`flex items-center gap-3 ${
-                                        isActive(link.path) ? 'text-[#187840]' : ''
-                                    }`}
-                                >
-                                    <IconComponent size={20} /> {link.label}
-                                </Link>
-                            );
-                        })}
-
-                        <div className="border-t border-slate-700 my-2 pt-4">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Connexion</p>
-                            <div className="flex flex-col gap-3">
-                                <button onClick={() => { setMobileNavOpen(false); navigate('/login'); }}
-                                    className="w-full text-center font-semibold text-white bg-slate-800 py-3 rounded-xl transition-colors">
-                                    Se connecter
-                                </button>
-                                <button onClick={() => { setMobileNavOpen(false); navigate('/register'); }}
-                                    className="w-full text-center bg-[#187840] text-white py-3 rounded-xl font-bold hover:bg-green-600 transition-colors shadow-md">
-                                    S'inscrire
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* ════════ MOBILE BOTTOM NAVIGATION BAR ════════ */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#003058]/95 backdrop-blur-lg border-t border-white/10 h-16 flex items-center justify-around text-white px-2 shadow-lg">
+                {navLinks.map((link) => {
+                    const IconComponent = link.Icon;
+                    const active = isActive(link.path);
+                    return (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-all ${
+                                active ? 'text-[#187840]' : 'text-slate-400'
+                            }`}
+                        >
+                            <IconComponent size={20} className={`mb-1 transition-transform duration-200 ${active ? 'scale-110' : ''}`} />
+                            <span className="text-[10px] font-bold tracking-wide">{link.label}</span>
+                        </Link>
+                    );
+                })}
+            </div>
 
             {/* ════════ MAIN CONTENT ════════ */}
-            <main className="flex-grow">
+            {/* Added pb-16 on mobile to offset bottom navigation bar height */}
+            <main className="flex-grow pb-16 md:pb-0">
                 <Outlet />
             </main>
 
