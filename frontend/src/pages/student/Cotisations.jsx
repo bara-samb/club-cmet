@@ -24,7 +24,7 @@ export default function Cotisations() {
                 .from('config')
                 .select('valeur')
                 .eq('cle', 'wave_link')
-                .single();
+                .maybeSingle();
             if (configData && configData.valeur) {
                 setWaveLink(configData.valeur);
             }
@@ -170,7 +170,7 @@ export default function Cotisations() {
                             
                             <form onSubmit={handleDeclareCotisation} className="space-y-4 pt-2">
                                 <div className="space-y-1.5">
-                                    <label className="block text-[11px] font-bold text-slate-700 ml-1 uppercase tracking-wider">Somme versée (FCFA) *</label>
+                                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-200 ml-1 uppercase tracking-wider">Somme versée (FCFA) *</label>
                                     <input 
                                         type="number" 
                                         required 
@@ -191,7 +191,7 @@ export default function Cotisations() {
                                 </button>
                             </form>
 
-                            <div className="border-t border-slate-100 pt-4 space-y-3">
+                            <div className="border-t border-slate-100 dark:border-white/10 pt-4 space-y-3">
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Lien de paiement direct</p>
                                 <a 
                                     href={waveLink} 
@@ -211,7 +211,7 @@ export default function Cotisations() {
                         <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 space-y-6">
                             
                             {/* Onglets navigation */}
-                            <div className="flex border-b border-slate-100 pb-1">
+                            <div className="flex border-b border-slate-100 dark:border-white/10 pb-1">
                                 <button 
                                     onClick={() => setActiveTab('mes-cotisations')}
                                     className={`pb-3 text-xs font-black uppercase tracking-wider border-b-2 transition-all mr-6 ${activeTab === 'mes-cotisations' ? 'border-[#187840] text-[#187840]' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
@@ -237,7 +237,7 @@ export default function Cotisations() {
                                     ) : (
                                         <div className="space-y-2.5 max-h-[400px] overflow-y-auto pr-1">
                                             {mesCotisations.map(c => (
-                                                <div key={c.id} className="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between gap-3 text-xs">
+                                                <div key={c.id} className="p-3 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-xl flex items-center justify-between gap-3 text-xs">
                                                     <div className="space-y-0.5">
                                                         <p className="font-bold text-[#003058] dark:text-white">{Number(c.montant).toLocaleString()} FCFA</p>
                                                         <p className="text-[10px] text-slate-400 flex items-center gap-1 font-medium"><Calendar size={10} /> {c.date_paiement}</p>
@@ -261,8 +261,8 @@ export default function Cotisations() {
                             {/* Contenu de l'onglet : Toutes les Cotisations (Transparence) */}
                             {activeTab === 'toutes-cotisations' && (
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl p-3 border border-slate-100">
-                                        <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5"><Users size={14} /> Total des contributeurs</span>
+                                    <div className="flex justify-between items-center bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl p-3 border border-slate-100 dark:border-white/10">
+                                        <span className="text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><Users size={14} /> Total des contributeurs</span>
                                         <span className="text-xs font-black text-[#003058] dark:text-white">{stats.contributorsCount} étudiants</span>
                                     </div>
 
@@ -274,21 +274,21 @@ export default function Cotisations() {
                                         <div className="overflow-x-auto max-h-[400px] overflow-y-auto pr-1">
                                             <table className="w-full text-left border-collapse text-xs">
                                                 <thead>
-                                                    <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[9px]">
+                                                    <tr className="border-b border-slate-100 dark:border-white/10 text-slate-400 font-bold uppercase tracking-wider text-[9px]">
                                                         <th className="py-2.5 px-2">Étudiant</th>
                                                         <th className="py-2.5 px-2">Montant</th>
                                                         <th className="py-2.5 px-2">Date</th>
                                                         <th className="py-2.5 px-2">Enregistré par</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="divide-y divide-slate-50">
+                                                <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                                                     {toutesCotisations.map(c => (
                                                         <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="py-2.5 px-2">
                                                                 <div className="font-bold text-[#003058] dark:text-white">{c.nom}</div>
                                                                 <div className="text-[10px] text-slate-400">{c.classe}</div>
                                                             </td>
-                                                            <td className="py-2.5 px-2 font-bold text-slate-700">
+                                                            <td className="py-2.5 px-2 font-bold text-slate-700 dark:text-slate-200">
                                                                 {Number(c.montant).toLocaleString()} FCFA
                                                             </td>
                                                             <td className="py-2.5 px-2 text-slate-500">

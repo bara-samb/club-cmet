@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
-import { ChevronLeft } from "../../components/ui/Icons";
+import { ChevronDown } from "../../components/ui/Icons";
+import AuthShell from "../../components/layout/AuthShell";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -64,99 +64,86 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f1f5f9]/85 dark:bg-ucak-dark/90 flex items-center justify-center px-4 py-10">
-            <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        <AuthShell
+            headline={<>Rejoins la communauté<br className="hidden md:block" /> Club-MET.</>}
+            description="Un seul espace pour ton tutorat, tes ressources et la vie du club — crée ton compte étudiant en une minute."
+            maxWidth="max-w-md"
+        >
+            <h2 className="text-[#003058] dark:text-white font-extrabold text-2xl tracking-tight">Créer un compte</h2>
+            <p className="text-slate-400 text-sm mt-1.5 mb-8">Rejoins la communauté Club-MET.</p>
 
-                {/* Header */}
-                <div className="relative bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
-                    <Link to="/" aria-label="Retour à l'accueil" title="Retour à l'accueil"
-                        className="absolute top-3 left-3 flex items-center justify-center w-9 h-9 rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors">
-                        <ChevronLeft size={20} />
-                    </Link>
-                    <img src="/images/logo-CMET.png" alt="Club-MET"
-                         className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-white/20 object-cover" />
-                    <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
-                    <p className="text-slate-400 text-[11px] mt-0.5">UFR Métiers & Technologies · UCAK</p>
+            {error && (
+                <div className="flex items-start gap-2 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-300 text-xs rounded-xl px-4 py-3 mb-6">
+                    <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                    </svg>
+                    {error}
+                </div>
+            )}
+
+            <form onSubmit={handle} className="space-y-6">
+                <div className="grid grid-cols-2 gap-5">
+                    <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Prénom *</label>
+                        <input type="text" required {...F("prenom")} placeholder="Mamadou"
+                               className="input-underline" />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nom *</label>
+                        <input type="text" required {...F("nom")} placeholder="Diop"
+                               className="input-underline" />
+                    </div>
                 </div>
 
-                {/* Body */}
-                <div className="px-8 py-8">
-                    <h2 className="text-[#003058] dark:text-white font-bold text-lg mb-1">Créer un compte</h2>
-                    <p className="text-slate-400 text-xs mb-6">Rejoins la communauté Club-MET.</p>
+                <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Email *</label>
+                    <input type="email" required {...F("email")} placeholder="prenom.nom@ucak.edu.sn"
+                           className="input-underline" />
+                </div>
 
-                    {error && (
-                        <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-4 py-3 mb-5">
-                            <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Niveau / Classe *</label>
+                    <div className="relative">
+                        <select required value={form.niveau} onChange={e => setForm({ ...form, niveau: e.target.value })}
+                                className="input-underline appearance-none pr-7 font-semibold cursor-pointer">
+                            <option value="">— Sélectionner votre niveau —</option>
+                            {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                        <ChevronDown className="absolute right-0.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-5">
+                    <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Mot de passe *</label>
+                        <input type="password" required {...F("password")} placeholder="Min. 6 car."
+                               className="input-underline" />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Confirmer *</label>
+                        <input type="password" required {...F("confirm")} placeholder="••••••••"
+                               className="input-underline" />
+                    </div>
+                </div>
+
+                <button type="submit" disabled={loading}
+                        className="btn-primary w-full mt-2 disabled:opacity-60">
+                    {loading ? (
+                        <>
+                            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                             </svg>
-                            {error}
-                        </div>
-                    )}
+                            Inscription...
+                        </>
+                    ) : "Créer mon compte"}
+                </button>
+            </form>
 
-                    <form onSubmit={handle} className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Prénom *</label>
-                                <input type="text" required {...F("prenom")} placeholder="Mamadou"
-                                       className="input-field" />
-                            </div>
-                            <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Nom *</label>
-                                <input type="text" required {...F("nom")} placeholder="Diop"
-                                       className="input-field" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Email *</label>
-                            <input type="email" required {...F("email")} placeholder="prenom.nom@ucak.edu.sn"
-                                   className="input-field" />
-                        </div>
-
-                        <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Niveau / Classe *</label>
-                            <div className="relative">
-                                <select required value={form.niveau} onChange={e => setForm({ ...form, niveau: e.target.value })}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
-                                    <option value="">— Sélectionner votre niveau —</option>
-                                    {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Mot de passe *</label>
-                            <input type="password" required {...F("password")} placeholder="Min. 6 caractères"
-                                   className="input-field" />
-                        </div>
-
-                        <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Confirmer le mot de passe *</label>
-                            <input type="password" required {...F("confirm")} placeholder="••••••••"
-                                   className="input-field" />
-                        </div>
-
-                        <button type="submit" disabled={loading}
-                                className="btn-primary w-full mt-2 disabled:opacity-60">
-                            {loading ? (
-                                <>
-                                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                                    </svg>
-                                    Inscription...
-                                </>
-                            ) : "Créer mon compte"}
-                        </button>
-                    </form>
-
-                    <p className="text-center text-xs text-slate-400 mt-6">
-                        Déjà inscrit ?{" "}
-                        <Link to="/login" className="text-[#187840] font-bold hover:underline">Se connecter</Link>
-                    </p>
-                </div>
-            </div>
-        </div>
+            <p className="text-center text-xs text-slate-400 mt-8">
+                Déjà inscrit ?{" "}
+                <Link to="/login" className="text-[#187840] dark:text-[#4ade80] font-bold hover:underline">Se connecter</Link>
+            </p>
+        </AuthShell>
     );
 }

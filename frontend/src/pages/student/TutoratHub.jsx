@@ -111,7 +111,7 @@ export default function MessagesHub() {
 
                 {/* ── FORMULAIRE D'ENVOI (2/3) ── */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                    <div className="bg-white dark:bg-ucak-dark-card p-6 sm:p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm space-y-6">
                         <div>
                             <h1 className="text-2xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                                 <MessageSquare className="text-[#187840] w-7 h-7" />
@@ -131,7 +131,7 @@ export default function MessagesHub() {
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="space-y-1.5">
-                                <label className="block text-xs font-bold text-slate-700 ml-1">Objet du message</label>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 ml-1">Objet du message</label>
                                 <input
                                     type="text"
                                     required
@@ -143,7 +143,7 @@ export default function MessagesHub() {
                             </div>
 
                             <div className="space-y-1.5">
-                                <label className="block text-xs font-bold text-slate-700 ml-1">Votre message</label>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 ml-1">Votre message</label>
                                 <textarea
                                     rows="5"
                                     required
@@ -171,8 +171,8 @@ export default function MessagesHub() {
 
                 {/* ── HISTORIQUE DES MESSAGES (1/3) ── */}
                 <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm overflow-hidden sticky top-6">
-                        <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                    <div className="bg-white dark:bg-ucak-dark-card p-6 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm overflow-hidden sticky top-6">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/10 pb-4 mb-4">
                             <div className="flex items-center gap-2 font-bold text-[#003058] dark:text-white">
                                 <Clock size={18} className="text-[#187840]" />
                                 <h2>Mes messages envoyés</h2>
@@ -196,7 +196,7 @@ export default function MessagesHub() {
                         ) : (
                             <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                                 {myMessages.map((msg) => (
-                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 bg-[#f1f5f9] dark:bg-ucak-dark text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
+                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 dark:border-white/10 bg-[#f1f5f9] dark:bg-ucak-dark text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
                                         <div className="flex justify-between items-start gap-2">
                                             <p className="font-bold text-[#003058] dark:text-white text-sm leading-tight line-clamp-2 flex-1">
                                                 {msg.message}

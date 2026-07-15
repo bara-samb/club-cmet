@@ -188,7 +188,7 @@ export default function Home() {
                     </p>
                     <div className="anim-btns flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer"
-                            className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white text-[#187840] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
+                            className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white dark:bg-ucak-dark-card text-[#187840] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" />
                             </svg>
@@ -206,12 +206,12 @@ export default function Home() {
             <section className="py-12 px-6 max-w-7xl mx-auto -mt-10 relative z-20">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     {[
-                        { label: "Tutorat & Partage", value: "Entraide académique continue", bg: "bg-emerald-50 text-emerald-800" },
-                        { label: "Projets Innovants", value: "Ateliers & Technologie", bg: "bg-blue-50 text-blue-800" },
-                        { label: "Maraudes & Social", value: "Engagement communautaire", bg: "bg-indigo-50 text-indigo-800" },
-                        { label: "Synergie MET", value: "Cohésion inter-filières", bg: "bg-amber-50 text-amber-800" }
+                        { label: "Tutorat & Partage", value: "Entraide académique continue", bg: "bg-emerald-50 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300" },
+                        { label: "Projets Innovants", value: "Ateliers & Technologie", bg: "bg-blue-50 text-blue-800 dark:bg-blue-500/10 dark:text-blue-300" },
+                        { label: "Maraudes & Social", value: "Engagement communautaire", bg: "bg-indigo-50 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-300" },
+                        { label: "Synergie MET", value: "Cohésion inter-filières", bg: "bg-amber-50 text-amber-800 dark:bg-amber-500/10 dark:text-amber-300" }
                     ].map((s, idx) => (
-                        <div key={idx} className={`p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between ${s.bg}`}>
+                        <div key={idx} className={`p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/10 flex flex-col justify-between ${s.bg}`}>
                             <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">{s.label}</span>
                             <span className="text-sm font-extrabold mt-2 leading-snug">{s.value}</span>
                         </div>
@@ -225,7 +225,7 @@ export default function Home() {
                     <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] dark:text-white mb-6 text-center">
                         Le Club Métiers & Technologies
                     </h2>
-                    <div className="text-slate-600 text-sm md:text-base leading-relaxed space-y-4">
+                    <div className="text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed space-y-4">
                         <p className="text-justify">
                             Le <strong>Club Métiers & Technologies (Club-MET)</strong> est la structure légale qui regroupe l'ensemble des étudiants de l'UFR <strong>Métiers & Technologies (MET)</strong>.
                         </p>
@@ -233,25 +233,25 @@ export default function Home() {
                             Le Club a pour missions de :
                         </p>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                            <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-start gap-2.5 bg-white dark:bg-ucak-dark-card p-4 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm">
                                 <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
                                     <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
                                 </span>
                                 <span className="text-xs md:text-sm"><strong>Promouvoir l'innovation</strong> technologique et entrepreneuriale.</span>
                             </li>
-                            <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-start gap-2.5 bg-white dark:bg-ucak-dark-card p-4 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm">
                                 <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
                                     <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
                                 </span>
                                 <span className="text-xs md:text-sm"><strong>Organiser des tutorats</strong> par les pairs pour soutenir les apprentissages disciplinaires.</span>
                             </li>
-                            <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-start gap-2.5 bg-white dark:bg-ucak-dark-card p-4 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm">
                                 <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
                                     <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
                                 </span>
                                 <span className="text-xs md:text-sm"><strong>Développer des projets communautaires</strong> (actions sociales, maraudes, supports pédagogiques).</span>
                             </li>
-                            <li className="flex items-start gap-2.5 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-start gap-2.5 bg-white dark:bg-ucak-dark-card p-4 rounded-xl border border-slate-100 dark:border-white/10 shadow-sm">
                                 <span className="w-5 h-5 rounded-full bg-[#187840]/10 flex items-center justify-center shrink-0 mt-0.5">
                                     <span className="w-2 h-2 rounded-full bg-[#187840]"></span>
                                 </span>
@@ -276,7 +276,7 @@ export default function Home() {
                             icon: <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.443.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         },
                     ].map((c, i) => (
-                        <div key={i} className="bg-white border border-gray-100 rounded-2xl p-6 text-center shadow-sm flex flex-col items-center">
+                        <div key={i} className="bg-white dark:bg-ucak-dark-card border border-gray-100 dark:border-white/10 rounded-2xl p-6 text-center shadow-sm flex flex-col items-center">
                             <div className="w-16 h-16 mb-4 text-[#187840] flex items-center justify-center">
                                 <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">{c.icon}</svg>
                             </div>
@@ -288,7 +288,7 @@ export default function Home() {
             </section>
 
             {/* ── PARCOURS & HISTOIRE ── */}
-            <section className="py-20 bg-gradient-to-b from-white to-[#f8fafc] px-6 border-t border-gray-100 overflow-hidden">
+            <section className="py-20 bg-gradient-to-b from-white to-[#f8fafc] dark:from-ucak-dark dark:to-ucak-dark px-6 border-t border-gray-100 dark:border-white/10 overflow-hidden">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/25">
@@ -307,9 +307,9 @@ export default function Home() {
                         ].map((item, index) => (
                             <div key={index} className="relative group">
                                 <div className="absolute -left-[35px] md:-left-[51px] top-1 w-6 h-6 rounded-full bg-[#187840] border-4 border-white group-hover:scale-110 transition-transform flex items-center justify-center shadow-md">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-ucak-dark-card" />
                                 </div>
-                                <div className="bg-white border border-[#e2e8f0]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
+                                <div className="bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                                         <h3 className="font-extrabold text-sm md:text-base text-[#003058] dark:text-white">{item.title}</h3>
                                         <span className="text-xs font-black text-white bg-[#187840] px-3 py-1 rounded-full">{item.year}</span>
@@ -323,18 +323,18 @@ export default function Home() {
             </section>
 
             {/* ── FONCTIONNEMENT ── */}
-            <section id="fonctionnement" className="py-16 bg-[#f1f5f9] dark:bg-ucak-dark border-t border-b border-gray-100 px-6 scroll-mt-20">
+            <section id="fonctionnement" className="py-16 bg-[#f1f5f9] dark:bg-ucak-dark border-t border-b border-gray-100 dark:border-white/10 px-6 scroll-mt-20">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
-                        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Régime Interne</span>
+                        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 dark:bg-blue-500/10 px-3 py-1 rounded-full">Régime Interne</span>
                         <h2 className="text-2xl font-bold text-[#003058] dark:text-white mt-3">Règles de Fonctionnement Exécutif</h2>
                     </div>
-                    <div className="bg-white border border-[#e2e8f0]/60 rounded-2xl shadow-sm p-6 space-y-4">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 rounded-2xl shadow-sm p-6 space-y-4">
                         {[
                             {
                                 id: 'bureau-exec', label: 'Composition des Organes Légaux du Club',
                                 icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />,
-                                content: <div className="p-5 text-xs text-slate-600 space-y-3 bg-white border-t border-gray-50 text-justify">
+                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-white dark:bg-ucak-dark-card border-t border-gray-50 text-justify">
                                     <p>La direction s'organise autour de deux entités majeures :</p>
                                     <ul className="list-disc pl-5 space-y-1">
                                         <li><strong>Bureau Exécutif :</strong> Président, Vice-Président, Secrétaire Général.</li>
@@ -345,15 +345,15 @@ export default function Home() {
                             {
                                 id: 'nomination', label: 'Durée du Mandat et Obligations de Clôture',
                                 icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
-                                content: <div className="p-5 text-xs text-slate-600 bg-white border-t border-gray-50 text-justify">
+                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-ucak-dark-card border-t border-gray-50 text-justify">
                                     Les membres effectuent un mandat d'un an non renouvelable immédiatement sans élection générale. La transmission des charges et documents comptables est obligatoire en fin d'exercice.
                                 </div>
                             },
                         ].map(item => (
-                            <div key={item.id} className="border border-gray-100 rounded-xl overflow-hidden">
+                            <div key={item.id} className="border border-gray-100 dark:border-white/10 rounded-xl overflow-hidden">
                                 <button onClick={() => setOpenArticle(openArticle === item.id ? null : item.id)}
                                     className="w-full bg-[#f1f5f9] dark:bg-ucak-dark px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
-                                    <span className="text-xs font-bold text-slate-700 flex items-start gap-2 pr-4 flex-1">
+                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-start gap-2 pr-4 flex-1">
                                         <svg className="w-4 h-4 text-[#187840]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
                                         {item.label}
                                     </span>
@@ -364,7 +364,7 @@ export default function Home() {
                         ))}
 
                         {/* Document Règlement Intérieur */}
-                        <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="mt-6 pt-5 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-left">
                                 <h4 className="text-xs font-black text-[#003058] dark:text-white uppercase tracking-wider">Document de Référence</h4>
                                 <p className="text-[11px] text-slate-500 mt-0.5">
@@ -381,7 +381,7 @@ export default function Home() {
                                     <FileText size={14} /> Télécharger le Règlement (PDF)
                                 </a>
                             ) : (
-                                <span className="text-xs text-slate-400 italic font-medium bg-slate-50 border border-slate-100 px-4 py-2 rounded-xl shrink-0">
+                                <span className="text-xs text-slate-400 italic font-medium bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-4 py-2 rounded-xl shrink-0">
                                     Document indisponible en ligne
                                 </span>
                             )}
@@ -391,7 +391,7 @@ export default function Home() {
             </section>
 
             {/* ── ACTIVITÉS & MÉDIAS ── */}
-            <section className="py-20 bg-[#f8fafc] dark:bg-ucak-dark border-t border-gray-100 px-6 overflow-hidden">
+            <section className="py-20 bg-[#f8fafc] dark:bg-ucak-dark border-t border-gray-100 dark:border-white/10 px-6 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058] dark:text-white">Actualités, Activités & Médias</h2>
@@ -399,7 +399,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex justify-center mb-10">
-                        <div className="bg-white p-1.5 rounded-2xl border border-gray-200/60 shadow-sm flex gap-2">
+                        <div className="bg-white dark:bg-ucak-dark-card p-1.5 rounded-2xl border border-gray-200/60 dark:border-white/10 shadow-sm flex gap-2">
                             <button
                                 onClick={() => setActiveTab('activites')}
                                 className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'activites' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}>
@@ -420,7 +420,7 @@ export default function Home() {
                                     <button
                                         key={f}
                                         onClick={() => setFiltreAct(f)}
-                                        className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${filtreAct === f ? 'bg-[#187840] text-white border-[#187840] shadow-sm' : 'bg-white text-slate-500 border-[#e2e8f0]/60 hover:border-[#187840] hover:text-[#187840]'}`}>
+                                        className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${filtreAct === f ? 'bg-[#187840] text-white border-[#187840] shadow-sm' : 'bg-white dark:bg-ucak-dark-card text-slate-500 border-[#e2e8f0]/60 hover:border-[#187840] hover:text-[#187840]'}`}>
                                         {f === 'tous' ? 'Tous' : f}
                                     </button>
                                 ))}
@@ -432,7 +432,7 @@ export default function Home() {
                                     Chargement des événements...
                                 </div>
                             ) : evenements.filter(ev => filtreAct === 'tous' || ev.type === filtreAct).length === 0 ? (
-                                <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                                <div className="text-center py-16 bg-white dark:bg-ucak-dark-card border border-dashed border-gray-200 dark:border-white/10 rounded-3xl text-sm text-slate-400">
                                     {filtreAct === 'tous' ? "Aucun événement publié pour le moment." : `Aucun événement de type « ${filtreAct} » pour le moment.`}
                                 </div>
                             ) : (
@@ -444,7 +444,7 @@ export default function Home() {
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.9 }}
                                             transition={{ duration: 0.3 }}
-                                            className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 flex flex-col justify-between group transition-all duration-300">
+                                            className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-white/10 flex flex-col justify-between group transition-all duration-300">
                                             <div>
                                                 <div className="h-48 overflow-hidden relative bg-slate-100">
                                                     <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
@@ -455,7 +455,7 @@ export default function Home() {
                                                             <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                                                         </div>
                                                     )}
-                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
+                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-sm">
                                                         {ev.type}
                                                     </span>
                                                 </div>
@@ -469,13 +469,13 @@ export default function Home() {
                                             </div>
                                             <div className="p-6 pt-0">
                                                 {inscriptions[ev.id] ? (
-                                                    <span className="w-full inline-flex items-center justify-center gap-1.5 bg-green-50 text-[#125e31] py-3 rounded-xl font-bold text-xs border border-green-100">
+                                                    <span className="w-full inline-flex items-center justify-center gap-1.5 bg-green-50 dark:bg-emerald-500/10 text-[#125e31] dark:text-emerald-300 py-3 rounded-xl font-bold text-xs border border-green-100 dark:border-emerald-500/20">
                                                         <Check size={14} /> Vous êtes inscrit
                                                     </span>
                                                 ) : (
                                                     <button
                                                         onClick={() => inscrireActivite(ev)}
-                                                        className="w-full bg-[#f1f5f9] dark:bg-ucak-dark group-hover:bg-[#187840] text-slate-700 group-hover:text-white py-3 rounded-xl font-bold text-xs transition-colors"
+                                                        className="w-full bg-[#f1f5f9] dark:bg-ucak-dark group-hover:bg-[#187840] text-slate-700 dark:text-slate-200 group-hover:text-white py-3 rounded-xl font-bold text-xs transition-colors"
                                                     >
                                                         S'inscrire à l'activité
                                                     </button>
@@ -494,7 +494,7 @@ export default function Home() {
                                     Chargement de la galerie...
                                 </div>
                             ) : medias.length === 0 ? (
-                                <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                                <div className="text-center py-16 bg-white dark:bg-ucak-dark-card border border-dashed border-gray-200 dark:border-white/10 rounded-3xl text-sm text-slate-400">
                                     Aucun média disponible dans la galerie pour le moment.
                                 </div>
                             ) : (
@@ -502,7 +502,7 @@ export default function Home() {
                                     {medias.map((m) => (
                                         <div key={m.id}
                                             onClick={() => setLightboxImage(m)}
-                                            className="group relative h-48 bg-slate-100 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300">
+                                            className="group relative h-48 bg-slate-100 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-lg transition-all duration-300">
                                             <img src={m.url} alt={m.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-[#187840] mb-1">{m.type}</span>
@@ -540,7 +540,7 @@ export default function Home() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             onClick={e => e.stopPropagation()}
-                            className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-gray-100 overflow-hidden relative text-slate-800">
+                            className="bg-white dark:bg-ucak-dark-card rounded-3xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden relative text-slate-800 dark:text-slate-100">
                             <button onClick={() => setInscrireModal(null)}
                                 className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors z-10">
                                 <X size={16} />

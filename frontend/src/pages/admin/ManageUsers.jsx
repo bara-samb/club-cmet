@@ -195,14 +195,14 @@ export default function ManageUsers() {
             {/* Modal suppression */}
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce membre ?</h3>
                         <p className="text-sm text-slate-500 mb-8"><strong>{confirmDel.nom}</strong> sera définitivement retiré du bureau.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDelete(confirmDel)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm shadow-red-500/20">Supprimer</button>
                         </div>
                     </div>
@@ -227,7 +227,7 @@ export default function ManageUsers() {
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         {/* Photo */}
-                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100">
+                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
                                 {preview
                                     ? <img src={preview} alt="preview" className="w-full h-full object-cover" />
@@ -236,7 +236,7 @@ export default function ManageUsers() {
                             </div>
                             <div>
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Photo du membre</label>
-                                <label className="cursor-pointer bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
+                                <label className="cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
                                     <ImageIcon size={16} />
                                     {imageFile ? imageFile.name : "Choisir une photo"}
                                     <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden" />
@@ -258,7 +258,7 @@ export default function ManageUsers() {
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Poste *</label>
                             <div className="relative">
                                 <select value={form.poste} onChange={e => setForm({ ...form, poste: e.target.value })}
-                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    className="input-field appearance-none pr-10 bg-white dark:bg-ucak-dark-card font-semibold cursor-pointer">
                                     <option value="">— Sélectionner un poste —</option>
                                     {POSTES.map(p => <option key={p} value={p}>{p}</option>)}
                                 </select>
@@ -271,7 +271,7 @@ export default function ManageUsers() {
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Niveau / Classe *</label>
                             <div className="relative">
                                 <select value={form.classe} onChange={e => setForm({ ...form, classe: e.target.value })}
-                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    className="input-field appearance-none pr-10 bg-white dark:bg-ucak-dark-card font-semibold cursor-pointer">
                                     <option value="">— Sélectionner un niveau —</option>
                                     {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
@@ -284,7 +284,7 @@ export default function ManageUsers() {
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Statut du membre *</label>
                             <div className="relative">
                                 <select value={form.estAncien ? "ancien" : "actuel"} onChange={e => setForm({ ...form, estAncien: e.target.value === "ancien" })}
-                                    className="input-field appearance-none pr-10 bg-white font-semibold cursor-pointer">
+                                    className="input-field appearance-none pr-10 bg-white dark:bg-ucak-dark-card font-semibold cursor-pointer">
                                     <option value="actuel">Membre Actuel (Bureau en cours)</option>
                                     <option value="ancien">Ancien Membre (Mandats passés)</option>
                                 </select>
@@ -303,7 +303,7 @@ export default function ManageUsers() {
                         )}
 
                         {uploading && (
-                            <div className="md:col-span-2 bg-[#f1f5f9] dark:bg-ucak-dark p-4 rounded-xl border border-slate-100">
+                            <div className="md:col-span-2 bg-[#f1f5f9] dark:bg-ucak-dark p-4 rounded-xl border border-slate-100 dark:border-white/10">
                                 <div className="flex justify-between text-[11px] font-bold text-[#003058] dark:text-white mb-2">
                                     <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#187840]" /> Upload en cours...</span>
                                     <span className="text-[#187840]">{progress}%</span>
@@ -314,10 +314,10 @@ export default function ManageUsers() {
                             </div>
                         )}
 
-                        <div className="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                        <div className="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
                             {editId && (
                                 <button type="button" onClick={resetForm}
-                                    className="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
+                                    className="bg-slate-100 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
                                     Annuler
                                 </button>
                             )}
@@ -332,7 +332,7 @@ export default function ManageUsers() {
 
                 {/* Liste */}
                 <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-2 border-b border-slate-100">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-2 border-b border-slate-100 dark:border-white/10">
                         <h2 className="font-black text-xl text-[#003058] dark:text-white flex items-center gap-3">
                             <Users className="text-[#187840]" size={24} />
                             Membres enregistrés
@@ -340,13 +340,13 @@ export default function ManageUsers() {
                         </h2>
                         
                         {/* Onglets d'administration */}
-                        <div className="flex gap-2 bg-[#f1f5f9] dark:bg-ucak-dark p-1 rounded-xl border border-slate-200/50">
+                        <div className="flex gap-2 bg-[#f1f5f9] dark:bg-ucak-dark p-1 rounded-xl border border-slate-200/50 dark:border-white/10">
                             <button type="button" onClick={() => setActiveTab('actuels')}
-                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'actuels' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'actuels' ? 'bg-white dark:bg-ucak-dark-card text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
                                 Actuels ({membresActuels.length})
                             </button>
                             <button type="button" onClick={() => setActiveTab('anciens')}
-                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'anciens' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                                className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'anciens' ? 'bg-white dark:bg-ucak-dark-card text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
                                 Anciens ({membresAnciens.length})
                             </button>
                         </div>
@@ -359,7 +359,7 @@ export default function ManageUsers() {
                         </div>
                     ) : activeTab === 'actuels' ? (
                         membresActuels.length === 0 ? (
-                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun membre actuel enregistré.</p>
                             </div>
@@ -369,12 +369,12 @@ export default function ManageUsers() {
                                     <div key={m.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                 title="Modifier">
                                                 <Pencil size={14} strokeWidth={2.5} />
                                             </button>
                                             <button onClick={() => setConfirmDel(m)}
-                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                 title="Supprimer">
                                                 <Trash2 size={14} strokeWidth={2.5} />
                                             </button>
@@ -388,7 +388,7 @@ export default function ManageUsers() {
                                         <h4 className="font-bold text-sm text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                         <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                            <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 dark:border-white/10 uppercase tracking-wider">{m.classe}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -396,7 +396,7 @@ export default function ManageUsers() {
                         )
                     ) : (
                         membresAnciens.length === 0 ? (
-                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
                             </div>
@@ -404,7 +404,7 @@ export default function ManageUsers() {
                             <div className="space-y-10 animate-in fade-in duration-300">
                                 {sortedAnciensYears.map(year => (
                                     <div key={year} className="space-y-4">
-                                        <h3 className="font-black text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">
+                                        <h3 className="font-black text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 dark:border-white/10 pb-2 flex items-center gap-2">
                                             <span>Mandat {year}</span>
                                             <span className="bg-[#187840]/10 text-[#187840] text-[10px] px-2.5 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
                                         </h3>
@@ -414,12 +414,12 @@ export default function ManageUsers() {
                                                     <div>
                                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                                 title="Modifier">
                                                                 <Pencil size={14} strokeWidth={2.5} />
                                                             </button>
                                                             <button onClick={() => setConfirmDel(m)}
-                                                                className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                                className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                                 title="Supprimer">
                                                                 <Trash2 size={14} strokeWidth={2.5} />
                                                             </button>
@@ -434,7 +434,7 @@ export default function ManageUsers() {
                                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                                     </div>
                                                     <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 dark:border-white/10 uppercase tracking-wider">{m.classe}</span>
                                                     </div>
                                                 </div>
                                             ))}

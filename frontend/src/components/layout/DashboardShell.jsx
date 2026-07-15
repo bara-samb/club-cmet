@@ -282,7 +282,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         {/* User Profile Info */}
                         <div className="flex items-center gap-3 pl-4 border-l border-slate-100 dark:border-white/10">
                             {user?.avatar_url ? (
-                                <img src={user.avatar_url} alt="Profile" className="w-8 h-8 rounded-full object-cover border border-slate-200" />
+                                <img src={user.avatar_url} alt="Profile" className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-white/10" />
                             ) : (
                                 <div className="w-8 h-8 rounded-full bg-[#003058] flex items-center justify-center text-white text-xs font-bold">{user?.prenom?.[0]}</div>
                             )}

@@ -118,7 +118,7 @@ export default function Bureau() {
 
             {/* Onglets de filtres */}
             <div className="flex justify-center mb-6">
-                <div className="bg-white p-1.5 rounded-2xl border border-gray-200/60 shadow-sm flex gap-2 w-full md:w-auto">
+                <div className="bg-white dark:bg-ucak-dark-card p-1.5 rounded-2xl border border-gray-200/60 dark:border-white/10 shadow-sm flex gap-2 w-full md:w-auto">
                     <button
                         onClick={() => setActiveTab('actuels')}
                         className={`flex-1 md:flex-initial px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${activeTab === 'actuels' ? 'bg-[#003058] text-white shadow-md' : 'text-slate-500 hover:text-slate-700'}`}
@@ -147,7 +147,7 @@ export default function Bureau() {
                 </div>
             ) : activeTab === 'actuels' ? (
                 membresActuels.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                    <div className="text-center py-20 bg-white dark:bg-ucak-dark-card rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                         <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-sm font-bold text-slate-500">Aucun membre enregistré dans cette section.</p>
                     </div>
@@ -169,7 +169,7 @@ export default function Bureau() {
                                     <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                 </div>
                                 <div className="mt-4">
-                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 dark:border-white/10 uppercase tracking-wider">
                                         {m.classe}
                                     </span>
                                 </div>
@@ -179,7 +179,7 @@ export default function Bureau() {
                 )
             ) : (
                 sortedAnciensYears.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                    <div className="text-center py-20 bg-white dark:bg-ucak-dark-card rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                         <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
                     </div>
@@ -187,7 +187,7 @@ export default function Bureau() {
                     <div className="space-y-10 animate-in fade-in duration-300">
                         {sortedAnciensYears.map(year => (
                             <div key={year} className="space-y-4">
-                                <h3 className="font-black text-sm text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">
+                                <h3 className="font-black text-sm text-[#187840] uppercase tracking-wider border-b border-slate-100 dark:border-white/10 pb-2 flex items-center gap-2">
                                     <span>Mandat {year}</span>
                                     <span className="bg-[#187840]/10 text-[#187840] text-[10px] px-2.5 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
                                 </h3>
@@ -208,7 +208,7 @@ export default function Bureau() {
                                                 <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                             </div>
                                             <div className="mt-4">
-                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 dark:border-white/10 uppercase tracking-wider">
                                                     {m.classe}
                                                 </span>
                                             </div>

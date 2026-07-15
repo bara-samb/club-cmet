@@ -154,7 +154,7 @@ export default function Medias() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden mb-8">
-                        <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 md:p-8">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-gray-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-base font-black text-[#0a1628]">
                                     {editingId ? 'Modifier le média' : 'Nouveau média'}
@@ -206,7 +206,7 @@ export default function Medias() {
                                     </div>
 
                                     {(preview || existingUrl) && (
-                                        <div className="mt-4 w-40 aspect-[4/3] rounded-xl overflow-hidden border border-gray-200 bg-slate-100">
+                                        <div className="mt-4 w-40 aspect-[4/3] rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-slate-100">
                                             {type === 'Photo' ? (
                                                 <img src={preview || existingUrl} alt="" className="w-full h-full object-cover" />
                                             ) : (
@@ -240,13 +240,13 @@ export default function Medias() {
                     <Loader2 className="animate-spin w-6 h-6 mr-2" /> Chargement...
                 </div>
             ) : medias.length === 0 ? (
-                <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                <div className="text-center py-16 bg-white dark:bg-ucak-dark-card border border-dashed border-gray-200 dark:border-white/10 rounded-3xl text-sm text-slate-400">
                     Aucun média enregistré pour le moment. Cliquez sur « Ajouter un média » pour publier le premier.
                 </div>
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                     {medias.map(m => (
-                        <div key={m.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group flex flex-col justify-between">
+                        <div key={m.id} className="bg-white dark:bg-ucak-dark-card rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 group flex flex-col justify-between">
                             <div>
                                 <div className="aspect-[4/3] bg-slate-100 relative">
                                     {m.type === 'Vidéo' ? (
@@ -263,12 +263,12 @@ export default function Medias() {
                                 <h4 className="text-xs font-extrabold text-[#0a1628] truncate flex-grow" title={m.titre}>{m.titre}</h4>
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     <button onClick={() => ouvrirEdition(m)}
-                                        className="w-7 h-7 bg-white border border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                         title="Modifier">
                                         <Pencil size={12} />
                                     </button>
                                     <button onClick={() => handleDelete(m)}
-                                        className="w-7 h-7 bg-white border border-[#e2e8f0]/60 hover:border-red-500 hover:text-red-500 text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 hover:border-red-500 hover:text-red-500 text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                         title="Supprimer">
                                         <Trash2 size={12} />
                                     </button>

@@ -238,7 +238,7 @@ export default function Evenements() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden mb-8">
-                        <div className="bg-white border border-gray-100 rounded-3xl shadow-sm p-6 md:p-8">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-gray-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-base font-black text-[#0a1628]">
                                     {editingId ? "Modifier l'événement" : 'Nouvel événement'}
@@ -305,7 +305,7 @@ export default function Evenements() {
                                     {(existingImages.length > 0 || previews.length > 0) && (
                                         <div className="flex flex-wrap gap-3 mt-4">
                                             {existingImages.map((url) => (
-                                                <div key={url} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 group">
+                                                <div key={url} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 group">
                                                     <img src={url} alt="" className="w-full h-full object-cover" />
                                                     <button type="button" onClick={() => retirerImageExistante(url)}
                                                         className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -351,13 +351,13 @@ export default function Evenements() {
                     <Loader2 className="animate-spin w-6 h-6 mr-2" /> Chargement...
                 </div>
             ) : evenements.length === 0 ? (
-                <div className="text-center py-16 bg-white border border-dashed border-gray-200 rounded-3xl text-sm text-slate-400">
+                <div className="text-center py-16 bg-white dark:bg-ucak-dark-card border border-dashed border-gray-200 dark:border-white/10 rounded-3xl text-sm text-slate-400">
                     Aucun événement enregistré pour le moment. Cliquez sur « Ajouter un événement » pour publier le premier.
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {evenements.map(ev => (
-                        <div key={ev.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
+                        <div key={ev.id} className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col">
                             <div className="h-40 bg-slate-100 relative">
                                 {ev.images?.[0] ? (
                                     <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover" />
@@ -385,7 +385,7 @@ export default function Evenements() {
 
                                     <div className="flex items-center gap-2">
                                         <button onClick={() => ouvrirEdition(ev)}
-                                            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
+                                            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition-colors">
                                             <Pencil size={14} />
                                         </button>
                                         <button onClick={() => handleDelete(ev)}
