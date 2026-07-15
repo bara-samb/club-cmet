@@ -132,37 +132,37 @@ export default function Contact() {
                         {/* Contact details */}
                         <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-5">
                             <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#187840] shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex items-center justify-center text-[#187840] shrink-0">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     </svg>
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Localisation</h4>
-                                    <p className="text-xs font-bold text-slate-700 mt-1">Complexe Universitaire de Touba</p>
+                                    <p className="text-xs font-bold text-slate-700 dark:text-slate-200 mt-1">Complexe Universitaire de Touba</p>
                                     <p className="text-[11px] text-slate-500">Touba, Sénégal</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#187840] shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex items-center justify-center text-[#187840] shrink-0">
                                     <Mail className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Email Officiel</h4>
-                                    <a href="mailto:contact.met@ucak.edu.sn" className="text-xs font-bold text-slate-700 hover:text-[#187840] transition-colors mt-1 block underline">
+                                    <a href="mailto:contact.met@ucak.edu.sn" className="text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-[#187840] transition-colors mt-1 block underline">
                                         contact.met@ucak.edu.sn
                                     </a>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#187840] shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 flex items-center justify-center text-[#187840] shrink-0">
                                     <Phone className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Téléphone</h4>
-                                    <a href="tel:+221787941004" className="text-xs font-bold text-slate-700 hover:text-[#187840] transition-colors mt-1 block underline">
+                                    <a href="tel:+221787941004" className="text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-[#187840] transition-colors mt-1 block underline">
                                         +221 78 79 41 004
                                     </a>
                                 </div>
@@ -246,7 +246,7 @@ export default function Contact() {
                                             value={sujetContact}
                                             onChange={e => setSujetContact(e.target.value)}
                                             disabled={contactSubmitting}
-                                            className="w-full bg-white border border-[#e2e8f0] rounded-xl px-4 py-3 text-xs text-slate-800 focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15"
+                                            className="w-full bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15"
                                         >
                                             <option value="tutorat">Soutien Académique / Tutorat</option>
                                             <option value="projet">Suggestion Projet Innovant</option>

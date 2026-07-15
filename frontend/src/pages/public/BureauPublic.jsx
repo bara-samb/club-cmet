@@ -107,17 +107,17 @@ export default function BureauPublic() {
                         Chargement de l'équipe...
                     </div>
                 ) : membresActuels.length === 0 ? (
-                    <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-3xl text-sm text-slate-400">
+                    <div className="text-center py-16 bg-slate-50 dark:bg-white/5 border border-dashed border-slate-200 dark:border-white/10 rounded-3xl text-sm text-slate-400">
                         Aucun membre du bureau actif enregistré pour le moment.
                     </div>
                 ) : (
                     <div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                             {membresActuels.map((m) => (
-                                <div key={m.id} className="group relative bg-white border border-[#e2e8f0]/60 rounded-3xl p-6 text-center shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                <div key={m.id} className="group relative bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 rounded-3xl p-6 text-center shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
                                     <div className="relative w-28 h-28 mx-auto mb-6">
                                         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#187840] to-[#003058] opacity-50 group-hover:rotate-180 transition-transform duration-700 ease-out" style={{ padding: '2px' }}>
-                                            <div className="w-full h-full bg-white rounded-full" />
+                                            <div className="w-full h-full bg-white dark:bg-ucak-dark-card rounded-full" />
                                         </div>
                                         <div className="absolute inset-1.5 rounded-full overflow-hidden border-2 border-white shadow-inner bg-slate-100">
                                             {m.imageUrl ? (
@@ -166,7 +166,7 @@ export default function BureauPublic() {
                             initial={{ scale: 0.95, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.95, y: 20 }}
-                            className="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800"
+                            className="bg-white dark:bg-ucak-dark-card rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800 dark:text-slate-100"
                             onClick={e => e.stopPropagation()}
                         >
                             <button onClick={() => setIsAnciensOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-100 rounded-full">
@@ -178,20 +178,20 @@ export default function BureauPublic() {
                             </div>
                             <div className="space-y-8 max-h-[55vh] overflow-y-auto p-1">
                                 {sortedAnciensYears.length === 0 ? (
-                                    <div className="text-center py-10 bg-slate-50 border border-slate-100 border-dashed rounded-2xl text-slate-400 text-xs font-bold">
+                                    <div className="text-center py-10 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 border-dashed rounded-2xl text-slate-400 text-xs font-bold">
                                         Aucun ancien membre enregistré pour le moment.
                                     </div>
                                 ) : sortedAnciensYears.map((year) => (
                                     <div key={year} className="space-y-3">
-                                        <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 pb-1.5 flex items-center gap-2">
+                                        <h4 className="font-extrabold text-xs text-[#187840] uppercase tracking-wider border-b border-slate-100 dark:border-white/10 pb-1.5 flex items-center gap-2">
                                             <span>Mandat {year}</span>
                                             <span className="bg-[#187840]/10 text-[#187840] text-[9px] px-2 py-0.5 rounded-full">{groupedAnciens[year].length}</span>
                                         </h4>
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                             {groupedAnciens[year].map((m) => (
-                                                <div key={m.id || m.nom} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
+                                                <div key={m.id || m.nom} className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
                                                     <div>
-                                                        <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                        <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 dark:border-white/10 shadow-inner bg-slate-100 flex items-center justify-center">
                                                             {m.imageUrl ? (
                                                                 <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
                                                             ) : (
@@ -204,7 +204,7 @@ export default function BureauPublic() {
                                                         <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                                     </div>
                                                     <div className="mt-3">
-                                                        <span className="inline-block text-[8px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                        <span className="inline-block text-[8px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2 py-0.5 rounded border border-slate-200/50 dark:border-white/10 uppercase tracking-wider">
                                                             {m.classe}
                                                         </span>
                                                     </div>

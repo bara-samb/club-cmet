@@ -44,7 +44,7 @@ export default function PublicLayout() {
             <nav className="bg-white dark:bg-ucak-dark-card text-slate-800 dark:text-slate-100 px-6 md:px-10 py-4 flex justify-between items-center border-b border-slate-200/80 dark:border-white/10 fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-150">
                 <Link to="/" className="flex items-center gap-3 cursor-pointer">
                     <div className="relative w-11 h-11 md:w-12 md:h-12 shrink-0">
-                        <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-full h-full rounded-full object-cover border border-slate-200" />
+                        <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-full h-full rounded-full object-cover border border-slate-200 dark:border-white/10" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-extrabold text-base md:text-lg tracking-wide leading-none text-[#003058] dark:text-white">CLUB-MET</span>

@@ -107,9 +107,9 @@ export default function NotificationsHistory() {
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-3xl border border-dashed border-gray-200 p-16 text-center"
+                    className="bg-white dark:bg-ucak-dark-card rounded-3xl border border-dashed border-gray-200 dark:border-white/10 p-16 text-center"
                 >
-                    <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Bell className="text-slate-300" size={28} />
                     </div>
                     <p className="text-sm font-semibold text-slate-400">Aucune notification reçue pour le moment.</p>
@@ -123,7 +123,7 @@ export default function NotificationsHistory() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.04 }}
-                            className={`bg-white rounded-2xl border border-slate-100 border-l-4 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 ${idx === 0 ? 'border-l-[#187840]' : 'border-l-[#003058]'}`}
+                            className={`bg-white dark:bg-ucak-dark-card rounded-2xl border border-slate-100 dark:border-white/10 border-l-4 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 ${idx === 0 ? 'border-l-[#187840]' : 'border-l-[#003058]'}`}
                         >
                             {/* ── Header carte ── */}
                             <div className="flex items-center w-full">
@@ -132,7 +132,7 @@ export default function NotificationsHistory() {
                                     className="flex-grow text-left px-5 py-4 flex items-start gap-4"
                                 >
                                     {/* Icône */}
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 border border-slate-100'}`}>
+                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
                                         <AlertCircle size={16} className={idx === 0 ? 'text-blue-500' : 'text-slate-400'} />
                                     </div>
 
@@ -192,8 +192,8 @@ export default function NotificationsHistory() {
                                             </p>
 
                                             {/* Message complet */}
-                                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                                                <p className="text-sm text-slate-600 leading-relaxed font-medium whitespace-pre-wrap">
+                                            <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/10">
+                                                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">
                                                     {notif.message}
                                                 </p>
                                             </div>
@@ -208,7 +208,7 @@ export default function NotificationsHistory() {
                                                         href={notif.image_url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="group inline-block relative overflow-hidden rounded-2xl border-2 border-slate-100 hover:border-blue-200 transition-colors shadow-sm"
+                                                        className="group inline-block relative overflow-hidden rounded-2xl border-2 border-slate-100 dark:border-white/10 hover:border-blue-200 transition-colors shadow-sm"
                                                     >
                                                         <img
                                                             src={notif.image_url}

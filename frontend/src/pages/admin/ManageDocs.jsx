@@ -206,14 +206,14 @@ export default function ManageDocs() {
             {/* Modal suppression */}
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce document ?</h3>
                         <p className="text-sm text-slate-500 mb-8">Le fichier <strong>{confirmDel.nom}</strong> sera définitivement effacé.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDelete(confirmDel)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">Supprimer</button>
                         </div>
                     </div>
@@ -239,8 +239,8 @@ export default function ManageDocs() {
                         {/* Fichier */}
                         <div className="space-y-1.5 md:col-span-2">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Fichier du document</label>
-                            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 w-full">
-                                <label className="w-full sm:w-auto text-center cursor-pointer bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 w-full">
+                                <label className="w-full sm:w-auto text-center cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
                                     <FolderOpen size={16} />
                                     {docFile ? docFile.name : "Choisir un fichier"}
                                     <input type="file" onChange={e => { setDocFile(e.target.files[0]); if(e.target.files[0]) setForm({...form, url:""}); }} className="hidden" />
@@ -251,7 +251,7 @@ export default function ManageDocs() {
                                     value={form.url} 
                                     onChange={e => { setForm({ ...form, url: e.target.value }); if(e.target.value) setDocFile(null); }}
                                     placeholder="Coller un lien URL externe" 
-                                    className="input-field flex-grow w-full bg-white" 
+                                    className="input-field flex-grow w-full bg-white dark:bg-ucak-dark-card" 
                                 />
                             </div>
                         </div>
@@ -276,7 +276,7 @@ export default function ManageDocs() {
                                 <select 
                                     value={form.categorie} 
                                     onChange={e => setForm({ ...form, categorie: e.target.value })}
-                                    className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                    className="input-field bg-white dark:bg-ucak-dark-card appearance-none pr-10 font-semibold cursor-pointer"
                                 >
                                     {CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
                                 </select>
@@ -292,7 +292,7 @@ export default function ManageDocs() {
                                     <select 
                                         value={form.filiere} 
                                         onChange={e => setForm({ ...form, filiere: e.target.value })}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                        className="input-field bg-white dark:bg-ucak-dark-card appearance-none pr-10 font-semibold cursor-pointer"
                                     >
                                         <option value="IT">Informatique & Télécommunications (IT)</option>
                                         <option value="HEC">Hautes Études Commerciales (HEC)</option>
@@ -310,7 +310,7 @@ export default function ManageDocs() {
                                     <select 
                                         value={form.niveau} 
                                         onChange={e => setForm({ ...form, niveau: e.target.value })}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                        className="input-field bg-white dark:bg-ucak-dark-card appearance-none pr-10 font-semibold cursor-pointer"
                                     >
                                         <option value="L1IT">L1IT - Technologies de l'Information</option>
                                         <option value="L1HEC">L1HEC - Hautes Études Commerciales</option>
@@ -342,7 +342,7 @@ export default function ManageDocs() {
                             />
                         </div>
 
-                        <div className="md:col-span-2 flex items-center justify-end pt-4 border-t border-slate-100">
+                        <div className="md:col-span-2 flex items-center justify-end pt-4 border-t border-slate-100 dark:border-white/10">
                             <button type="submit" disabled={submitting} className="btn-primary w-full mt-2">
                                 {submitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                                 Publier le document
@@ -365,7 +365,7 @@ export default function ManageDocs() {
                             <p className="text-sm font-medium text-slate-500">Chargement...</p>
                         </div>
                     ) : docs.length === 0 ? (
-                        <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                             <FolderOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucun document publié pour le moment.</p>
                         </div>
@@ -375,20 +375,20 @@ export default function ManageDocs() {
                                 <div key={doc.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative">
                                     <button 
                                         onClick={() => setConfirmDel(doc)}
-                                        className="absolute top-3 right-3 w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                                        className="absolute top-3 right-3 w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm opacity-100 md:opacity-0 md:group-hover:opacity-100"
                                     >
                                         <Trash2 size={14} />
                                     </button>
                                     <div>
                                         <div className="flex items-start gap-3 mb-3">
-                                            <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                            <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100 dark:border-white/10">
                                                 <FileText size={20} className="text-[#003058] dark:text-white" />
                                             </div>
                                             <div className="flex-grow min-w-0 pr-6">
                                                 <h3 className="text-xs font-bold text-[#003058] dark:text-white leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
                                                     {doc.nom}
                                                 </h3>
-                                                <span className="text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark border border-slate-200 px-1.5 py-0.5 rounded tracking-wide uppercase">
+                                                <span className="text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark border border-slate-200 dark:border-white/10 px-1.5 py-0.5 rounded tracking-wide uppercase">
                                                     {doc.categorie}
                                                 </span>
                                             </div>

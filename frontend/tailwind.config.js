@@ -15,11 +15,12 @@ export default {
           lime: '#84CC16',        // Accent - Énergie et dynamique
           blue: '#003058',        // Bleu MET
           green: '#187840',       // Vert MET
-          gold: '#FBBF24',        
+          gold: '#FBBF24',
           light: '#F8F0F0',       // Gris clair
-          dark: '#002850',        // Bleu foncé secondaire
-          'dark-card': '#1E293B', 
-          'dark-hover': '#334155' 
+          // Palette nuit dérivée du navy du logo (#003058), même teinte assombrie
+          dark: '#03121F',        // Fond de page nuit
+          'dark-card': '#08283F',
+          'dark-hover': '#0C3A5C'
         },
       },
       fontSize: {

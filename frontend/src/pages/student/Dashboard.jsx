@@ -126,11 +126,11 @@ export default function Dashboard() {
 
             {/* Quick Access */}
             <div className="anim-fade-up space-y-3">
-                <h2 className="text-sm font-semibold text-slate-800 tracking-tight">Accès rapide</h2>
+                <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight">Accès rapide</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                     {actions.map((a, i) => (
                         <button key={i} onClick={() => navigate(a.path)} className="group relative overflow-hidden text-left rounded-2xl p-4 md:p-5 hover-lift shadow-sm active:scale-[0.98]" style={{ backgroundColor: a.color, boxShadow: `0 4px 12px -3px ${a.color}45`, animationDelay: `${i * 0.05}s` }}>
-                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.06] transition-opacity duration-200" />
+                            <div className="absolute inset-0 bg-white dark:bg-ucak-dark-card opacity-0 group-hover:opacity-[0.06] transition-opacity duration-200" />
                             <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center mb-3 md:mb-4"><a.Icon size={16} className="text-white" /></div>
                             <p className="font-semibold text-xs md:text-sm text-white tracking-tight">{a.label}</p>
                             <p className="text-[10px] text-white/70 mt-0.5 leading-relaxed line-clamp-1">{a.desc}</p>
@@ -142,19 +142,19 @@ export default function Dashboard() {
             {/* Last Additions */}
             <div className="anim-fade-up space-y-3">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-semibold text-slate-800 tracking-tight">Derniers ajouts à la bibliothèque</h2>
+                    <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight">Derniers ajouts à la bibliothèque</h2>
                     <button onClick={() => navigate('/student/library')} className="text-xs font-semibold text-[#187840] hover:text-[#125e31] transition-colors flex items-center gap-0.5">Voir tout <ChevronRight size={14} /></button>
                 </div>
                 {bibliotheque.length === 0 ? (
                     <div className="card p-10 text-center"><p className="text-xs text-slate-400 font-medium">Aucune ressource disponible pour le moment.</p></div>
                 ) : (
-                    <div className="card divide-y divide-slate-50 overflow-hidden shadow-sm border border-slate-100">
+                    <div className="card divide-y divide-slate-50 dark:divide-white/5 overflow-hidden shadow-sm border border-slate-100 dark:border-white/10">
                         {bibliotheque.slice(0, 5).map((b) => (
-                            <div key={b.id} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50 transition-colors duration-150">
+                            <div key={b.id} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors duration-150">
                                 <div className="flex items-center gap-3 min-w-0">
                                     <div className="w-8 h-8 bg-[#187840]/10 rounded-lg flex items-center justify-center shrink-0 border border-[#187840]/15"><FileText size={16} className="text-[#187840]" /></div>
                                     <div className="min-w-0">
-                                        <p className="text-xs font-bold text-slate-700 truncate">{b.nom}</p>
+                                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{b.nom}</p>
                                         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                             <span className="text-[9px] font-black text-[#003058] dark:text-white bg-[#003058]/5 px-1.5 py-0.5 rounded uppercase tracking-wider">{formatCategory(b.categorie)}</span>
                                             <span className="text-[9px] font-bold text-slate-400">{b.niveau}</span>
@@ -162,7 +162,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                                 {b.url && (
-                                    <a href={b.url} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[10px] font-bold text-[#187840] hover:text-[#125e31] border border-[#187840]/25 hover:border-[#187840]/50 px-3 py-1.5 rounded-lg bg-white shadow-sm transition-all duration-150">
+                                    <a href={b.url} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[10px] font-bold text-[#187840] hover:text-[#125e31] border border-[#187840]/25 hover:border-[#187840]/50 px-3 py-1.5 rounded-lg bg-white dark:bg-ucak-dark-card shadow-sm transition-all duration-150">
                                         Consulter
                                     </a>
                                 )}

@@ -61,7 +61,7 @@ export default function AdminPanel() {
                         <LayoutDashboard className="text-[#187840] w-8 h-8" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight">Panel Administrateur</h1>
+                        <h1 className="text-2xl md:text-3xl font-black tracking-tight">Panel Administrateur</h1>
                         <p className="text-slate-400 mt-1 text-sm font-medium">Gestion centralisée de la plateforme Club-MET</p>
                     </div>
                 </div>
@@ -73,9 +73,9 @@ export default function AdminPanel() {
                     <Link
                         key={idx}
                         to={action.path}
-                        className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#187840]/30 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden"
+                        className="bg-white dark:bg-ucak-dark-card p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm hover:shadow-xl hover:border-[#187840]/30 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden"
                     >
-                        <div className="w-14 h-14 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl flex items-center justify-center mb-6 text-[#003058] dark:text-white group-hover:bg-[#187840] group-hover:text-white transition-colors duration-300 border border-slate-100 group-hover:border-[#187840]">
+                        <div className="w-14 h-14 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl flex items-center justify-center mb-6 text-[#003058] dark:text-white group-hover:bg-[#187840] group-hover:text-white transition-colors duration-300 border border-slate-100 dark:border-white/10 group-hover:border-[#187840]">
                             <action.icon size={26} strokeWidth={2} />
                         </div>
                         {action.badge !== undefined && action.badge > 0 && (

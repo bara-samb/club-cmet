@@ -144,7 +144,7 @@ export default function ManageMessages() {
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un expéditeur ou mot-clé..."
-                        className="w-full pl-12 pr-4 py-3 bg-white border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-700"
+                        className="w-full pl-12 pr-4 py-3 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-700 dark:text-slate-200"
                     />
                     {recherche && (
                         <button onClick={() => setRecherche('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -155,7 +155,7 @@ export default function ManageMessages() {
             </div>
 
             {/* Barre de Filtres */}
-            <div className="bg-white p-5 rounded-2xl border border-gray-200/60 shadow-sm mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="bg-white dark:bg-ucak-dark-card p-5 rounded-2xl border border-gray-200/60 dark:border-white/10 shadow-sm mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-[#003058] dark:text-white font-bold text-sm">
                     <Filter size={16} className="text-[#187840]" /> Filtres rapides :
                 </div>
@@ -188,17 +188,17 @@ export default function ManageMessages() {
                     </div>
                 </div>
             ) : messagesFiltrés.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-3xl border border-gray-200/60 shadow-sm">
+                <div className="text-center py-20 bg-white dark:bg-ucak-dark-card rounded-3xl border border-gray-200/60 dark:border-white/10 shadow-sm">
                     <MailOpen className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                     <p className="text-base font-bold text-slate-400">Aucun message trouvé</p>
                     <p className="text-xs text-slate-300 mt-2">Votre boîte de réception est vide ou aucun message ne correspond à vos critères.</p>
                 </div>
             ) : (
-                <div className="bg-white rounded-3xl border border-gray-200/60 shadow-sm overflow-hidden">
+                <div className="bg-white dark:bg-ucak-dark-card rounded-3xl border border-gray-200/60 dark:border-white/10 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse text-xs">
+                        <table className="w-full min-w-[680px] text-left border-collapse text-xs">
                             <thead>
-                                <tr className="bg-slate-50 border-b border-gray-100 text-[#003058] dark:text-white font-bold uppercase tracking-wider">
+                                <tr className="bg-slate-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 text-[#003058] dark:text-white font-bold uppercase tracking-wider">
                                     <th className="p-4 pl-6 w-16 text-center">Statut</th>
                                     <th className="p-4">Expéditeur</th>
                                     <th className="p-4">Message</th>
@@ -206,7 +206,7 @@ export default function ManageMessages() {
                                     <th className="p-4 w-24 text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                                 {messagesFiltrés.map(msg => (
                                     <tr 
                                         key={msg.id} 
@@ -229,13 +229,13 @@ export default function ManageMessages() {
                                         {/* Expéditeur */}
                                         <td className="p-4">
                                             <div className="flex flex-col">
-                                                <span className="text-slate-800 font-bold max-w-[200px] truncate">{msg.nom}</span>
+                                                <span className="text-slate-800 dark:text-slate-100 font-bold max-w-[200px] truncate">{msg.nom}</span>
                                                 <span className="text-[10px] text-slate-400 font-medium truncate max-w-[200px] mt-0.5">{msg.email}</span>
                                             </div>
                                         </td>
                                         
                                         {/* Extrait Message */}
-                                        <td className="p-4 max-w-xs md:max-w-md truncate font-medium text-slate-600">
+                                        <td className="p-4 max-w-xs md:max-w-md truncate font-medium text-slate-600 dark:text-slate-300">
                                             {msg.message}
                                         </td>
                                         
@@ -270,7 +270,7 @@ export default function ManageMessages() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             onClick={e => e.stopPropagation()}
-                            className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 overflow-hidden relative text-left">
+                            className="bg-white dark:bg-ucak-dark-card rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden relative text-left">
                             
                             <button 
                                 onClick={() => setActiveMessage(null)}
@@ -289,10 +289,10 @@ export default function ManageMessages() {
                             </div>
 
                             {/* Contenu Expéditeur */}
-                            <div className="bg-[#f1f5f9] dark:bg-ucak-dark/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100">
+                            <div className="bg-[#f1f5f9] dark:bg-ucak-dark/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100 dark:border-white/10">
                                 <div className="flex items-center gap-2 text-xs">
                                     <User size={14} className="text-[#003058] dark:text-white" />
-                                    <span className="font-bold text-slate-700">{activeMessage.nom}</span>
+                                    <span className="font-bold text-slate-700 dark:text-slate-200">{activeMessage.nom}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-xs">
                                     <Mail size={14} className="text-[#003058] dark:text-white" />
@@ -301,7 +301,7 @@ export default function ManageMessages() {
                                 {activeMessage.telephone && (
                                     <div className="flex items-center gap-2 text-xs">
                                         <Phone size={14} className="text-[#003058] dark:text-white" />
-                                        <a href={`tel:${activeMessage.telephone}`} className="text-slate-600 font-bold hover:underline">{activeMessage.telephone}</a>
+                                        <a href={`tel:${activeMessage.telephone}`} className="text-slate-600 dark:text-slate-300 font-bold hover:underline">{activeMessage.telephone}</a>
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold">
@@ -313,13 +313,13 @@ export default function ManageMessages() {
                             {/* Corps du message */}
                             <div className="mb-6">
                                 <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Message</h4>
-                                <div className="bg-white border border-gray-200/80 rounded-2xl p-4 text-xs text-slate-600 leading-relaxed max-h-60 overflow-y-auto whitespace-pre-wrap select-text text-justify">
+                                <div className="bg-white dark:bg-ucak-dark-card border border-gray-200/80 dark:border-white/10 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-h-60 overflow-y-auto whitespace-pre-wrap select-text text-justify">
                                     {activeMessage.message}
                                 </div>
                             </div>
 
                             {/* Actions du Modal */}
-                            <div className="flex justify-between items-center gap-3 pt-4 border-t border-slate-100">
+                            <div className="flex justify-between items-center gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
                                 <button
                                     onClick={() => setConfirmDelId(activeMessage.id)}
                                     className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border border-red-100">
@@ -344,14 +344,14 @@ export default function ManageMessages() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-100 text-center">
+                            className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-100 dark:border-white/10 text-center">
                             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
                             <h3 className="text-base font-black text-[#003058] dark:text-white mb-2">Supprimer ce message ?</h3>
                             <p className="text-xs text-slate-400 leading-relaxed mb-6">Cette action est irréversible. Le message sera définitivement retiré de la base de données.</p>
                             <div className="flex gap-3 justify-center">
                                 <button
                                     onClick={() => setConfirmDelId(null)}
-                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex-1">
+                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex-1">
                                     Annuler
                                 </button>
                                 <button

@@ -134,14 +134,14 @@ export default function ManageNotifications() {
             {/* Modal suppression */}
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce message ?</h3>
                         <p className="text-sm text-slate-500 mb-8">Le message diffusé sera définitivement effacé pour tous les étudiants.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDeleteNotification(confirmDel)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">Supprimer</button>
                         </div>
                     </div>
@@ -160,26 +160,26 @@ export default function ManageNotifications() {
                 </div>
             )}
 
-            <form onSubmit={handleSend} className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-lg shadow-[#003058]/5 space-y-6">
+            <form onSubmit={handleSend} className="bg-white dark:bg-ucak-dark-card p-6 md:p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-lg shadow-[#003058]/5 space-y-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-700 ml-1 uppercase tracking-wider">Contenu du message</label>
+                    <label className="text-xs font-bold text-slate-700 dark:text-slate-200 ml-1 uppercase tracking-wider">Contenu du message</label>
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="w-full h-40 p-5 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-[#187840]/30 focus:border-[#187840] outline-none transition-all resize-none text-sm leading-relaxed"
+                        className="w-full h-40 p-5 rounded-2xl border border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-[#187840]/30 focus:border-[#187840] outline-none transition-all resize-none text-sm leading-relaxed"
                         placeholder="Tapez votre message ici... Soyez clair et concis."
                         required
                     />
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-700 ml-1 uppercase tracking-wider">Image d'illustration (optionnelle)</label>
+                    <label className="text-xs font-bold text-slate-700 dark:text-slate-200 ml-1 uppercase tracking-wider">Image d'illustration (optionnelle)</label>
                     <div className="flex items-center gap-4">
                         {!imagePreview ? (
                             <button
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
-                                className="flex items-center gap-2.5 px-5 py-3 bg-[#f1f5f9] dark:bg-ucak-dark text-[#003058] dark:text-white rounded-xl border border-slate-100 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
+                                className="flex items-center gap-2.5 px-5 py-3 bg-[#f1f5f9] dark:bg-ucak-dark text-[#003058] dark:text-white rounded-xl border border-slate-100 dark:border-white/10 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
                             >
                                 <ImageIcon size={18} />
                                 Ajouter une photo
@@ -208,7 +208,7 @@ export default function ManageNotifications() {
                     />
                 </div>
 
-                <div className="pt-6 border-t border-slate-100 flex justify-end">
+                <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex justify-end">
                     <button
                         type="submit"
                         disabled={loading || !message.trim()}
@@ -234,27 +234,27 @@ export default function ManageNotifications() {
                         <p className="text-sm font-medium text-slate-500">Chargement de l'historique...</p>
                     </div>
                 ) : notifications.length === 0 ? (
-                    <div className="text-center py-12 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
+                    <div className="text-center py-12 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                         <Bell className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-sm font-bold text-slate-500">Aucun message diffusé pour le moment.</p>
                     </div>
                 ) : (
                     <div className="space-y-4">
                         {notifications.map((notif) => (
-                            <div key={notif.id} className="border border-slate-100 rounded-2xl p-5 shadow-sm flex items-start justify-between gap-4 group relative bg-white">
+                            <div key={notif.id} className="border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex items-start justify-between gap-4 group relative bg-white dark:bg-ucak-dark-card">
                                 <div className="flex-grow min-w-0 space-y-3">
                                     <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold">
                                         <Clock size={12} />
                                         <span>{new Date(notif.created_at).toLocaleString('fr-FR')}</span>
                                     </div>
                                     
-                                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap font-medium">
+                                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-medium">
                                         {notif.message}
                                     </p>
 
                                     {notif.image_url && (
                                         <a href={notif.image_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-2">
-                                            <img src={notif.image_url} alt="Attaché" className="max-w-[120px] max-h-[80px] object-cover rounded-lg border border-slate-150 shadow-sm" />
+                                            <img src={notif.image_url} alt="Attaché" className="max-w-[120px] max-h-[80px] object-cover rounded-lg border border-slate-150 dark:border-white/10 shadow-sm" />
                                         </a>
                                     )}
                                 </div>

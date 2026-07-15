@@ -143,7 +143,7 @@ export default function ManageRegisteredUsers() {
             {/* Modal de confirmation de rôle */}
             {confirmRoleUser && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5">
                             <Shield className="w-8 h-8 text-[#003058] dark:text-white" />
                         </div>
@@ -155,7 +155,7 @@ export default function ManageRegisteredUsers() {
                             </span> ?
                         </p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmRoleUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">
+                            <button onClick={() => setConfirmRoleUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
                                 Annuler
                             </button>
                             <button onClick={() => handleToggleRole(confirmRoleUser)} className="flex-1 bg-[#003058] hover:bg-[#002545] text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">
@@ -169,7 +169,7 @@ export default function ManageRegisteredUsers() {
             {/* Modal de confirmation de suppression */}
             {confirmDeleteUser && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5">
                             <ShieldAlert className="w-8 h-8 text-red-500" />
                         </div>
@@ -178,7 +178,7 @@ export default function ManageRegisteredUsers() {
                             Cette action supprimera définitivement le compte de <strong>{confirmDeleteUser.prenom} {confirmDeleteUser.nom}</strong> ({confirmDeleteUser.email}) de l'application Club-MET.
                         </p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDeleteUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">
+                            <button onClick={() => setConfirmDeleteUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
                                 Annuler
                             </button>
                             <button onClick={() => handleDeleteUser(confirmDeleteUser)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm shadow-red-500/20">
@@ -196,7 +196,7 @@ export default function ManageRegisteredUsers() {
                         <h1 className="text-3xl font-black text-[#003058] dark:text-white tracking-tight">Utilisateurs Inscrits</h1>
                         <p className="text-sm text-slate-500 mt-1 font-medium">Visualiser, filtrer et gérer les permissions des utilisateurs enregistrés sur la plateforme.</p>
                     </div>
-                    <button onClick={fetchUsers} className="self-start md:self-auto flex items-center gap-2 bg-white dark:bg-ucak-dark-card border border-slate-200 dark:border-white/10 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors">
+                    <button onClick={fetchUsers} className="self-start md:self-auto flex items-center gap-2 bg-white dark:bg-ucak-dark-card border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors">
                         <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Actualiser
                     </button>
                 </div>
@@ -208,7 +208,7 @@ export default function ManageRegisteredUsers() {
                             <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Utilisateurs</span>
                             <span className="block text-2xl font-black text-[#003058] dark:text-white mt-1">{totalCount}</span>
                         </div>
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+                        <div className="w-12 h-12 bg-slate-50 dark:bg-white/5 rounded-xl flex items-center justify-center text-slate-400">
                             <User size={22} />
                         </div>
                     </div>
@@ -242,7 +242,7 @@ export default function ManageRegisteredUsers() {
                             placeholder="Rechercher par nom, prénom ou email..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
+                            className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
                         />
                     </div>
 
@@ -251,7 +251,7 @@ export default function ManageRegisteredUsers() {
                         <select
                             value={roleFilter}
                             onChange={(e) => setRoleFilter(e.target.value)}
-                            className="w-full appearance-none bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
+                            className="w-full appearance-none bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
                         >
                             <option value="all">Tous les rôles</option>
                             <option value="student">Étudiants</option>
@@ -265,7 +265,7 @@ export default function ManageRegisteredUsers() {
                         <select
                             value={levelFilter}
                             onChange={(e) => setLevelFilter(e.target.value)}
-                            className="w-full appearance-none bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
+                            className="w-full appearance-none bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:border-[#187840] cursor-pointer"
                         >
                             <option value="all">Tous les niveaux</option>
                             {NIVEAUX.map((l) => (
@@ -286,16 +286,16 @@ export default function ManageRegisteredUsers() {
                             <p className="text-sm font-bold text-slate-500">Chargement des comptes...</p>
                         </div>
                     ) : filteredUsers.length === 0 ? (
-                        <div className="text-center py-20 bg-white px-4">
+                        <div className="text-center py-20 bg-white dark:bg-ucak-dark-card px-4">
                             <User className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                            <h3 className="font-bold text-slate-600">Aucun utilisateur trouvé</h3>
+                            <h3 className="font-bold text-slate-600 dark:text-slate-300">Aucun utilisateur trouvé</h3>
                             <p className="text-xs text-slate-400 mt-1">Essayez d'ajuster vos filtres ou termes de recherche.</p>
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full border-collapse text-left">
+                            <table className="w-full min-w-[760px] border-collapse text-left">
                                 <thead>
-                                    <tr className="border-b border-slate-100 bg-slate-50/70">
+                                    <tr className="border-b border-slate-100 dark:border-white/10 bg-slate-50/70">
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Utilisateur</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Email</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Niveau / Classe</th>
@@ -303,7 +303,7 @@ export default function ManageRegisteredUsers() {
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
+                                <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                                     {filteredUsers.map((user) => {
                                         const initials = `${user.prenom?.[0] || ""}${user.nom?.[0] || ""}`.toUpperCase();
                                         const isActionLoading = actionLoading === user.id;
@@ -326,13 +326,13 @@ export default function ManageRegisteredUsers() {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+                                                    <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium">
                                                         <Mail size={12} className="text-slate-400" />
                                                         {user.email}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
+                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark border border-slate-200/50 dark:border-white/10 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
                                                         {user.niveau || "Non spécifié"}
                                                     </span>
                                                 </td>
@@ -368,14 +368,14 @@ export default function ManageRegisteredUsers() {
                                                                 <button
                                                                     onClick={() => setConfirmRoleUser(user)}
                                                                     title={user.role === "admin" ? "Rétrograder en Étudiant" : "Promouvoir en Administrateur"}
-                                                                    className="p-2 bg-slate-50 hover:bg-[#003058]/10 text-[#003058] dark:text-white border border-slate-200 hover:border-[#003058]/20 rounded-xl transition-all shadow-sm"
+                                                                    className="p-2 bg-slate-50 dark:bg-white/5 hover:bg-[#003058]/10 text-[#003058] dark:text-white border border-slate-200 dark:border-white/10 hover:border-[#003058]/20 rounded-xl transition-all shadow-sm"
                                                                 >
                                                                     <Shield size={14} />
                                                                 </button>
                                                                 <button
                                                                     onClick={() => setConfirmDeleteUser(user)}
                                                                     title="Supprimer l'utilisateur"
-                                                                    className="p-2 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 border border-slate-200 hover:border-red-200 rounded-xl transition-all shadow-sm"
+                                                                    className="p-2 bg-slate-50 dark:bg-white/5 hover:bg-red-50 text-slate-400 hover:text-red-500 border border-slate-200 dark:border-white/10 hover:border-red-200 rounded-xl transition-all shadow-sm"
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>

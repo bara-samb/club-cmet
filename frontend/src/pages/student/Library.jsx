@@ -138,9 +138,9 @@ export default function Library() {
             examens:       'bg-red-50 text-red-700 border-red-200',
             projets:       'bg-indigo-50 text-indigo-700 border-indigo-200',
             maquette:      'bg-amber-50 text-amber-700 border-amber-200',
-            autres:        'bg-slate-50 text-slate-700 border-slate-200',
+            autres:        'bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10',
         };
-        return colors[cat] || 'bg-slate-50 text-slate-700 border-slate-200';
+        return colors[cat] || 'bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10';
     };
 
     const badgeLabel = (cat) => {
@@ -177,7 +177,7 @@ export default function Library() {
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un document..."
-                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
+                        className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#187840] focus:ring-1 focus:ring-[#187840] font-medium transition-all"
                     />
                     {recherche && (
                         <button onClick={() => setRecherche('')}
@@ -192,7 +192,7 @@ export default function Library() {
                     <select
                         value={filtreCat}
                         onChange={e => setFiltreCat(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
+                        className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
                     >
                         {CATEGORIES.map(cat => (
                             <option key={cat.id} value={cat.id}>
@@ -208,7 +208,7 @@ export default function Library() {
                     <select
                         value={filtreNiveau}
                         onChange={e => setFiltreNiveau(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200/80 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
+                        className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-semibold focus:outline-none focus:border-[#187840] appearance-none cursor-pointer"
                     >
                         <option value="Tous">Tous les niveaux</option>
                         {LEVELS_ORDER.map(level => (
@@ -230,7 +230,7 @@ export default function Library() {
                     </div>
                 </div>
             ) : documentsFiltrés.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-3xl border border-gray-200/60 shadow-sm">
+                <div className="text-center py-20 bg-white dark:bg-ucak-dark-card rounded-3xl border border-gray-200/60 dark:border-white/10 shadow-sm">
                     <FileX className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                     <p className="text-base font-bold text-slate-400">Aucun document trouvé</p>
                     <p className="text-sm text-slate-300 mt-2">Aucun cours ne correspond à ces critères de recherche.</p>
@@ -238,12 +238,12 @@ export default function Library() {
             ) : (
                 <div className="space-y-8">
                     {levelsGrouped.map(group => (
-                        <div key={group.id} className="bg-white/40 rounded-3xl border border-gray-200/50 overflow-hidden shadow-sm">
+                        <div key={group.id} className="bg-white/40 rounded-3xl border border-gray-200/50 dark:border-white/10 overflow-hidden shadow-sm">
                             
                             {/* En-tête du niveau */}
                             <button 
                                 onClick={() => toggleLevelExpand(group.id)}
-                                className="w-full bg-white px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition-colors border-b border-gray-100">
+                                className="w-full bg-white dark:bg-ucak-dark-card px-6 py-4 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/10">
                                 <div className="flex items-center gap-3">
                                     <span className="w-2.5 h-6 rounded-full" style={{ backgroundColor: group.color }} />
                                     <h2 className="text-sm font-extrabold text-[#003058] dark:text-white tracking-wide uppercase">{group.label} ({group.docs.length})</h2>
@@ -271,10 +271,10 @@ export default function Library() {
                                             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                                                 {group.docs.map(doc => (
                                                     <div key={doc.id}
-                                                         className="bg-white border border-[#e2e8f0]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
+                                                         className="bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                                                         <div>
                                                             <div className="flex items-start gap-3 mb-3">
-                                                                <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                                                <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100 dark:border-white/10">
                                                                     <FileText size={20} className="text-[#003058] dark:text-white" />
                                                                 </div>
                                                                 <div className="flex-grow min-w-0">

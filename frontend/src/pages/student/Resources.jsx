@@ -92,7 +92,7 @@ export default function Resources() {
         if (cat === 'reglement') return 'text-red-600 bg-red-50 border-red-200';
         if (cat === 'rapports') return 'text-[#187840] bg-[#187840]/10 border-[#187840]/20';
         if (cat === 'comptes_rendus') return 'text-blue-600 bg-blue-50 border-blue-200';
-        return 'text-slate-500 bg-slate-50 border-slate-200';
+        return 'text-slate-500 bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10';
     };
 
     const ouvrirFichier = (url) => {
@@ -131,7 +131,7 @@ export default function Resources() {
                         value={recherche}
                         onChange={e => setRecherche(e.target.value)}
                         placeholder="Rechercher un document..."
-                        className="w-full pl-12 pr-4 py-2.5 bg-white border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-800"
+                        className="w-full pl-12 pr-4 py-2.5 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] rounded-xl text-sm focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 shadow-sm transition-all font-medium text-slate-800 dark:text-slate-100"
                     />
                 </div>
             </div>
@@ -142,7 +142,7 @@ export default function Resources() {
                     <button
                         key={cat.id}
                         onClick={() => setCatActive(cat.id)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap border transition-all ${catActive === cat.id ? 'bg-[#003058] text-white border-[#003058] shadow-md shadow-[#003058]/15' : 'bg-white text-slate-500 border-slate-200/80 hover:border-slate-300'}`}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap border transition-all ${catActive === cat.id ? 'bg-[#003058] text-white border-[#003058] shadow-md shadow-[#003058]/15' : 'bg-white dark:bg-ucak-dark-card text-slate-500 border-slate-200/80 dark:border-white/10 hover:border-slate-300'}`}
                     >
                         {cat.label}
                     </button>
@@ -161,7 +161,7 @@ export default function Resources() {
                     <p className="text-sm font-semibold">{error}</p>
                 </div>
             ) : filtrés.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 border-dashed">
+                <div className="text-center py-20 bg-white dark:bg-ucak-dark-card rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                     <FolderOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                     <p className="text-sm font-bold text-slate-500">Aucun document ne correspond à vos critères.</p>
                 </div>
@@ -171,7 +171,7 @@ export default function Resources() {
                         <div key={doc.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                    <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100 dark:border-white/10">
                                         <FileText size={20} className="text-[#003058] dark:text-white" />
                                     </div>
                                     <div className="flex-grow min-w-0">

@@ -42,7 +42,7 @@ export default function UfrMet() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* IT */}
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col group hover:shadow-lg transition-all duration-300">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col group hover:shadow-lg transition-all duration-300">
                         <div className="bg-gradient-to-br from-[#003058] to-[#004a8c] px-6 pt-6 pb-8 relative overflow-hidden">
                             <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-[#187840]/20 rounded-full" />
@@ -69,7 +69,7 @@ export default function UfrMet() {
                                 Le Département Informatique et Télécommunications forme les futurs experts du numérique à travers un cursus rigoureux mêlant développement d'applications, administration de bases de données, sécurité des réseaux et administration Linux avancée.
                             </p>
                         </div>
-                        <div className="border-t border-gray-100 px-6 py-4 text-center">
+                        <div className="border-t border-gray-100 dark:border-white/10 px-6 py-4 text-center">
                             <button onClick={() => navigate('/login')}
                                 className="text-xs font-bold text-[#003058] dark:text-white hover:text-[#187840] transition-colors">
                                 Se connecter pour accéder aux maquettes
@@ -78,7 +78,7 @@ export default function UfrMet() {
                     </div>
 
                     {/* HEC */}
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col group hover:shadow-lg transition-all duration-300">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col group hover:shadow-lg transition-all duration-300">
                         <div className="bg-gradient-to-br from-amber-600 to-amber-800 px-6 pt-6 pb-8 relative overflow-hidden">
                             <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/10 rounded-full" />
@@ -105,7 +105,7 @@ export default function UfrMet() {
                                 Le Département Hautes Études Commerciales prépare les futurs cadres et leaders financiers à travers des formations de pointe en comptabilité, contrôle de gestion, audit, finance d'entreprise et techniques de management stratégique.
                             </p>
                         </div>
-                        <div className="border-t border-gray-100 px-6 py-4 text-center">
+                        <div className="border-t border-gray-100 dark:border-white/10 px-6 py-4 text-center">
                             <button onClick={() => navigate('/login')}
                                 className="text-xs font-bold text-[#003058] dark:text-white hover:text-[#187840] transition-colors">
                                 Se connecter pour accéder aux maquettes

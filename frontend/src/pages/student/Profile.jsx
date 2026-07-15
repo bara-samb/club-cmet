@@ -90,14 +90,14 @@ export default function Profile() {
                 </div>
             </div>
 
-            <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-8">
+            <div className="bg-white dark:bg-ucak-dark-card p-6 md:p-8 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm space-y-8">
                 {/* Photo de profil */}
                 <div className="flex flex-col items-center gap-4">
                     <div className="relative group">
                         {user?.avatar_url ? (
                             <img
                                 src={user.avatar_url}
-                                className="w-32 h-32 rounded-full object-cover border-4 border-slate-100 shadow-md transition-all group-hover:brightness-90"
+                                className="w-32 h-32 rounded-full object-cover border-4 border-slate-100 dark:border-white/10 shadow-md transition-all group-hover:brightness-90"
                                 alt="Avatar"
                             />
                         ) : (
@@ -117,7 +117,7 @@ export default function Profile() {
                 <div className="space-y-5">
                     <div className="space-y-1.5">
                         <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Adresse e-mail</label>
-                        <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed" value={session?.user?.email || ''} disabled />
+                        <input className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 rounded-xl text-xs font-semibold cursor-not-allowed" value={session?.user?.email || ''} disabled />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

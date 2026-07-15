@@ -32,7 +32,7 @@ export default function ManageCotisations() {
                     .from('config')
                     .select('valeur')
                     .eq('cle', 'wave_link')
-                    .single();
+                    .maybeSingle();
                 if (configData && configData.valeur && active) {
                     setWaveLink(configData.valeur);
                 }
@@ -49,7 +49,7 @@ export default function ManageCotisations() {
                 // 3. Charger les comptes étudiants enregistrés
                 const { data: usersData } = await supabase
                     .from('users')
-                    .select('id, prenom, nom, classe')
+                    .select('id, prenom, nom, niveau')
                     .eq('role', 'student');
                 if (usersData && active) {
                     setEtudiants(usersData);
@@ -128,7 +128,7 @@ export default function ManageCotisations() {
             const selected = etudiants.find(et => et.id === selectedEtudiantId);
             if (selected) {
                 finalNom = `${selected.prenom} ${selected.nom}`.trim();
-                finalClasse = selected.classe || 'Licence';
+                finalClasse = selected.niveau || 'Licence';
                 userIdToInsert = selected.id;
             }
         }
@@ -196,14 +196,14 @@ export default function ManageCotisations() {
             {/* Modal Suppression */}
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Rejeter ce paiement ?</h3>
                         <p className="text-sm text-slate-500 mb-8">La déclaration de <strong>{confirmDel.nom}</strong> sera définitivement supprimée.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDelete(confirmDel.id)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">Supprimer</button>
                         </div>
                     </div>
@@ -259,15 +259,15 @@ export default function ManageCotisations() {
                                                 const selected = etudiants.find(et => et.id === e.target.value);
                                                 if (selected) {
                                                     setManualNom(`${selected.prenom} ${selected.nom}`);
-                                                    setManualClasse(selected.classe || '');
+                                                    setManualClasse(selected.niveau || '');
                                                 }
                                             }
                                         }}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer"
+                                        className="input-field bg-white dark:bg-ucak-dark-card appearance-none pr-10 font-semibold cursor-pointer"
                                     >
                                         <option value="">— Sélectionner un étudiant inscrit (Optionnel) —</option>
                                         {etudiants.map(et => (
-                                            <option key={et.id} value={et.id}>{et.prenom} {et.nom} ({et.classe || 'Non défini'})</option>
+                                            <option key={et.id} value={et.id}>{et.prenom} {et.nom} ({et.niveau || 'Non défini'})</option>
                                         ))}
                                     </select>
                                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
@@ -337,15 +337,15 @@ export default function ManageCotisations() {
                             <p className="text-sm font-medium text-slate-500">Chargement des cotisations...</p>
                         </div>
                     ) : cotisations.length === 0 ? (
-                        <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 border-dashed">
                             <CreditCard className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucune cotisation enregistrée pour le moment.</p>
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse text-xs md:text-sm">
+                            <table className="w-full min-w-[720px] text-left border-collapse text-xs md:text-sm">
                                 <thead>
-                                    <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                    <tr className="border-b border-slate-100 dark:border-white/10 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                                         <th className="py-4 px-4">Nom & Classe</th>
                                         <th className="py-4 px-4">Montant</th>
                                         <th className="py-4 px-4">Date de Paiement</th>
@@ -354,7 +354,7 @@ export default function ManageCotisations() {
                                         <th className="py-4 px-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-50">
+                                <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                                     {cotisations.map(c => (
                                         <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
                                             <td className="py-4 px-4">
@@ -367,7 +367,7 @@ export default function ManageCotisations() {
                                             <td className="py-4 px-4 text-slate-500 font-medium">
                                                 {c.date_paiement}
                                             </td>
-                                            <td className="py-4 px-4 text-slate-600 font-medium text-xs">
+                                            <td className="py-4 px-4 text-slate-600 dark:text-slate-300 font-medium text-xs">
                                                 {c.enregistre_par || <span className="text-slate-300 italic text-[11px]">Système</span>}
                                             </td>
                                             <td className="py-4 px-4">
@@ -386,7 +386,7 @@ export default function ManageCotisations() {
                                                     {c.statut === 'en_attente' && (
                                                         <button 
                                                             onClick={() => handleValidate(c.id)}
-                                                            className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-green-500 hover:text-green-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                            className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-green-500 hover:text-green-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                             title="Valider la cotisation"
                                                         >
                                                             <Check size={14} />
@@ -394,7 +394,7 @@ export default function ManageCotisations() {
                                                     )}
                                                     <button 
                                                         onClick={() => setConfirmDel(c)}
-                                                        className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                                        className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                                         title="Supprimer la déclaration"
                                                     >
                                                         <Trash2 size={14} />
