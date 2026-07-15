@@ -39,7 +39,7 @@ export default function PublicLayout() {
     ];
 
     return (
-        <div className="min-h-screen bg-white dark:bg-ucak-dark flex flex-col justify-between antialiased text-slate-800 dark:text-slate-100 transition-colors">
+        <div className="min-h-screen bg-white/85 dark:bg-ucak-dark/90 flex flex-col justify-between antialiased text-slate-800 dark:text-slate-100 transition-colors">
             {/* ════════ HIGH-END INSTITUTIONAL NAVBAR ════════ */}
             <nav className="bg-white dark:bg-ucak-dark-card text-slate-800 dark:text-slate-100 px-6 md:px-10 py-4 flex justify-between items-center border-b border-slate-200/80 dark:border-white/10 fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-150">
                 <Link to="/" className="flex items-center gap-3 cursor-pointer">

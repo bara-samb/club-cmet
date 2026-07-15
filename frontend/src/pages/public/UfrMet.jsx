@@ -5,7 +5,7 @@ export default function UfrMet() {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-[#f8fafc] dark:bg-ucak-dark min-h-screen">
+        <div className="bg-[#f8fafc]/85 dark:bg-ucak-dark/90 min-h-screen">
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">L'UFR Métiers & Technologies</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">

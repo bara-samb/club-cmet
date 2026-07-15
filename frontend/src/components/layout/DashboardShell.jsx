@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, LogOut, Menu, X, ChevronLeft, Sun, Moon, SwitchView } from '../ui/Icons';
+import { Bell, LogOut, X, ChevronLeft, Sun, Moon, SwitchView, MoreHorizontal } from '../ui/Icons';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import { supabase } from '../../config/supabaseClient';
 import InstallAppButton from '../ui/InstallAppButton';
 
 /**
- * Charpente commune aux espaces Admin et Étudiant : header mobile, sidebar
- * responsive, topbar desktop, cloche de notifications et zone de contenu
- * animée. AdminLayout / StudentLayout ne font que passer leur configuration
- * (menu, libellés, lien de bascule vers l'autre espace).
+ * Charpente commune aux espaces Admin et Étudiant : sidebar desktop, topbar
+ * desktop, et — côté mobile — une bottom tab bar unique (items principaux +
+ * bouton "Plus") au lieu d'un menu hamburger, pour une ergonomie identique
+ * quel que soit le rôle. AdminLayout / StudentLayout ne font que passer leur
+ * configuration (menu, items prioritaires mobile, lien de bascule de rôle).
  */
-export default function DashboardShell({ panelLabel, topbarContext, menuItems, crossNav }) {
+export default function DashboardShell({ panelLabel, topbarContext, menuItems, mobilePrimary, crossNav }) {
     const location = useLocation();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMoreOpen, setIsMoreOpen] = useState(false);
     const { user, signOut } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+    const primaryItems = mobilePrimary
+        ? mobilePrimary.map(path => menuItems.find(i => i.path === path)).filter(Boolean)
+        : menuItems.slice(0, 4);
+    const moreItems = menuItems.filter(item => !primaryItems.includes(item));
 
     useEffect(() => {
         let active = true;
@@ -74,10 +80,8 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
         }
     };
 
-    const closeMobileMenu = () => setIsMobileMenuOpen(false);
-
     return (
-        <div className="min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark flex flex-col md:flex-row transition-colors">
+        <div className="min-h-screen bg-[#f1f5f9]/85 dark:bg-ucak-dark/90 flex flex-col md:flex-row transition-colors">
             {/* Mobile Header */}
             <div className="md:hidden bg-[#003058] text-white p-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
                 <div className="flex items-center gap-3">
@@ -102,13 +106,6 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
                             )}
                         </button>
                     </div>
-
-                    <button onClick={signOut} title="Déconnexion" className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition">
-                        <LogOut size={20} />
-                    </button>
-                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 rounded-lg text-white hover:bg-white/10 transition">
-                        {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-                    </button>
                 </div>
             </div>
 
@@ -135,17 +132,9 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
                 </div>
             )}
 
-            {/* Overlay pour mobile */}
-            {isMobileMenuOpen && (
-                <div
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity"
-                    onClick={closeMobileMenu}
-                />
-            )}
-
-            {/* Sidebar Fixe */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#003058] text-white p-6 flex flex-col shrink-0 overflow-y-auto transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}>
-                <div className="mb-10 hidden md:flex items-center gap-3">
+            {/* Sidebar — desktop uniquement, la navigation mobile passe par la bottom bar */}
+            <aside className="hidden md:flex md:relative w-64 bg-[#003058] text-white p-6 flex-col shrink-0 overflow-y-auto">
+                <div className="mb-10 flex items-center gap-3">
                     <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border-2 border-[#003058]/60" />
                     <div>
                         <h1 className="text-lg font-black text-white leading-none">Club-MET</h1>
@@ -155,7 +144,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
 
                 <nav className="flex-grow space-y-2">
                     {menuItems.map((item) => (
-                        <Link key={item.path} to={item.path} onClick={closeMobileMenu}
+                        <Link key={item.path} to={item.path}
                             className={`flex items-center gap-3 p-3 rounded-xl transition ${location.pathname === item.path ? 'bg-[#187840] text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
                             <item.Icon size={20} />
                             <span className="font-medium">{item.label}</span>
@@ -165,7 +154,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
 
                 <div className="mt-auto space-y-4 pt-6 border-t border-white/10">
                     {crossNav && (
-                        <Link to={crossNav.to} onClick={closeMobileMenu} className="flex items-center gap-3 p-3 text-[#187840] bg-[#187840]/10 hover:bg-[#187840]/20 rounded-xl transition font-bold text-sm">
+                        <Link to={crossNav.to} className="flex items-center gap-3 p-3 text-[#187840] bg-[#187840]/10 hover:bg-[#187840]/20 rounded-xl transition font-bold text-sm">
                             <SwitchView size={18} /> {crossNav.label}
                         </Link>
                     )}
@@ -178,8 +167,67 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, c
                 </div>
             </aside>
 
+            {/* Bottom Tab Bar — mobile uniquement, uniforme pour Admin et Étudiant */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-ucak-dark-card border-t border-slate-200 dark:border-white/10 h-16 flex items-center justify-around text-slate-500 dark:text-slate-400 px-1 shadow-lg">
+                {primaryItems.map((item) => {
+                    const active = location.pathname === item.path;
+                    return (
+                        <Link key={item.path} to={item.path}
+                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${active ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
+                            <item.Icon size={20} className="mb-0.5" />
+                            <span className="text-[9px] font-bold tracking-wide">{item.label}</span>
+                        </Link>
+                    );
+                })}
+                <button onClick={() => setIsMoreOpen(true)}
+                    className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${isMoreOpen ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
+                    <MoreHorizontal size={20} className="mb-0.5" />
+                    <span className="text-[9px] font-bold tracking-wide">Plus</span>
+                </button>
+            </div>
+
+            {/* Feuille "Plus" — mobile uniquement : reste du menu + actions de compte */}
+            {isMoreOpen && (
+                <div className="md:hidden fixed inset-0 z-50 flex items-end" onClick={() => setIsMoreOpen(false)}>
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+                    <div className="relative w-full bg-white dark:bg-ucak-dark-card rounded-t-3xl shadow-2xl p-5 pb-8 max-h-[75vh] overflow-y-auto text-slate-800 dark:text-slate-100" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between pb-4 mb-2 border-b border-slate-100 dark:border-white/10">
+                            <span className="font-black text-sm text-[#003058] dark:text-white uppercase tracking-wider">Menu</span>
+                            <button onClick={() => setIsMoreOpen(false)} className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white"><X size={20} /></button>
+                        </div>
+
+                        <div className="grid grid-cols-4 gap-3 mb-2">
+                            {moreItems.map(item => (
+                                <Link key={item.path} to={item.path} onClick={() => setIsMoreOpen(false)}
+                                    className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl text-center transition ${location.pathname === item.path ? 'bg-[#187840]/10 text-[#187840]' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5'}`}>
+                                    <item.Icon size={22} />
+                                    <span className="text-[10px] font-bold leading-tight">{item.label}</span>
+                                </Link>
+                            ))}
+                        </div>
+
+                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/10 space-y-1">
+                            {crossNav && (
+                                <Link to={crossNav.to} onClick={() => setIsMoreOpen(false)}
+                                    className="flex items-center gap-3 p-3 text-[#187840] bg-[#187840]/10 rounded-xl font-bold text-sm mb-1">
+                                    <SwitchView size={18} /> {crossNav.label}
+                                </Link>
+                            )}
+                            <Link to="/" onClick={() => setIsMoreOpen(false)}
+                                className="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 rounded-xl text-sm">
+                                <ChevronLeft size={18} /> Retour au site
+                            </Link>
+                            <button onClick={signOut}
+                                className="flex w-full items-center gap-3 p-3 text-red-500 hover:bg-red-500/10 rounded-xl transition text-sm font-semibold">
+                                <LogOut size={18} /> Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Zone de contenu principale */}
-            <main className="flex-grow overflow-y-auto w-full relative flex flex-col min-h-screen">
+            <main className="flex-grow overflow-y-auto w-full relative flex flex-col min-h-screen pb-20 md:pb-0">
                 {/* Desktop Topbar */}
                 <header className="hidden md:flex bg-white dark:bg-ucak-dark-card border-b border-slate-200 dark:border-white/10 px-8 py-4 justify-between items-center shrink-0 z-30 shadow-sm">
                     <div className="flex items-center gap-2">

@@ -58,7 +58,8 @@ import {
   Info as MuiInfo,
   LightMode,
   DarkMode,
-  SwapHoriz
+  SwapHoriz,
+  MoreHoriz
 } from '@mui/icons-material';
 
 // Helper wrapper to map 'size' prop to 'sx={{ fontSize: size }}'
@@ -145,3 +146,4 @@ export const Info = wrapIcon(MuiInfo);
 export const Sun = wrapIcon(LightMode);
 export const Moon = wrapIcon(DarkMode);
 export const SwitchView = wrapIcon(SwapHoriz);
+export const MoreHorizontal = wrapIcon(MoreHoriz);

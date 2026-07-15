@@ -14,12 +14,15 @@ const menuItems = [
     { path: '/admin/media', label: 'Médias', Icon: Camera },
 ];
 
+const mobilePrimary = ['/admin/panel', '/admin/users', '/admin/manage-cotisations', '/admin/manage-messages'];
+
 export default function AdminLayout() {
     return (
         <DashboardShell
             panelLabel="Admin Panel"
             topbarContext="Administration"
             menuItems={menuItems}
+            mobilePrimary={mobilePrimary}
             crossNav={{ to: '/student/dashboard', label: 'Espace Étudiant' }}
         />
     );

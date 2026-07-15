@@ -90,7 +90,7 @@ export default function BureauPublic() {
     const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     return (
-        <div className="bg-white min-h-screen">
+        <div className="bg-white/85 dark:bg-ucak-dark/90 min-h-screen">
             {/* Header Banner */}
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>

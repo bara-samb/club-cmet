@@ -132,7 +132,7 @@ export default function ManageRegisteredUsers() {
     const studentCount = users.filter((u) => u.role === "student").length;
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark p-4 md:p-8">
+        <div className="anim-fade-up min-h-screen p-4 md:p-8">
             {/* Toast Alerts */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all transform translate-y-0 ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>

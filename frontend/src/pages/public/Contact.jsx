@@ -104,7 +104,7 @@ export default function Contact() {
     };
 
     return (
-        <div className="bg-[#f8fafc] dark:bg-ucak-dark min-h-screen">
+        <div className="bg-[#f8fafc]/85 dark:bg-ucak-dark/90 min-h-screen">
             {/* Header Banner */}
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Contact & Support</h1>

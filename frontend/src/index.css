@@ -259,6 +259,59 @@
   animation-play-state: paused;
 }
 
+/* ── Fond doux "mesh gradient" (style Material/Gemini) ──────────────── */
+/* Couche statique : dégradés radiaux aux quatre coins, couleurs de la charte */
+.soft-mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(0, 48, 88, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(24, 120, 64, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(251, 191, 36, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(0, 48, 88, 0.10) 0%, transparent 50%);
+}
+
+.dark .soft-mesh-bg {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(24, 120, 64, 0.24) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(24, 120, 64, 0.14) 0%, transparent 50%);
+}
+
+/* Couche animée : taches de couleur floutées qui dérivent lentement */
+.soft-mesh-aura {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  filter: blur(80px);
+  opacity: 0.75;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.soft-mesh-spot {
+  position: absolute;
+  border-radius: 50%;
+  animation: soft-mesh-float 22s infinite alternate ease-in-out;
+}
+
+.soft-mesh-spot-1 { width: 55vw; height: 55vw; top: -15%; left: -10%; background: #003058; opacity: 0.20; animation-delay: 0s; }
+.soft-mesh-spot-2 { width: 45vw; height: 45vw; bottom: -10%; right: -5%; background: #187840; opacity: 0.22; animation-delay: -7s; }
+.soft-mesh-spot-3 { width: 38vw; height: 38vw; top: 25%; right: 15%; background: #FBBF24; opacity: 0.16; animation-delay: -14s; }
+
+.dark .soft-mesh-spot-1 { opacity: 0.26; }
+.dark .soft-mesh-spot-2 { opacity: 0.28; }
+.dark .soft-mesh-spot-3 { opacity: 0.18; }
+
+@keyframes soft-mesh-float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, 8%) scale(1.08); }
+  100% { transform: translate(-4%, 4%) scale(0.92); }
+}
+
 /* ── Utility to hide scrollbars ── */
 .scrollbar-none::-webkit-scrollbar {
   display: none;

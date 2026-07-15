@@ -145,7 +145,7 @@ export default function Home() {
     };
 
     return (
-        <div className="bg-white">
+        <div className="bg-white/85 dark:bg-ucak-dark/90">
             <style dangerouslySetInnerHTML={{ __html: `
                 @keyframes ken-burns {
                   0%   {transform:scale(1)}

@@ -14,6 +14,8 @@ const menuItems = [
     { path: '/student/profile', label: 'Profil', Icon: User },
 ];
 
+const mobilePrimary = ['/student/dashboard', '/student/library', '/student/cotisations', '/student/tutorat'];
+
 export default function StudentLayout() {
     const { user } = useAuth();
 
@@ -22,6 +24,7 @@ export default function StudentLayout() {
             panelLabel="Espace Étudiant"
             topbarContext="Espace Étudiant"
             menuItems={menuItems}
+            mobilePrimary={mobilePrimary}
             crossNav={user?.role === 'admin' ? { to: '/admin/panel', label: 'Espace Admin' } : null}
         />
     );
