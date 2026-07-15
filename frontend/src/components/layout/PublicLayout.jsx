@@ -32,8 +32,6 @@ export default function PublicLayout() {
 
     const navLinks = [
         { path: '/', label: 'Accueil', Icon: HomeIcon },
-        { path: '/club', label: 'Le Club', Icon: Info },
-        { path: '/fonctionnement', label: 'Fonctionnement', Icon: BookOpen },
         { path: '/bureau', label: 'Bureau', Icon: Users },
         { path: '/ufr-met', label: "L'UFR MET", Icon: GraduationCap },
         { path: '/contact', label: 'Contact', Icon: Mail }
@@ -167,8 +165,8 @@ export default function PublicLayout() {
                     <div className="space-y-1.5">
                         <h5 className="font-bold text-slate-300 uppercase tracking-wider">Navigation</h5>
                         <ul className="space-y-1 text-slate-400">
-                            <li><Link to="/club" className="hover:text-[#187840] transition-colors">L'Institution</Link></li>
-                            <li><Link to="/fonctionnement" className="hover:text-[#187840] transition-colors">Règlement Interne</Link></li>
+                            <li><Link to="/" className="hover:text-[#187840] transition-colors">L'Institution</Link></li>
+                            <li><Link to="/" className="hover:text-[#187840] transition-colors">Règlement Interne</Link></li>
                             <li><Link to="/bureau" className="hover:text-[#187840] transition-colors">Le Bureau</Link></li>
                             <li><Link to="/ufr-met" className="hover:text-[#187840] transition-colors">L'UFR MET</Link></li>
                         </ul>

@@ -12,8 +12,6 @@ import PublicLayout from './components/layout/PublicLayout';
 import Home from './pages/public/Home';
 import Login from './pages/public/Login';
 import Register from './pages/public/Register';
-import Club from './pages/public/Club';
-import Fonctionnement from './pages/public/Fonctionnement';
 import BureauPublic from './pages/public/BureauPublic';
 import UfrMet from './pages/public/UfrMet';
 import Contact from './pages/public/Contact';
@@ -94,8 +92,6 @@ export default function App() {
                     {/* Routes Publiques */}
                     <Route element={<PublicLayout />}>
                         <Route path="/" element={<Home />} />
-                        <Route path="/club" element={<Club />} />
-                        <Route path="/fonctionnement" element={<Fonctionnement />} />
                         <Route path="/bureau" element={<BureauPublic />} />
                         <Route path="/ufr-met" element={<UfrMet />} />
                         <Route path="/contact" element={<Contact />} />
