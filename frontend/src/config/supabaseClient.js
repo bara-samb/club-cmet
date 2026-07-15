@@ -3,6 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://znqctltzyvwmhwbhqvvk.supabase.co";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_8aQegfNcLYwZNsoGQj9bgQ_sCioRIdS";
 
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+    console.warn("⚠️ [Supabase] Utilisation des identifiants de secours. Veuillez configurer VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY dans un fichier .env.");
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 /**

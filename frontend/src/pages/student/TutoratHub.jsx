@@ -138,7 +138,7 @@ export default function MessagesHub() {
                                     placeholder="Ex: Question sur l'inscription, Demande d'aide, Suggestion..."
                                     value={objet}
                                     onChange={(e) => setObjet(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
+                                    className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
                                 />
                             </div>
 
@@ -150,7 +150,7 @@ export default function MessagesHub() {
                                     placeholder="Rédigez votre message ici... Soyez le plus précis possible pour que le bureau puisse vous aider efficacement."
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold resize-none"
+                                    className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold resize-none"
                                 ></textarea>
                             </div>
 
@@ -196,7 +196,7 @@ export default function MessagesHub() {
                         ) : (
                             <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                                 {myMessages.map((msg) => (
-                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 bg-[#F8F0F0] text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
+                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 bg-[#f1f5f9] text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
                                         <div className="flex justify-between items-start gap-2">
                                             <p className="font-bold text-[#003058] text-sm leading-tight line-clamp-2 flex-1">
                                                 {msg.message}

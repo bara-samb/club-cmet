@@ -99,7 +99,7 @@ export default function Cotisations() {
             const { error } = await supabase.from('cotisations').insert([payload]);
             if (error) throw error;
 
-            alert("✅ Votre déclaration de cotisation a bien été transmise à l'administration pour validation.");
+            alert("Votre déclaration de cotisation a bien été transmise à l'administration pour validation.");
             setMontantDeclaration('');
             fetchData();
         } catch (err) {
@@ -178,7 +178,7 @@ export default function Cotisations() {
                                         value={montantDeclaration}
                                         onChange={e => setMontantDeclaration(e.target.value)}
                                         placeholder="Ex: 5000"
-                                        className="w-full px-4 py-3 bg-[#F8F0F0] border border-[#C8C8C8]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
                                     />
                                 </div>
                                 <button 
@@ -261,7 +261,7 @@ export default function Cotisations() {
                             {/* Contenu de l'onglet : Toutes les Cotisations (Transparence) */}
                             {activeTab === 'toutes-cotisations' && (
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center bg-[#F8F0F0] rounded-xl p-3 border border-slate-100">
+                                    <div className="flex justify-between items-center bg-[#f1f5f9] rounded-xl p-3 border border-slate-100">
                                         <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5"><Users size={14} /> Total des contributeurs</span>
                                         <span className="text-xs font-black text-[#003058]">{stats.contributorsCount} étudiants</span>
                                     </div>

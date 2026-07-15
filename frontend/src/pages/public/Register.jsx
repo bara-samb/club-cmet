@@ -91,7 +91,7 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center px-4 py-10">
             <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
@@ -191,7 +191,7 @@ export default function Register() {
                         <Link to="/login" className="text-[#187840] font-bold hover:underline">Se connecter</Link>
                     </p>
                     <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">← Retour à l'accueil</Link>
+                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">Retour à l'accueil</Link>
                     </div>
                 </div>
             </div>

@@ -52,7 +52,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] flex items-center justify-center px-4">
+        <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center px-4">
             <div className="anim-fade-up w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
@@ -127,7 +127,7 @@ export default function Login() {
                         <Link to="/register" className="text-[#187840] font-bold hover:underline">S'inscrire</Link>
                     </p>
                     <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">← Retour à l'accueil</Link>
+                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">Retour à l'accueil</Link>
                     </div>
                 </div>
             </div>

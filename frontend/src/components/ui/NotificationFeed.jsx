@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { Bell, X } from 'lucide-react';
+import { Bell, X } from './Icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotificationFeed() {

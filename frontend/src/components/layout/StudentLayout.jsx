@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users, CreditCard } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users, CreditCard } from '../ui/Icons';
 import useAuth from '../../hooks/useAuth';
 import { supabase } from '../../config/supabaseClient';
 
@@ -68,7 +68,7 @@ export default function StudentLayout() {
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
     return (
-        <div className="min-h-screen bg-[#F8F0F0] flex flex-col md:flex-row">
+        <div className="min-h-screen bg-[#f1f5f9] flex flex-col md:flex-row">
             {/* Mobile Header */}
             <div className="md:hidden bg-[#003058] text-white p-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
                 <div className="flex items-center gap-3">

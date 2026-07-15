@@ -164,7 +164,7 @@ export default function ManageDocs() {
 
             if (error) throw error;
 
-            showToast("Document ajouté avec succès ! ✓");
+            showToast("Document ajouté avec succès.");
             setForm({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "L1IT" });
             setDocFile(null);
         } catch (err) {
@@ -195,7 +195,7 @@ export default function ManageDocs() {
     };
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#F8F0F0] p-6">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-6">
             {/* Toast */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -239,8 +239,8 @@ export default function ManageDocs() {
                         {/* Fichier */}
                         <div className="space-y-1.5 md:col-span-2">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Fichier du document</label>
-                            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#F8F0F0] rounded-2xl border border-slate-100 w-full">
-                                <label className="w-full sm:w-auto text-center cursor-pointer bg-white border border-[#C8C8C8] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#f1f5f9] rounded-2xl border border-slate-100 w-full">
+                                <label className="w-full sm:w-auto text-center cursor-pointer bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
                                     <FolderOpen size={16} />
                                     {docFile ? docFile.name : "Choisir un fichier"}
                                     <input type="file" onChange={e => { setDocFile(e.target.files[0]); if(e.target.files[0]) setForm({...form, url:""}); }} className="hidden" />
@@ -365,7 +365,7 @@ export default function ManageDocs() {
                             <p className="text-sm font-medium text-slate-500">Chargement...</p>
                         </div>
                     ) : docs.length === 0 ? (
-                        <div className="text-center py-20 bg-[#F8F0F0] rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
                             <FolderOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucun document publié pour le moment.</p>
                         </div>
@@ -375,20 +375,20 @@ export default function ManageDocs() {
                                 <div key={doc.id} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative">
                                     <button 
                                         onClick={() => setConfirmDel(doc)}
-                                        className="absolute top-3 right-3 w-7 h-7 bg-white border border-[#C8C8C8] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                                        className="absolute top-3 right-3 w-7 h-7 bg-white border border-[#e2e8f0] hover:border-red-500 hover:text-red-500 text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm opacity-100 md:opacity-0 md:group-hover:opacity-100"
                                     >
                                         <Trash2 size={14} />
                                     </button>
                                     <div>
                                         <div className="flex items-start gap-3 mb-3">
-                                            <div className="w-10 h-10 bg-[#F8F0F0] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                            <div className="w-10 h-10 bg-[#f1f5f9] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
                                                 <FileText size={20} className="text-[#003058]" />
                                             </div>
                                             <div className="flex-grow min-w-0 pr-6">
                                                 <h3 className="text-xs font-bold text-[#003058] leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
                                                     {doc.nom}
                                                 </h3>
-                                                <span className="text-[9px] font-black text-slate-500 bg-[#F8F0F0] border border-slate-200 px-1.5 py-0.5 rounded tracking-wide uppercase">
+                                                <span className="text-[9px] font-black text-slate-500 bg-[#f1f5f9] border border-slate-200 px-1.5 py-0.5 rounded tracking-wide uppercase">
                                                     {doc.categorie}
                                                 </span>
                                             </div>
@@ -400,8 +400,8 @@ export default function ManageDocs() {
                                         )}
                                     </div>
                                     <div className="pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-bold">
-                                        <span>📅 {doc.date}</span>
-                                        <span>📄 {doc.typeDoc}</span>
+                                        <span>{doc.date}</span>
+                                        <span>{doc.typeDoc}</span>
                                     </div>
                                 </div>
                             ))}

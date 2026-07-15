@@ -188,7 +188,7 @@ export default function NotificationsHistory() {
                                         <div className="px-5 pb-5 border-t border-slate-50 pt-4 space-y-4">
                                             {/* Date complète */}
                                             <p className="text-[10px] text-slate-400 font-medium">
-                                                📅 Diffusé le {formatDateFull(notif.created_at)}
+                                                Diffusé le {formatDateFull(notif.created_at)}
                                             </p>
 
                                             {/* Message complet */}
