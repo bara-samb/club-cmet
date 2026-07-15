@@ -196,13 +196,13 @@ export default function ManageUsers() {
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
-                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <AlertTriangle className="w-8 h-8 text-red-500" />
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <AlertTriangle className="w-8 h-8 text-red-500 dark:text-red-300" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce membre ?</h3>
                         <p className="text-sm text-slate-500 mb-8"><strong>{confirmDel.nom}</strong> sera définitivement retiré du bureau.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDelete(confirmDel)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm shadow-red-500/20">Supprimer</button>
                         </div>
                     </div>
@@ -228,7 +228,7 @@ export default function ManageUsers() {
 
                         {/* Photo */}
                         <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10">
-                            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
+                            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 dark:bg-white/10 flex items-center justify-center">
                                 {preview
                                     ? <img src={preview} alt="preview" className="w-full h-full object-cover" />
                                     : <ImageIcon className="w-8 h-8 text-slate-300" />
@@ -308,7 +308,7 @@ export default function ManageUsers() {
                                     <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#187840]" /> Upload en cours...</span>
                                     <span className="text-[#187840]">{progress}%</span>
                                 </div>
-                                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                                <div className="w-full bg-slate-200 dark:bg-white/10 rounded-full h-2 overflow-hidden">
                                     <div className="bg-[#187840] h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
                                 </div>
                             </div>
@@ -317,7 +317,7 @@ export default function ManageUsers() {
                         <div className="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
                             {editId && (
                                 <button type="button" onClick={resetForm}
-                                    className="bg-slate-100 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 transition-colors">
+                                    className="bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-200 dark:hover:bg-white/20 transition-colors">
                                     Annuler
                                 </button>
                             )}
@@ -379,7 +379,7 @@ export default function ManageUsers() {
                                                 <Trash2 size={14} strokeWidth={2.5} />
                                             </button>
                                         </div>
-                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
+                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 dark:border-white/5 shadow-sm">
                                             {m.imageUrl
                                                 ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
                                                 : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
@@ -424,7 +424,7 @@ export default function ManageUsers() {
                                                                 <Trash2 size={14} strokeWidth={2.5} />
                                                             </button>
                                                         </div>
-                                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-sm">
+                                                        <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 dark:border-white/5 shadow-sm">
                                                             {m.imageUrl
                                                                 ? <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
                                                                 : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>

@@ -203,7 +203,7 @@ export default function Contact() {
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            className={`p-4 rounded-xl border text-xs font-semibold leading-relaxed flex items-start gap-2.5 overflow-hidden ${contactStatus.type === 'success' ? 'bg-green-50 text-[#125e31] border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                                            className={`p-4 rounded-xl border text-xs font-semibold leading-relaxed flex items-start gap-2.5 overflow-hidden ${contactStatus.type === 'success' ? 'bg-green-50 dark:bg-emerald-500/10 text-[#125e31] dark:text-emerald-300 border-green-200 dark:border-emerald-500/20' : 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-300 border-red-200 dark:border-red-500/20'}`}>
                                             <span className="mt-0.5 select-none shrink-0">{contactStatus.type === 'success' ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}</span>
                                             <span>{contactStatus.msg}</span>
                                         </motion.div>
@@ -217,7 +217,7 @@ export default function Contact() {
                                             onChange={e => { setNomContact(e.target.value); if (contactErrors.nom) setContactErrors(p => ({ ...p, nom: null })); }}
                                             disabled={contactSubmitting} placeholder="Fatou Diop"
                                             className={`input-field ${contactErrors.nom ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                        {contactErrors.nom && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.nom}</p>}
+                                        {contactErrors.nom && <p className="text-red-500 dark:text-red-300 text-[10px] font-bold mt-1 pl-1">{contactErrors.nom}</p>}
                                     </div>
 
                                     <div>
@@ -226,7 +226,7 @@ export default function Contact() {
                                             onChange={e => { setTelContact(e.target.value); if (contactErrors.telephone) setContactErrors(p => ({ ...p, telephone: null })); }}
                                             disabled={contactSubmitting} placeholder="+221 77 000 00 00"
                                             className={`input-field ${contactErrors.telephone ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                        {contactErrors.telephone && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.telephone}</p>}
+                                        {contactErrors.telephone && <p className="text-red-500 dark:text-red-300 text-[10px] font-bold mt-1 pl-1">{contactErrors.telephone}</p>}
                                     </div>
                                 </div>
 
@@ -237,7 +237,7 @@ export default function Contact() {
                                             onChange={e => { setEmailContact(e.target.value); if (contactErrors.email) setContactErrors(p => ({ ...p, email: null })); }}
                                             disabled={contactSubmitting} placeholder="votre.nom@ucak.edu.sn"
                                             className={`input-field ${contactErrors.email ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                        {contactErrors.email && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.email}</p>}
+                                        {contactErrors.email && <p className="text-red-500 dark:text-red-300 text-[10px] font-bold mt-1 pl-1">{contactErrors.email}</p>}
                                     </div>
 
                                     <div>
@@ -263,7 +263,7 @@ export default function Contact() {
                                         onChange={e => { setMsgContact(e.target.value); if (contactErrors.message) setContactErrors(p => ({ ...p, message: null })); }}
                                         disabled={contactSubmitting} placeholder="Rédigez votre message avec précision..."
                                         className={`input-field resize-none ${contactErrors.message ? 'border-red-400 focus:ring-red-200' : ''}`} />
-                                    {contactErrors.message && <p className="text-red-500 text-[10px] font-bold mt-1 pl-1">{contactErrors.message}</p>}
+                                    {contactErrors.message && <p className="text-red-500 dark:text-red-300 text-[10px] font-bold mt-1 pl-1">{contactErrors.message}</p>}
                                 </div>
 
                                 <button type="submit" disabled={contactSubmitting}

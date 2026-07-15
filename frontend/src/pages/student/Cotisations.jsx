@@ -139,7 +139,7 @@ export default function Cotisations() {
 
                         {/* Ma contribution totale */}
                         <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-5 shadow-sm flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-green-50 text-[#187840] flex items-center justify-center border border-green-100 shrink-0">
+                            <div className="w-12 h-12 rounded-2xl bg-green-50 dark:bg-emerald-500/10 text-[#187840] flex items-center justify-center border border-green-100 dark:border-emerald-500/20 shrink-0">
                                 <CheckCircle size={22} />
                             </div>
                             <div>
@@ -150,7 +150,7 @@ export default function Cotisations() {
 
                         {/* Collecte globale du Club */}
                         <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-5 shadow-sm flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shrink-0">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-300 flex items-center justify-center border border-blue-100 dark:border-blue-500/20 shrink-0">
                                 <TrendingUp size={22} />
                             </div>
                             <div>
@@ -197,7 +197,7 @@ export default function Cotisations() {
                                     href={waveLink} 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
-                                    className="w-full bg-blue-50 text-blue-600 hover:bg-blue-100 py-3 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] border border-blue-200/50"
+                                    className="w-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-300 hover:bg-blue-100 py-3 rounded-xl font-bold text-xs tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-[1.01] border border-blue-200/50"
                                 >
                                     Ouvrir Wave Marchand <ArrowUpRight size={16} />
                                 </a>
@@ -243,11 +243,11 @@ export default function Cotisations() {
                                                         <p className="text-[10px] text-slate-400 flex items-center gap-1 font-medium"><Calendar size={10} /> {c.date_paiement}</p>
                                                     </div>
                                                     {c.statut === 'valide' ? (
-                                                        <span className="flex items-center gap-1 text-[9px] font-black text-green-600 bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-green-600 dark:text-emerald-300 bg-green-50 dark:bg-emerald-500/10 border border-green-200 dark:border-emerald-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                                                             <CheckCircle size={10} /> Validée
                                                         </span>
                                                     ) : (
-                                                        <span className="flex items-center gap-1 text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                                                             <Clock size={10} /> En attente
                                                         </span>
                                                     )}
@@ -283,7 +283,7 @@ export default function Cotisations() {
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                                                     {toutesCotisations.map(c => (
-                                                        <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
+                                                        <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
                                                             <td className="py-2.5 px-2">
                                                                 <div className="font-bold text-[#003058] dark:text-white">{c.nom}</div>
                                                                 <div className="text-[10px] text-slate-400">{c.classe}</div>

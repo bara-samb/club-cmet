@@ -88,10 +88,10 @@ export default function Resources() {
     };
 
     const badgeColor = (cat) => {
-        if (cat === 'maquette') return 'text-amber-600 bg-amber-50 border-amber-200';
-        if (cat === 'reglement') return 'text-red-600 bg-red-50 border-red-200';
+        if (cat === 'maquette') return 'text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20';
+        if (cat === 'reglement') return 'text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20';
         if (cat === 'rapports') return 'text-[#187840] bg-[#187840]/10 border-[#187840]/20';
-        if (cat === 'comptes_rendus') return 'text-blue-600 bg-blue-50 border-blue-200';
+        if (cat === 'comptes_rendus') return 'text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20';
         return 'text-slate-500 bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10';
     };
 
@@ -156,8 +156,8 @@ export default function Resources() {
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chargement des documents...</p>
                 </div>
             ) : error ? (
-                <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center text-red-600">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500" />
+                <div className="bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-2xl p-6 text-center text-red-600 dark:text-red-300">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500 dark:text-red-300" />
                     <p className="text-sm font-semibold">{error}</p>
                 </div>
             ) : filtrés.length === 0 ? (
@@ -190,7 +190,7 @@ export default function Resources() {
                                 )}
                             </div>
 
-                            <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50">
+                            <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50 dark:border-white/5">
                                 <button
                                     onClick={() => ouvrirFichier(doc.url)}
                                     disabled={!doc.url}

@@ -160,7 +160,7 @@ export default function Medias() {
                                     {editingId ? 'Modifier le média' : 'Nouveau média'}
                                 </h2>
                                 <button onClick={fermerFormulaire}
-                                    className="text-slate-400 hover:text-slate-600 p-1.5 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors">
+                                    className="text-slate-400 hover:text-slate-600 p-1.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-full transition-colors">
                                     <X size={16} />
                                 </button>
                             </div>
@@ -206,7 +206,7 @@ export default function Medias() {
                                     </div>
 
                                     {(preview || existingUrl) && (
-                                        <div className="mt-4 w-40 aspect-[4/3] rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-slate-100">
+                                        <div className="mt-4 w-40 aspect-[4/3] rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-slate-100 dark:bg-white/10">
                                             {type === 'Photo' ? (
                                                 <img src={preview || existingUrl} alt="" className="w-full h-full object-cover" />
                                             ) : (
@@ -224,7 +224,7 @@ export default function Medias() {
                                             : (editingId ? 'Enregistrer les modifications' : 'Publier le média')}
                                     </button>
                                     <button type="button" onClick={fermerFormulaire}
-                                        className="px-6 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition-colors">
+                                        className="px-6 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-white/15 transition-colors">
                                         Annuler
                                     </button>
                                 </div>
@@ -248,7 +248,7 @@ export default function Medias() {
                     {medias.map(m => (
                         <div key={m.id} className="bg-white dark:bg-ucak-dark-card rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 group flex flex-col justify-between">
                             <div>
-                                <div className="aspect-[4/3] bg-slate-100 relative">
+                                <div className="aspect-[4/3] bg-slate-100 dark:bg-white/10 relative">
                                     {m.type === 'Vidéo' ? (
                                         <video src={m.url} className="w-full h-full object-cover" muted preload="metadata" />
                                     ) : (
@@ -259,7 +259,7 @@ export default function Medias() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-3 flex items-center justify-between gap-2 border-t border-slate-50 bg-slate-50/20">
+                            <div className="p-3 flex items-center justify-between gap-2 border-t border-slate-50 dark:border-white/5 bg-slate-50/20 dark:bg-white/[0.03]">
                                 <h4 className="text-xs font-extrabold text-[#0a1628] truncate flex-grow" title={m.titre}>{m.titre}</h4>
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     <button onClick={() => ouvrirEdition(m)}

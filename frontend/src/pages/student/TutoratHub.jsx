@@ -203,7 +203,7 @@ export default function MessagesHub() {
                                             </p>
                                             <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] shrink-0 border ${
                                                 msg.statut === 'non_lu'
-                                                    ? 'bg-amber-50 text-amber-600 border-amber-200'
+                                                    ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-300 border-amber-200 dark:border-amber-500/20'
                                                     : 'bg-[#187840]/10 text-[#187840] border-[#187840]/20'
                                             }`}>
                                                 {msg.statut === 'non_lu' ? 'En attente' : 'Lu'}
