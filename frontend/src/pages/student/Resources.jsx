@@ -115,7 +115,7 @@ export default function Resources() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">
+                    <h1 className="text-2xl md:text-3xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                         <FolderOpen className="text-[#187840] w-8 h-8" /> Documents Officiels
                     </h1>
                     <p className="text-sm text-slate-500 mt-2">
@@ -168,14 +168,14 @@ export default function Resources() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filtrés.map(doc => (
-                        <div key={doc.id} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div key={doc.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="w-10 h-10 bg-[#f1f5f9] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
-                                        <FileText size={20} className="text-[#003058]" />
+                                    <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                        <FileText size={20} className="text-[#003058] dark:text-white" />
                                     </div>
                                     <div className="flex-grow min-w-0">
-                                        <h3 className="text-xs font-bold text-[#003058] leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
+                                        <h3 className="text-xs font-bold text-[#003058] dark:text-white leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
                                             {doc.nom}
                                         </h3>
                                         <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase tracking-wider ${badgeColor(doc.categorie)}`}>

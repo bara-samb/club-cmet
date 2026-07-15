@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
+import { ThemeProvider } from './context/ThemeProvider';
 import useAuth from './hooks/useAuth';
+import SoftMeshBackground from './components/ui/SoftMeshBackground';
 
 // Layouts
 import AdminLayout from './components/layout/AdminLayout';
@@ -85,9 +87,11 @@ function ScrollToTop() {
 
 export default function App() {
     return (
+        <ThemeProvider>
         <AuthProvider>
             <Router>
                 <ScrollToTop />
+                <SoftMeshBackground />
                 <Routes>
                     {/* Routes Publiques */}
                     <Route element={<PublicLayout />}>
@@ -130,5 +134,6 @@ export default function App() {
                 </Routes>
             </Router>
         </AuthProvider>
+        </ThemeProvider>
     );
 }

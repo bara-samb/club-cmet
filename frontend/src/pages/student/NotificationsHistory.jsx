@@ -87,7 +87,7 @@ export default function NotificationsHistory() {
                     <Bell className="text-blue-500" size={22} />
                 </div>
                 <div>
-                    <h1 className="text-xl font-bold text-[#003058] tracking-tight">Historique des notifications</h1>
+                    <h1 className="text-xl font-bold text-[#003058] dark:text-white tracking-tight">Historique des notifications</h1>
                     <p className="text-xs text-slate-400 mt-0.5">Tous les messages diffusés par le Club-MET</p>
                 </div>
                 {!loading && visibleNotifications.length > 0 && (
@@ -139,7 +139,7 @@ export default function NotificationsHistory() {
                                     {/* Contenu principal */}
                                     <div className="flex-grow min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                                            <span className="text-xs font-bold text-[#003058]">Information Club-MET</span>
+                                            <span className="text-xs font-bold text-[#003058] dark:text-white">Information Club-MET</span>
                                             {idx === 0 && (
                                                 <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse inline-block" />

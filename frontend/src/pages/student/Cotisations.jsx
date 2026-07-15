@@ -118,7 +118,7 @@ export default function Cotisations() {
         <div className="anim-fade-up p-4 md:p-6 max-w-5xl mx-auto space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                     <CreditCard className="text-[#187840] w-8 h-8" /> Cotisations du Club-MET
                 </h1>
                 <p className="text-sm text-slate-500 mt-2">
@@ -138,30 +138,30 @@ export default function Cotisations() {
                     <div className="lg:col-span-1 space-y-6">
 
                         {/* Ma contribution totale */}
-                        <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm flex items-center gap-4">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-5 shadow-sm flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-green-50 text-[#187840] flex items-center justify-center border border-green-100 shrink-0">
                                 <CheckCircle size={22} />
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cotisation Validée</p>
-                                <p className="text-xl font-black text-[#003058] mt-0.5">{monTotalValide.toLocaleString()} FCFA</p>
+                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">{monTotalValide.toLocaleString()} FCFA</p>
                             </div>
                         </div>
 
                         {/* Collecte globale du Club */}
-                        <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm flex items-center gap-4">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-5 shadow-sm flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shrink-0">
                                 <TrendingUp size={22} />
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Collecte globale du Club</p>
-                                <p className="text-xl font-black text-[#003058] mt-0.5">{stats.totalCollecte.toLocaleString()} FCFA</p>
+                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">{stats.totalCollecte.toLocaleString()} FCFA</p>
                             </div>
                         </div>
 
                         {/* Déclarer ma cotisation */}
-                        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
-                            <h3 className="font-extrabold text-base text-[#003058] flex items-center gap-2">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-5">
+                            <h3 className="font-extrabold text-base text-[#003058] dark:text-white flex items-center gap-2">
                                 <DollarSign className="text-[#187840]" size={20} /> Déclarer ma cotisation
                             </h3>
                             <p className="text-xs text-slate-500 leading-relaxed text-justify font-medium">
@@ -178,7 +178,7 @@ export default function Cotisations() {
                                         value={montantDeclaration}
                                         onChange={e => setMontantDeclaration(e.target.value)}
                                         placeholder="Ex: 5000"
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold"
                                     />
                                 </div>
                                 <button 
@@ -208,7 +208,7 @@ export default function Cotisations() {
 
                     {/* COLONNE DROITE: Registre Transparent des Cotisations */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 space-y-6">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 space-y-6">
                             
                             {/* Onglets navigation */}
                             <div className="flex border-b border-slate-100 pb-1">
@@ -229,7 +229,7 @@ export default function Cotisations() {
                             {/* Contenu de l'onglet : Mes Cotisations */}
                             {activeTab === 'mes-cotisations' && (
                                 <div className="space-y-4">
-                                    <h3 className="font-extrabold text-sm text-[#003058]">Historique de mes cotisations</h3>
+                                    <h3 className="font-extrabold text-sm text-[#003058] dark:text-white">Historique de mes cotisations</h3>
                                     {mesCotisations.length === 0 ? (
                                         <div className="text-center py-10 text-slate-400 text-xs font-semibold leading-relaxed">
                                             Aucune cotisation enregistrée à votre nom pour le moment.
@@ -239,7 +239,7 @@ export default function Cotisations() {
                                             {mesCotisations.map(c => (
                                                 <div key={c.id} className="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between gap-3 text-xs">
                                                     <div className="space-y-0.5">
-                                                        <p className="font-bold text-[#003058]">{Number(c.montant).toLocaleString()} FCFA</p>
+                                                        <p className="font-bold text-[#003058] dark:text-white">{Number(c.montant).toLocaleString()} FCFA</p>
                                                         <p className="text-[10px] text-slate-400 flex items-center gap-1 font-medium"><Calendar size={10} /> {c.date_paiement}</p>
                                                     </div>
                                                     {c.statut === 'valide' ? (
@@ -261,9 +261,9 @@ export default function Cotisations() {
                             {/* Contenu de l'onglet : Toutes les Cotisations (Transparence) */}
                             {activeTab === 'toutes-cotisations' && (
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center bg-[#f1f5f9] rounded-xl p-3 border border-slate-100">
+                                    <div className="flex justify-between items-center bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl p-3 border border-slate-100">
                                         <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5"><Users size={14} /> Total des contributeurs</span>
-                                        <span className="text-xs font-black text-[#003058]">{stats.contributorsCount} étudiants</span>
+                                        <span className="text-xs font-black text-[#003058] dark:text-white">{stats.contributorsCount} étudiants</span>
                                     </div>
 
                                     {toutesCotisations.length === 0 ? (
@@ -285,7 +285,7 @@ export default function Cotisations() {
                                                     {toutesCotisations.map(c => (
                                                         <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
                                                             <td className="py-2.5 px-2">
-                                                                <div className="font-bold text-[#003058]">{c.nom}</div>
+                                                                <div className="font-bold text-[#003058] dark:text-white">{c.nom}</div>
                                                                 <div className="text-[10px] text-slate-400">{c.classe}</div>
                                                             </td>
                                                             <td className="py-2.5 px-2 font-bold text-slate-700">

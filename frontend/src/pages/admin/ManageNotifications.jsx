@@ -138,7 +138,7 @@ export default function ManageNotifications() {
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
-                        <h3 className="font-black text-xl text-[#003058] mb-2">Supprimer ce message ?</h3>
+                        <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce message ?</h3>
                         <p className="text-sm text-slate-500 mb-8">Le message diffusé sera définitivement effacé pour tous les étudiants.</p>
                         <div className="flex gap-4">
                             <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
@@ -149,7 +149,7 @@ export default function ManageNotifications() {
             )}
 
             <div>
-                <h1 className="text-2xl font-black text-[#003058] tracking-tight">Diffuser un message</h1>
+                <h1 className="text-2xl font-black text-[#003058] dark:text-white tracking-tight">Diffuser un message</h1>
                 <p className="text-sm text-slate-500 mt-1 font-medium">Envoyez un message important à tous les étudiants en temps réel.</p>
             </div>
 
@@ -179,7 +179,7 @@ export default function ManageNotifications() {
                             <button
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
-                                className="flex items-center gap-2.5 px-5 py-3 bg-[#f1f5f9] text-[#003058] rounded-xl border border-slate-100 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
+                                className="flex items-center gap-2.5 px-5 py-3 bg-[#f1f5f9] dark:bg-ucak-dark text-[#003058] dark:text-white rounded-xl border border-slate-100 text-xs font-semibold hover:bg-[#187840]/10 hover:text-[#187840] transition"
                             >
                                 <ImageIcon size={18} />
                                 Ajouter une photo
@@ -221,8 +221,8 @@ export default function ManageNotifications() {
             </form>
 
             {/* Historique des messages diffusés pour l'admin */}
-            <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8 space-y-6">
-                <h2 className="font-black text-xl text-[#003058] flex items-center gap-3">
+            <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8 space-y-6">
+                <h2 className="font-black text-xl text-[#003058] dark:text-white flex items-center gap-3">
                     <Bell className="text-[#187840]" size={24} />
                     Messages diffusés
                     <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{notifications.length}</span>
@@ -234,7 +234,7 @@ export default function ManageNotifications() {
                         <p className="text-sm font-medium text-slate-500">Chargement de l'historique...</p>
                     </div>
                 ) : notifications.length === 0 ? (
-                    <div className="text-center py-12 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
+                    <div className="text-center py-12 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
                         <Bell className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <p className="text-sm font-bold text-slate-500">Aucun message diffusé pour le moment.</p>
                     </div>

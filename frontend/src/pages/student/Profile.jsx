@@ -82,10 +82,10 @@ export default function Profile() {
             {/* En-tête */}
             <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
-                    <User className="text-[#003058]" size={22} />
+                    <User className="text-[#003058] dark:text-white" size={22} />
                 </div>
                 <div>
-                    <h1 className="text-xl font-bold text-[#003058] tracking-tight">Mon Profil</h1>
+                    <h1 className="text-xl font-bold text-[#003058] dark:text-white tracking-tight">Mon Profil</h1>
                     <p className="text-xs text-slate-400 mt-0.5">Gérez vos informations personnelles et votre photo de profil</p>
                 </div>
             </div>
@@ -123,11 +123,11 @@ export default function Profile() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Prénom</label>
-                            <input className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom" />
+                            <input className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={prenom} onChange={e => setPrenom(e.target.value)} placeholder="Prénom" />
                         </div>
                         <div className="space-y-1.5">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Nom</label>
-                            <input className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom" />
+                            <input className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold" value={nom} onChange={e => setNom(e.target.value)} placeholder="Nom" />
                         </div>
                     </div>
 
@@ -137,7 +137,7 @@ export default function Profile() {
                             <select 
                                 value={niveau} 
                                 onChange={e => setNiveau(e.target.value)}
-                                className="w-full appearance-none px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold pr-10 cursor-pointer"
+                                className="w-full appearance-none px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/10 transition-all font-semibold pr-10 cursor-pointer"
                             >
                                 <option value="">Sélectionnez un niveau</option>
                                 {NIVEAUX.map(niv => (

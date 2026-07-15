@@ -257,7 +257,7 @@ export default function Evenements() {
                                         </label>
                                         <input type="text" required value={titre} onChange={e => setTitre(e.target.value)}
                                             placeholder="Ex: Hackathon UCAK 2026"
-                                            className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
+                                            className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
                                     </div>
                                     <div>
                                         <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
@@ -265,7 +265,7 @@ export default function Evenements() {
                                         </label>
                                         <div className="relative">
                                             <select value={type} onChange={e => setType(e.target.value)}
-                                                className="w-full appearance-none px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold pr-10 cursor-pointer">
+                                                className="w-full appearance-none px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold pr-10 cursor-pointer">
                                                 {TYPES_EVENEMENT.map(t => <option key={t} value={t}>{t}</option>)}
                                             </select>
                                             <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
@@ -278,7 +278,7 @@ export default function Evenements() {
                                         Date de l'événement
                                     </label>
                                     <input type="date" required value={date} onChange={e => setDate(e.target.value)}
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
                                 </div>
 
                                 <div>
@@ -287,7 +287,7 @@ export default function Evenements() {
                                     </label>
                                     <textarea rows={4} required value={description} onChange={e => setDescription(e.target.value)}
                                         placeholder="Décrivez l'activité, son contenu et ses objectifs..."
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold resize-none" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold resize-none" />
                                 </div>
 
                                 <div>

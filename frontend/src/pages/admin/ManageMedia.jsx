@@ -173,7 +173,7 @@ export default function Medias() {
                                     <div className="flex gap-2">
                                         {['Photo', 'Vidéo'].map(t => (
                                             <button key={t} type="button" onClick={() => setType(t)}
-                                                className={`px-5 py-2.5 rounded-xl text-xs font-bold border transition-all ${type === t ? 'bg-[#16a34a] text-white border-[#16a34a] shadow-sm' : 'bg-[#f1f5f9] text-slate-500 border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a]'}`}>
+                                                className={`px-5 py-2.5 rounded-xl text-xs font-bold border transition-all ${type === t ? 'bg-[#16a34a] text-white border-[#16a34a] shadow-sm' : 'bg-[#f1f5f9] dark:bg-ucak-dark text-slate-500 border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a]'}`}>
                                                 {t}
                                             </button>
                                         ))}
@@ -186,7 +186,7 @@ export default function Medias() {
                                     </label>
                                     <input type="text" required value={titre} onChange={e => setTitre(e.target.value)}
                                         placeholder="Ex: Hackathon 2026 - Finale"
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
                                 </div>
 
                                 <div>

@@ -104,7 +104,7 @@ export default function Contact() {
     };
 
     return (
-        <div className="bg-[#f8fafc] min-h-screen">
+        <div className="bg-[#f8fafc]/85 dark:bg-ucak-dark/90 min-h-screen">
             {/* Header Banner */}
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Contact & Support</h1>
@@ -121,7 +121,7 @@ export default function Contact() {
                             <span className="text-xs font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-3 py-1.5 rounded-full border border-[#187840]/20">
                                 Entrer en contact
                             </span>
-                            <h2 className="text-3xl font-extrabold text-[#003058] mt-4 leading-tight">
+                            <h2 className="text-3xl font-extrabold text-[#003058] dark:text-white mt-4 leading-tight">
                                 Discutons de vos projets ou questions
                             </h2>
                             <p className="text-slate-500 text-sm mt-4 leading-relaxed text-justify">
@@ -130,7 +130,7 @@ export default function Contact() {
                         </div>
 
                         {/* Contact details */}
-                        <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl p-6 shadow-sm space-y-5">
                             <div className="flex items-start gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#187840] shrink-0">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -140,7 +140,7 @@ export default function Contact() {
                                 <div>
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Localisation</h4>
                                     <p className="text-xs font-bold text-slate-700 mt-1">Complexe Universitaire de Touba</p>
-                                    <p className="text-[11px] text-slate-500">Mbacké, Sénégal</p>
+                                    <p className="text-[11px] text-slate-500">Touba, Sénégal</p>
                                 </div>
                             </div>
 
@@ -162,8 +162,8 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">Téléphone</h4>
-                                    <a href="tel:+221338000000" className="text-xs font-bold text-slate-700 hover:text-[#187840] transition-colors mt-1 block underline">
-                                        +221 33 800 00 00
+                                    <a href="tel:+221787941004" className="text-xs font-bold text-slate-700 hover:text-[#187840] transition-colors mt-1 block underline">
+                                        +221 78 79 41 004
                                     </a>
                                 </div>
                             </div>
@@ -175,7 +175,7 @@ export default function Contact() {
                             <div className="flex gap-3">
                                 {[
                                     { href: 'https://facebook.com', icon: <FacebookIcon />, color: 'hover:bg-[#1877F2] hover:text-white' },
-                                    { href: 'https://www.instagram.com/cmet_officiel?igsh=c2hqN2EwaXgyazV5', icon: <InstagramIcon />, color: 'hover:bg-[#E1306C] hover:text-white' },
+                                    { href: 'https://www.instagram.com/cmet_officiel/', icon: <InstagramIcon />, color: 'hover:bg-[#E1306C] hover:text-white' },
                                     { href: 'https://wa.me/221787941004', icon: <WhatsAppIcon />, color: 'hover:bg-[#25D366] hover:text-white' },
                                     { href: 'https://www.tiktok.com/@cmet_officiel', icon: <TikTokIcon />, color: 'hover:bg-black hover:text-white' }
                                 ].map((soc, i) => (
@@ -184,7 +184,7 @@ export default function Contact() {
                                         href={soc.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 transition-all hover:scale-105 shadow-sm ${soc.color}`}
+                                        className={`w-10 h-10 rounded-xl bg-white dark:bg-ucak-dark-card border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 transition-all hover:scale-105 shadow-sm ${soc.color}`}
                                     >
                                         {soc.icon}
                                     </a>
@@ -195,7 +195,7 @@ export default function Contact() {
 
                     {/* Right Column: Form Card */}
                     <div className="lg:col-span-7">
-                        <div className="bg-white border border-slate-200/80 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
+                        <div className="bg-white dark:bg-ucak-dark-card border border-slate-200 dark:border-white/10/80 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
                             <form onSubmit={gererSoumissionContact} className="space-y-5">
                                 <AnimatePresence>
                                     {contactStatus && (

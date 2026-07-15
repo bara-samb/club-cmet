@@ -75,7 +75,7 @@ export default function Home() {
             const { data } = await supabase
                 .from('medias')
                 .select('*')
-                .order('created_at', { ascending: false });
+                .order('date_ajout', { ascending: false });
             if (data && active) setMedias(data);
             if (active) setLoadingMedias(false);
         };
@@ -145,7 +145,7 @@ export default function Home() {
     };
 
     return (
-        <div className="bg-white">
+        <div className="bg-white/85 dark:bg-ucak-dark/90">
             <style dangerouslySetInnerHTML={{ __html: `
                 @keyframes ken-burns {
                   0%   {transform:scale(1)}
@@ -222,14 +222,14 @@ export default function Home() {
             {/* ── À PROPOS (Le Club) ── */}
             <section id="about-club" className="py-16 px-6 max-w-7xl mx-auto scroll-mt-20">
                 <div className="mb-12">
-                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] mb-6 text-center">
+                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] dark:text-white mb-6 text-center">
                         Le Club Métiers & Technologies
                     </h2>
                     <div className="text-slate-600 text-sm md:text-base leading-relaxed space-y-4">
                         <p className="text-justify">
                             Le <strong>Club Métiers & Technologies (Club-MET)</strong> est la structure légale qui regroupe l'ensemble des étudiants de l'UFR <strong>Métiers & Technologies (MET)</strong>.
                         </p>
-                        <p className="font-semibold text-[#003058] mt-4">
+                        <p className="font-semibold text-[#003058] dark:text-white mt-4">
                             Le Club a pour missions de :
                         </p>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
@@ -280,7 +280,7 @@ export default function Home() {
                             <div className="w-16 h-16 mb-4 text-[#187840] flex items-center justify-center">
                                 <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">{c.icon}</svg>
                             </div>
-                            <h3 className="font-bold text-xs text-[#003058] mb-2">{c.titre}</h3>
+                            <h3 className="font-bold text-xs text-[#003058] dark:text-white mb-2">{c.titre}</h3>
                             <p className="text-[11px] text-slate-500 leading-relaxed">{c.desc}</p>
                         </div>
                     ))}
@@ -294,7 +294,7 @@ export default function Home() {
                         <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/25">
                             Notre Histoire
                         </span>
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058] mt-4">Le Parcours du Club-MET</h2>
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058] dark:text-white mt-4">Le Parcours du Club-MET</h2>
                         <p className="text-slate-500 mt-2 text-sm max-w-xl mx-auto">Découvrez les grandes étapes clés et les succès qui ont forgé notre club académique.</p>
                     </div>
 
@@ -311,7 +311,7 @@ export default function Home() {
                                 </div>
                                 <div className="bg-white border border-[#e2e8f0]/30 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-300 relative">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                                        <h3 className="font-extrabold text-sm md:text-base text-[#003058]">{item.title}</h3>
+                                        <h3 className="font-extrabold text-sm md:text-base text-[#003058] dark:text-white">{item.title}</h3>
                                         <span className="text-xs font-black text-white bg-[#187840] px-3 py-1 rounded-full">{item.year}</span>
                                     </div>
                                     <p className="text-xs md:text-sm text-slate-500 leading-relaxed text-justify">{item.desc}</p>
@@ -323,11 +323,11 @@ export default function Home() {
             </section>
 
             {/* ── FONCTIONNEMENT ── */}
-            <section id="fonctionnement" className="py-16 bg-[#f1f5f9] border-t border-b border-gray-100 px-6 scroll-mt-20">
+            <section id="fonctionnement" className="py-16 bg-[#f1f5f9] dark:bg-ucak-dark border-t border-b border-gray-100 px-6 scroll-mt-20">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Régime Interne</span>
-                        <h2 className="text-2xl font-bold text-[#003058] mt-3">Règles de Fonctionnement Exécutif</h2>
+                        <h2 className="text-2xl font-bold text-[#003058] dark:text-white mt-3">Règles de Fonctionnement Exécutif</h2>
                     </div>
                     <div className="bg-white border border-[#e2e8f0]/60 rounded-2xl shadow-sm p-6 space-y-4">
                         {[
@@ -352,7 +352,7 @@ export default function Home() {
                         ].map(item => (
                             <div key={item.id} className="border border-gray-100 rounded-xl overflow-hidden">
                                 <button onClick={() => setOpenArticle(openArticle === item.id ? null : item.id)}
-                                    className="w-full bg-[#f1f5f9] px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
+                                    className="w-full bg-[#f1f5f9] dark:bg-ucak-dark px-5 py-4 text-left flex justify-between items-center hover:bg-slate-100/60 transition-colors">
                                     <span className="text-xs font-bold text-slate-700 flex items-start gap-2 pr-4 flex-1">
                                         <svg className="w-4 h-4 text-[#187840]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{item.icon}</svg>
                                         {item.label}
@@ -366,7 +366,7 @@ export default function Home() {
                         {/* Document Règlement Intérieur */}
                         <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-left">
-                                <h4 className="text-xs font-black text-[#003058] uppercase tracking-wider">Document de Référence</h4>
+                                <h4 className="text-xs font-black text-[#003058] dark:text-white uppercase tracking-wider">Document de Référence</h4>
                                 <p className="text-[11px] text-slate-500 mt-0.5">
                                     Consultez l'intégralité du Règlement Intérieur du Club-MET pour en savoir plus sur nos chartes et obligations.
                                 </p>
@@ -391,10 +391,10 @@ export default function Home() {
             </section>
 
             {/* ── ACTIVITÉS & MÉDIAS ── */}
-            <section className="py-20 bg-[#f8fafc] border-t border-gray-100 px-6 overflow-hidden">
+            <section className="py-20 bg-[#f8fafc] dark:bg-ucak-dark border-t border-gray-100 px-6 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058]">Actualités, Activités & Médias</h2>
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058] dark:text-white">Actualités, Activités & Médias</h2>
                         <p className="text-slate-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">Suivez nos événements, participez à nos ateliers et revivez en images les moments forts du club.</p>
                     </div>
 
@@ -455,7 +455,7 @@ export default function Home() {
                                                             <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                                                         </div>
                                                     )}
-                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
+                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 shadow-sm">
                                                         {ev.type}
                                                     </span>
                                                 </div>
@@ -463,7 +463,7 @@ export default function Home() {
                                                     <div className="flex items-center gap-1.5 text-[#187840] text-[10px] font-black uppercase tracking-widest mb-3">
                                                         <Calendar size={12} /> {formatDateEvenement(ev.date)}
                                                     </div>
-                                                    <h3 className="font-extrabold text-base text-[#003058] mb-3 leading-snug group-hover:text-[#187840] transition-colors">{ev.titre}</h3>
+                                                    <h3 className="font-extrabold text-base text-[#003058] dark:text-white mb-3 leading-snug group-hover:text-[#187840] transition-colors">{ev.titre}</h3>
                                                     <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 text-justify">{ev.descriptionText}</p>
                                                 </div>
                                             </div>
@@ -475,7 +475,7 @@ export default function Home() {
                                                 ) : (
                                                     <button
                                                         onClick={() => inscrireActivite(ev)}
-                                                        className="w-full bg-[#f1f5f9] group-hover:bg-[#187840] text-slate-700 group-hover:text-white py-3 rounded-xl font-bold text-xs transition-colors"
+                                                        className="w-full bg-[#f1f5f9] dark:bg-ucak-dark group-hover:bg-[#187840] text-slate-700 group-hover:text-white py-3 rounded-xl font-bold text-xs transition-colors"
                                                     >
                                                         S'inscrire à l'activité
                                                     </button>
@@ -548,20 +548,20 @@ export default function Home() {
                             <span className="inline-block bg-[#187840]/10 text-[#187840] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">
                                 Inscription Activité
                             </span>
-                            <h3 className="text-lg font-extrabold text-[#003058] mb-2">{inscrireModal.titre}</h3>
+                            <h3 className="text-lg font-extrabold text-[#003058] dark:text-white mb-2">{inscrireModal.titre}</h3>
                             <p className="text-xs text-slate-400 mb-6 font-medium">Complétez le formulaire ci-dessous pour réserver votre place.</p>
                             <form onSubmit={gererInscription} className="space-y-4">
                                 <div className="text-left">
                                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nom Complet</label>
                                     <input type="text" required value={nomInscrit} onChange={e => setNomInscrit(e.target.value)}
                                         placeholder="Ex: Fatou Diop"
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
                                 </div>
                                 <div className="text-left">
                                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Adresse Email Pro</label>
                                     <input type="email" required value={emailInscrit} onChange={e => setEmailInscrit(e.target.value)}
                                         placeholder="Ex: fatou.diop@ucak.edu.sn"
-                                        className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
                                 </div>
                                 <button type="submit" disabled={inscriptionSubmitting}
                                     className="w-full bg-[#187840] hover:bg-green-600 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-colors shadow-md mt-6 flex items-center justify-center gap-2">

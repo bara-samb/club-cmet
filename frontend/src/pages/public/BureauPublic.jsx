@@ -90,7 +90,7 @@ export default function BureauPublic() {
     const sortedAnciensYears = Object.keys(groupedAnciens).sort((a, b) => b.localeCompare(a));
 
     return (
-        <div className="bg-white min-h-screen">
+        <div className="bg-white/85 dark:bg-ucak-dark/90 min-h-screen">
             {/* Header Banner */}
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>
@@ -127,10 +127,10 @@ export default function BureauPublic() {
                                             )}
                                         </div>
                                     </div>
-                                    <h4 className="font-extrabold text-base text-[#003058] truncate mb-1 group-hover:text-[#187840] transition-colors">{m.nom}</h4>
+                                    <h4 className="font-extrabold text-base text-[#003058] dark:text-white truncate mb-1 group-hover:text-[#187840] transition-colors">{m.nom}</h4>
                                     <p className="text-xs text-[#187840] font-black uppercase tracking-wider mb-4">{m.poste}</p>
                                     <div>
-                                        <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-3.5 py-1.5 rounded-full border border-[#e2e8f0]/50 uppercase tracking-widest shadow-sm">
+                                        <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-3.5 py-1.5 rounded-full border border-[#e2e8f0]/50 uppercase tracking-widest shadow-sm">
                                             {m.classe}
                                         </span>
                                     </div>
@@ -142,7 +142,7 @@ export default function BureauPublic() {
                         <div className="flex justify-center mt-16">
                             <button
                                 onClick={() => setIsAnciensOpen(true)}
-                                className="bg-transparent hover:bg-[#003058] text-[#003058] hover:text-white px-6 py-3 rounded-xl font-bold text-xs border-2 border-[#003058] transition-all flex items-center gap-2 hover:scale-105 shadow-sm"
+                                className="bg-transparent hover:bg-[#003058] text-[#003058] dark:text-white hover:text-white px-6 py-3 rounded-xl font-bold text-xs border-2 border-[#003058] transition-all flex items-center gap-2 hover:scale-105 shadow-sm"
                             >
                                 <Users size={16} />
                                 Voir les Anciens membres
@@ -173,7 +173,7 @@ export default function BureauPublic() {
                                 <X size={20} />
                             </button>
                             <div className="text-center mb-6">
-                                <h3 className="text-xl font-black text-[#003058]">Anciens Membres du Bureau</h3>
+                                <h3 className="text-xl font-black text-[#003058] dark:text-white">Anciens Membres du Bureau</h3>
                                 <p className="text-xs text-slate-400 mt-1">Les promotions précédentes qui ont fait grandir le Club-MET.</p>
                             </div>
                             <div className="space-y-8 max-h-[55vh] overflow-y-auto p-1">
@@ -200,11 +200,11 @@ export default function BureauPublic() {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <h4 className="font-bold text-xs text-[#003058] truncate">{m.nom}</h4>
+                                                        <h4 className="font-bold text-xs text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                                         <p className="text-[10px] text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                                     </div>
                                                     <div className="mt-3">
-                                                        <span className="inline-block text-[8px] font-black text-slate-500 bg-[#f1f5f9] px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                        <span className="inline-block text-[8px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2 py-0.5 rounded border border-slate-200/50 uppercase tracking-wider">
                                                             {m.classe}
                                                         </span>
                                                     </div>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import { ChevronLeft } from "../../components/ui/Icons";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -11,7 +12,7 @@ const ERRORS = {
 };
 
 export default function Register() {
-    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", role:"student", password:"", confirm:"" });
+    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", password:"", confirm:"" });
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -48,41 +49,13 @@ export default function Register() {
                         prenom: form.prenom,
                         email: form.email,
                         niveau: form.niveau,
-                        role: form.role,
-                        approuve: form.role !== 'admin'
+                        role: 'student',
+                        approuve: true
                     });
                 if (insertErr) throw insertErr;
             }
-            
-            if (form.role === 'admin') {
-                // Fetch emails of all currently approved admins to notify them
-                try {
-                    const { data: admins } = await supabase
-                        .from('users')
-                        .select('email')
-                        .eq('role', 'admin')
-                        .eq('approuve', true);
 
-                    if (admins && admins.length > 0) {
-                        const adminEmails = admins.map(a => a.email);
-                        await supabase.functions.invoke('send-approval-email', {
-                            body: {
-                                prenom: form.prenom,
-                                nom: form.nom,
-                                email: form.email,
-                                adminEmails
-                            }
-                        });
-                    }
-                } catch (fnErr) {
-                    console.warn("Échec de l'envoi du mail de notification aux admins (l'Edge Function n'est peut-être pas déployée) :", fnErr);
-                }
-
-                await supabase.auth.signOut();
-                navigate("/login", { state: { info: "Votre inscription en tant qu'administrateur a été enregistrée. Elle doit être approuvée par un administrateur existant avant de pouvoir vous connecter." } });
-            } else {
-                navigate("/student/dashboard");
-            }
+            navigate("/student/dashboard");
         } catch (err) {
             setError(ERRORS[err.message] || err.message || "Erreur lors de l'inscription.");
         } finally {
@@ -91,11 +64,15 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-[#f1f5f9]/85 dark:bg-ucak-dark/90 flex items-center justify-center px-4 py-10">
             <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
-                <div className="bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
+                <div className="relative bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
+                    <Link to="/" aria-label="Retour à l'accueil" title="Retour à l'accueil"
+                        className="absolute top-3 left-3 flex items-center justify-center w-9 h-9 rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors">
+                        <ChevronLeft size={20} />
+                    </Link>
                     <img src="/images/logo-CMET.png" alt="Club-MET"
                          className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-white/20 object-cover" />
                     <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
@@ -104,7 +81,7 @@ export default function Register() {
 
                 {/* Body */}
                 <div className="px-8 py-8">
-                    <h2 className="text-[#003058] font-bold text-lg mb-1">Créer un compte</h2>
+                    <h2 className="text-[#003058] dark:text-white font-bold text-lg mb-1">Créer un compte</h2>
                     <p className="text-slate-400 text-xs mb-6">Rejoins la communauté Club-MET.</p>
 
                     {error && (
@@ -149,18 +126,6 @@ export default function Register() {
                         </div>
 
                         <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Rôle *</label>
-                            <div className="relative">
-                                <select required value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
-                                    <option value="student">Étudiant (Espace Étudiant)</option>
-                                    <option value="admin">Administrateur (Espace Admin)</option>
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Mot de passe *</label>
                             <input type="password" required {...F("password")} placeholder="Min. 6 caractères"
                                    className="input-field" />
@@ -190,9 +155,6 @@ export default function Register() {
                         Déjà inscrit ?{" "}
                         <Link to="/login" className="text-[#187840] font-bold hover:underline">Se connecter</Link>
                     </p>
-                    <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">Retour à l'accueil</Link>
-                    </div>
                 </div>
             </div>
         </div>
