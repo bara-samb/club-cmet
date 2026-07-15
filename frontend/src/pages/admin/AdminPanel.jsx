@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, Mail, Bell, Calendar, Image } from 'lucide-react';
+import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, Mail, Bell, Calendar, Image } from '../../components/ui/Icons';
 import { supabase } from '../../config/supabaseClient';
 
 export default function AdminPanel() {

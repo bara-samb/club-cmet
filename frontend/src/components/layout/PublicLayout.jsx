@@ -39,7 +39,7 @@ export default function PublicLayout() {
     return (
         <div className="min-h-screen bg-white flex flex-col justify-between antialiased text-slate-800">
             {/* ════════ NAVBAR (Desktop & Mobile header) ════════ */}
-            <nav className="bg-[#003058]/95 text-white px-6 md:px-10 py-5 flex justify-between items-center shadow-md sticky top-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
+            <nav className="bg-[#003058]/95 text-white px-6 md:px-10 py-5 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
                 <Link to="/" className="flex items-center gap-3.5 cursor-pointer">
                     <div className="relative w-11 h-11 md:w-12 md:h-12 shrink-0">
                         <img src="/images/logo-CMET.png" alt="Logo Club-MET"
@@ -99,9 +99,8 @@ export default function PublicLayout() {
                 })}
             </div>
 
-            {/* ════════ MAIN CONTENT ════════ */}
-            {/* Added pb-16 on mobile to offset bottom navigation bar height */}
-            <main className="flex-grow pb-16 md:pb-0">
+            {/* Added pb-16 on mobile to offset bottom navigation bar height, and pt-[84px]/[88px] to offset fixed top navbar */}
+            <main className="flex-grow pt-[84px] md:pt-[88px] pb-16 md:pb-0">
                 <Outlet />
             </main>
 

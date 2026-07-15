@@ -92,15 +92,15 @@ export default function BureauPublic() {
     return (
         <div className="bg-white min-h-screen">
             {/* Header Banner */}
-            <div className="bg-[#003058] text-white py-12 px-6 text-center">
-                <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>
+            <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">
                     Découvrez l'équipe dirigeante élue pour l'exercice en cours, ainsi que les promotions précédentes.
                 </p>
             </div>
 
             {/* ── BUREAU ACTUEL ── */}
-            <section className="py-16 px-6 max-w-6xl mx-auto">
+            <section className="py-16 px-6 max-w-7xl mx-auto">
                 {loading ? (
                     <div className="flex items-center justify-center py-20 text-slate-400 gap-3">
                         <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" /></svg>
