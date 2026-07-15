@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { HomeIcon, Users, GraduationCap, Mail, Sun, Moon } from '../ui/Icons';
+import { HomeIcon, Users, GraduationCap, Mail, Sun, Moon, UserCircle } from '../ui/Icons';
 import useTheme from '../../hooks/useTheme';
 
 const FacebookIcon = () => (
@@ -84,9 +84,11 @@ export default function PublicLayout() {
                     </button>
                     <button
                         onClick={() => navigate('/login')}
-                        className="bg-[#187840] hover:bg-[#125e31] text-white px-5 md:px-6 py-2.5 rounded-xl font-bold tracking-wider transition-colors duration-150 shadow-sm"
+                        title="Espace Étudiant"
+                        className="flex items-center gap-2 bg-[#187840] hover:bg-[#125e31] text-white p-2.5 md:px-6 md:py-2.5 rounded-xl font-bold tracking-wider transition-colors duration-150 shadow-sm"
                     >
-                        Espace Étudiant
+                        <UserCircle size={20} />
+                        <span className="hidden md:inline">Espace Étudiant</span>
                     </button>
                 </div>
             </nav>

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ArrowUpRight } from "../../components/ui/Icons";
+import { ArrowUpRight, ChevronLeft } from "../../components/ui/Icons";
 
 const ERRORS = {
     "Invalid login credentials": "Email ou mot de passe incorrect.",
@@ -69,10 +69,15 @@ export default function Login() {
                     className="absolute -right-28 -bottom-28 w-[26rem] h-[26rem] object-cover rounded-full opacity-[0.06] pointer-events-none select-none"
                 />
 
-                <Link to="/" className="relative flex items-center gap-3 w-max">
-                    <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border border-white/20" />
-                    <span className="font-extrabold tracking-wide text-sm">CLUB-MET</span>
-                </Link>
+                <div className="relative flex items-center justify-between">
+                    <Link to="/" className="flex items-center gap-3 w-max">
+                        <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border border-white/20" />
+                        <span className="font-extrabold tracking-wide text-sm">CLUB-MET</span>
+                    </Link>
+                    <Link to="/" className="flex items-center gap-1 text-[11px] font-bold text-slate-200 hover:text-white bg-white/10 hover:bg-white/15 border border-white/10 rounded-full pl-2 pr-3 py-1.5 transition-colors">
+                        <ChevronLeft size={14} /> Accueil
+                    </Link>
+                </div>
 
                 <div className="relative mt-14 md:mt-0">
                     <span className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#4ade80] bg-white/5 border border-white/10 px-3 py-1.5 rounded-full mb-6">
@@ -162,9 +167,6 @@ export default function Login() {
                         Pas encore de compte ?{" "}
                         <Link to="/register" className="text-[#187840] dark:text-[#4ade80] font-bold hover:underline">S'inscrire</Link>
                     </p>
-                    <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Retour à l'accueil</Link>
-                    </div>
                 </div>
             </div>
         </div>

@@ -59,7 +59,9 @@ import {
   LightMode,
   DarkMode,
   SwapHoriz,
-  MoreHoriz
+  MoreHoriz,
+  Login as MuiLogin,
+  AccountCircle
 } from '@mui/icons-material';
 
 // Helper wrapper to map 'size' prop to 'sx={{ fontSize: size }}'
@@ -147,3 +149,5 @@ export const Sun = wrapIcon(LightMode);
 export const Moon = wrapIcon(DarkMode);
 export const SwitchView = wrapIcon(SwapHoriz);
 export const MoreHorizontal = wrapIcon(MoreHoriz);
+export const LogIn = wrapIcon(MuiLogin);
+export const UserCircle = wrapIcon(AccountCircle);
