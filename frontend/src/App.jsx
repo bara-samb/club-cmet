@@ -1,16 +1,22 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import useAuth from './hooks/useAuth';
 
 // Layouts
 import AdminLayout from './components/layout/AdminLayout';
 import StudentLayout from './components/layout/StudentLayout';
+import PublicLayout from './components/layout/PublicLayout';
 
 // Pages
 import Home from './pages/public/Home';
 import Login from './pages/public/Login';
 import Register from './pages/public/Register';
+import Club from './pages/public/Club';
+import Fonctionnement from './pages/public/Fonctionnement';
+import BureauPublic from './pages/public/BureauPublic';
+import UfrMet from './pages/public/UfrMet';
+import Contact from './pages/public/Contact';
 import Dashboard from './pages/student/Dashboard';
 import Library from './pages/student/Library';
 import Resources from './pages/student/Resources';
@@ -67,15 +73,33 @@ function RequireAdmin({ children }) {
     return user?.role === 'admin' ? children : <Navigate to="/" replace />;
 }
 
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
+
 /* ── App Principal ── */
 
 export default function App() {
     return (
         <AuthProvider>
             <Router>
+                <ScrollToTop />
                 <Routes>
                     {/* Routes Publiques */}
-                    <Route path="/" element={<Home />} />
+                    <Route element={<PublicLayout />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/club" element={<Club />} />
+                        <Route path="/fonctionnement" element={<Fonctionnement />} />
+                        <Route path="/bureau" element={<BureauPublic />} />
+                        <Route path="/ufr-met" element={<UfrMet />} />
+                        <Route path="/contact" element={<Contact />} />
+                    </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
 
