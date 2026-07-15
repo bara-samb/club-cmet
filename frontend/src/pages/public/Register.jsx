@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import { ChevronLeft } from "../../components/ui/Icons";
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -67,7 +68,11 @@ export default function Register() {
             <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
-                <div className="bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
+                <div className="relative bg-[#003058] px-8 py-7 text-center border-b border-slate-700">
+                    <Link to="/" aria-label="Retour à l'accueil" title="Retour à l'accueil"
+                        className="absolute top-3 left-3 flex items-center justify-center w-9 h-9 rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors">
+                        <ChevronLeft size={20} />
+                    </Link>
                     <img src="/images/logo-CMET.png" alt="Club-MET"
                          className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-white/20 object-cover" />
                     <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
@@ -150,9 +155,6 @@ export default function Register() {
                         Déjà inscrit ?{" "}
                         <Link to="/login" className="text-[#187840] font-bold hover:underline">Se connecter</Link>
                     </p>
-                    <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">Retour à l'accueil</Link>
-                    </div>
                 </div>
             </div>
         </div>

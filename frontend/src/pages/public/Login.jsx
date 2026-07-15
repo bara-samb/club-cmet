@@ -69,13 +69,14 @@ export default function Login() {
                     className="absolute -right-28 -bottom-28 w-[26rem] h-[26rem] object-cover rounded-full opacity-[0.06] pointer-events-none select-none"
                 />
 
-                <div className="relative flex items-center justify-between">
+                <div className="relative flex items-center gap-1">
+                    <Link to="/" aria-label="Retour à l'accueil" title="Retour à l'accueil"
+                        className="flex items-center justify-center w-9 h-9 -ml-2 rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+                        <ChevronLeft size={20} />
+                    </Link>
                     <Link to="/" className="flex items-center gap-3 w-max">
                         <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border border-white/20" />
                         <span className="font-extrabold tracking-wide text-sm">CLUB-MET</span>
-                    </Link>
-                    <Link to="/" className="flex items-center gap-1 text-[11px] font-bold text-slate-200 hover:text-white bg-white/10 hover:bg-white/15 border border-white/10 rounded-full pl-2 pr-3 py-1.5 transition-colors">
-                        <ChevronLeft size={14} /> Accueil
                     </Link>
                 </div>
 
