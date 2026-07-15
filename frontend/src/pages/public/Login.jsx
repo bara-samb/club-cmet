@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ArrowUpRight } from "../../components/ui/Icons";
 
 const ERRORS = {
     "Invalid login credentials": "Email ou mot de passe incorrect.",
@@ -52,25 +53,55 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f1f5f9]/85 dark:bg-ucak-dark/90 flex items-center justify-center px-4">
-            <div className="anim-fade-up w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        <div className="min-h-screen flex flex-col md:flex-row bg-white dark:bg-ucak-dark">
 
-                {/* Header */}
-                <div className="bg-[#003058] px-8 py-8 text-center border-b border-slate-700">
-                    <img src="/images/logo-CMET.png" alt="Club-MET"
-                         className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-white/20 object-cover" />
-                    <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
-                    <p className="text-slate-400 text-[11px] mt-0.5">UFR Métiers & Technologies · UCAK</p>
+            {/* ── Panneau institutionnel ── */}
+            <div className="relative md:w-[42%] md:min-h-screen bg-[#003058] text-white flex flex-col justify-between px-8 md:px-12 py-10 md:py-14 overflow-hidden shrink-0">
+                {/* Trame de points, très discrète — évoque la grille technique du MET */}
+                <div
+                    className="absolute inset-0 opacity-[0.07]"
+                    style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '26px 26px' }}
+                />
+                {/* Empreinte du logo, géante et estompée, en fond de plan */}
+                <img
+                    src="/images/logo-CMET.png"
+                    alt=""
+                    className="absolute -right-28 -bottom-28 w-[26rem] h-[26rem] object-cover rounded-full opacity-[0.06] pointer-events-none select-none"
+                />
+
+                <Link to="/" className="relative flex items-center gap-3 w-max">
+                    <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-10 h-10 rounded-full object-cover border border-white/20" />
+                    <span className="font-extrabold tracking-wide text-sm">CLUB-MET</span>
+                </Link>
+
+                <div className="relative mt-14 md:mt-0">
+                    <span className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#4ade80] bg-white/5 border border-white/10 px-3 py-1.5 rounded-full mb-6">
+                        UFR Métiers &amp; Technologies · UCAK
+                    </span>
+                    <h1 className="text-3xl md:text-[2.5rem] leading-[1.12] font-extrabold tracking-tight">
+                        L'entraide académique,<br className="hidden md:block" /> organisée.
+                    </h1>
+                    <p className="text-slate-300 text-sm mt-5 max-w-sm leading-relaxed">
+                        Tutorat par les pairs, ressources partagées et vie associative du Club Métiers &amp; Technologies — tout au même endroit.
+                    </p>
                 </div>
 
-                {/* Body */}
-                <div className="px-8 py-8">
-                    <h2 className="text-[#003058] dark:text-white font-bold text-lg mb-1">Connexion</h2>
-                    <p className="text-slate-400 text-xs mb-6">Accédez à votre espace personnel Club-MET.</p>
+                <div className="relative hidden md:flex items-center gap-5 text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+                    <span>Fondé en 2024</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-600" />
+                    <span>UCAK · Touba</span>
+                </div>
+            </div>
+
+            {/* ── Formulaire ── */}
+            <div className="flex-1 flex items-center justify-center px-6 py-14 md:py-10">
+                <div className="anim-fade-up w-full max-w-sm">
+                    <h2 className="text-[#003058] dark:text-white font-extrabold text-2xl tracking-tight">Connexion</h2>
+                    <p className="text-slate-400 text-sm mt-1.5 mb-8">Entrez vos identifiants pour accéder à votre espace.</p>
 
                     {infoMessage && (
-                        <div className="flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-xl px-4 py-3 mb-5 font-medium">
-                            <svg className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <div className="flex items-start gap-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs rounded-xl px-4 py-3 mb-6 font-medium">
+                            <svg className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             {infoMessage}
@@ -78,7 +109,7 @@ export default function Login() {
                     )}
 
                     {error && (
-                        <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-4 py-3 mb-5">
+                        <div className="flex items-start gap-2 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-300 text-xs rounded-xl px-4 py-3 mb-6">
                             <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
                             </svg>
@@ -86,30 +117,30 @@ export default function Login() {
                         </div>
                     )}
 
-                    <form onSubmit={handle} className="space-y-4">
+                    <form onSubmit={handle} className="space-y-6">
                         <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Email</label>
+                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Email</label>
                             <input type="email" required value={form.email}
                                    onChange={e => setForm({ ...form, email: e.target.value })}
                                    placeholder="prenom.nom@ucak.edu.sn"
-                                   className="input-field" />
+                                   className="input-underline" />
                         </div>
 
                         <div>
-                            <div className="flex justify-between items-center mb-1.5">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Mot de passe</label>
-                                <span className="text-[10px] text-[#187840] font-semibold cursor-pointer hover:underline">
-                  Mot de passe oublié ?
-                </span>
+                            <div className="flex justify-between items-baseline mb-1.5">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mot de passe</label>
+                                <span className="text-[10px] text-[#187840] dark:text-[#4ade80] font-semibold cursor-pointer hover:underline">
+                                    Mot de passe oublié ?
+                                </span>
                             </div>
                             <input type="password" required value={form.password}
                                    onChange={e => setForm({ ...form, password: e.target.value })}
                                    placeholder="••••••••"
-                                   className="input-field" />
+                                   className="input-underline" />
                         </div>
 
                         <button type="submit" disabled={loading}
-                                className="btn-primary w-full mt-2 disabled:opacity-60">
+                                className="btn-primary w-full mt-2 group disabled:opacity-60">
                             {loading ? (
                                 <>
                                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -118,16 +149,21 @@ export default function Login() {
                                     </svg>
                                     Connexion...
                                 </>
-                            ) : "Se connecter"}
+                            ) : (
+                                <>
+                                    Se connecter
+                                    <ArrowUpRight size={16} className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </>
+                            )}
                         </button>
                     </form>
 
-                    <p className="text-center text-xs text-slate-400 mt-6">
+                    <p className="text-center text-xs text-slate-400 mt-8">
                         Pas encore de compte ?{" "}
-                        <Link to="/register" className="text-[#187840] font-bold hover:underline">S'inscrire</Link>
+                        <Link to="/register" className="text-[#187840] dark:text-[#4ade80] font-bold hover:underline">S'inscrire</Link>
                     </p>
                     <div className="text-center mt-3">
-                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600">Retour à l'accueil</Link>
+                        <Link to="/" className="text-[10px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Retour à l'accueil</Link>
                     </div>
                 </div>
             </div>

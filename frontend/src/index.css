@@ -97,6 +97,11 @@
     @apply w-full bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-150 focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15;
   }
 
+  /* Input minimal (soulignement) — pages éditoriales type connexion */
+  .input-underline {
+    @apply w-full bg-transparent border-0 border-b-2 border-slate-200 dark:border-white/15 px-0.5 py-2.5 text-[15px] text-slate-800 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 transition-colors duration-200 focus:outline-none focus:border-[#187840];
+  }
+
   /* Badge */
   .badge {
     @apply inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full;
