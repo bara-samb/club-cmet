@@ -133,11 +133,11 @@ export default function Library() {
 
     const badgeColor = (cat) => {
         const colors = {
-            cours:         'bg-blue-50 text-blue-700 border-blue-200',
+            cours:         'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-500/20',
             td:            'bg-orange-50 text-orange-700 border-orange-200',
-            examens:       'bg-red-50 text-red-700 border-red-200',
-            projets:       'bg-indigo-50 text-indigo-700 border-indigo-200',
-            maquette:      'bg-amber-50 text-amber-700 border-amber-200',
+            examens:       'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 border-red-200 dark:border-red-500/20',
+            projets:       'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-500/20',
+            maquette:      'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-500/20',
             autres:        'bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10',
         };
         return colors[cat] || 'bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10';
@@ -308,7 +308,7 @@ export default function Library() {
                                                         </div>
 
                                                         {/* Actions */}
-                                                        <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50">
+                                                        <div className="flex gap-2 mt-auto pt-4 border-t border-slate-50 dark:border-white/5">
                                                             <button
                                                                 onClick={() => ouvrirFichier(doc.url, doc.nom)}
                                                                 disabled={!doc.url}

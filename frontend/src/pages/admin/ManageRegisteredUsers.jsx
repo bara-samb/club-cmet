@@ -144,7 +144,7 @@ export default function ManageRegisteredUsers() {
             {confirmRoleUser && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
-                        <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                        <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-5">
                             <Shield className="w-8 h-8 text-[#003058] dark:text-white" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Modifier le rôle ?</h3>
@@ -155,7 +155,7 @@ export default function ManageRegisteredUsers() {
                             </span> ?
                         </p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmRoleUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
+                            <button onClick={() => setConfirmRoleUser(null)} className="flex-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
                                 Annuler
                             </button>
                             <button onClick={() => handleToggleRole(confirmRoleUser)} className="flex-1 bg-[#003058] hover:bg-[#002545] text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">
@@ -170,15 +170,15 @@ export default function ManageRegisteredUsers() {
             {confirmDeleteUser && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
-                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                            <ShieldAlert className="w-8 h-8 text-red-500" />
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                            <ShieldAlert className="w-8 h-8 text-red-500 dark:text-red-300" />
                         </div>
-                        <h3 className="font-black text-xl text-red-600 mb-2">Supprimer l'utilisateur ?</h3>
+                        <h3 className="font-black text-xl text-red-600 dark:text-red-300 mb-2">Supprimer l'utilisateur ?</h3>
                         <p className="text-sm text-slate-500 mb-6">
                             Cette action supprimera définitivement le compte de <strong>{confirmDeleteUser.prenom} {confirmDeleteUser.nom}</strong> ({confirmDeleteUser.email}) de l'application Club-MET.
                         </p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDeleteUser(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
+                            <button onClick={() => setConfirmDeleteUser(null)} className="flex-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">
                                 Annuler
                             </button>
                             <button onClick={() => handleDeleteUser(confirmDeleteUser)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm shadow-red-500/20">
@@ -295,7 +295,7 @@ export default function ManageRegisteredUsers() {
                         <div className="overflow-x-auto">
                             <table className="w-full min-w-[760px] border-collapse text-left">
                                 <thead>
-                                    <tr className="border-b border-slate-100 dark:border-white/10 bg-slate-50/70">
+                                    <tr className="border-b border-slate-100 dark:border-white/10 bg-slate-50/70 dark:bg-white/5">
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Utilisateur</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Email</th>
                                         <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Niveau / Classe</th>
@@ -309,7 +309,7 @@ export default function ManageRegisteredUsers() {
                                         const isActionLoading = actionLoading === user.id;
 
                                         return (
-                                            <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
+                                            <tr key={user.id} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center gap-3">
                                                         <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black shadow-sm shrink-0 ${user.role === "admin" ? "bg-[#187840]/10 text-[#187840] border border-[#187840]/10" : "bg-[#003058]/10 text-[#003058] dark:text-white border border-[#003058]/10"}`}>
@@ -343,9 +343,9 @@ export default function ManageRegisteredUsers() {
                                                         </span>
                                                         {user.role === "admin" && (
                                                             user.approuve ? (
-                                                                <span className="text-[8px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-wider w-max">Approuvé</span>
+                                                                <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-100 dark:border-emerald-500/20 uppercase tracking-wider w-max">Approuvé</span>
                                                             ) : (
-                                                                <span className="text-[8px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100 uppercase tracking-wider w-max animate-pulse">En attente</span>
+                                                                <span className="text-[8px] font-black text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-100 dark:border-amber-500/20 uppercase tracking-wider w-max animate-pulse">En attente</span>
                                                             )
                                                         )}
                                                     </div>
@@ -360,7 +360,7 @@ export default function ManageRegisteredUsers() {
                                                                     <button
                                                                         onClick={() => handleApproveAdmin(user)}
                                                                         title="Approuver l'administrateur"
-                                                                        className="px-3 py-1.5 bg-emerald-50 hover:bg-[#187840] hover:text-white text-[#187840] border border-emerald-200 hover:border-[#187840] rounded-xl transition-all shadow-sm text-[9px] font-black uppercase flex items-center gap-1"
+                                                                        className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 hover:bg-[#187840] hover:text-white text-[#187840] border border-emerald-200 dark:border-emerald-500/20 hover:border-[#187840] rounded-xl transition-all shadow-sm text-[9px] font-black uppercase flex items-center gap-1"
                                                                     >
                                                                         <Check size={11} strokeWidth={3} /> Approuver
                                                                     </button>

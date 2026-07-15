@@ -212,7 +212,7 @@ export default function ManageMessages() {
                                         key={msg.id} 
                                         onClick={() => lireMessage(msg)}
                                         className={`hover:bg-[#f1f5f9] dark:hover:bg-ucak-dark/50 transition-colors cursor-pointer ${
-                                            msg.statut === 'non_lu' ? 'font-bold bg-green-50/20' : 'text-slate-500'
+                                            msg.statut === 'non_lu' ? 'font-bold bg-green-50/20 dark:bg-emerald-500/5' : 'text-slate-500'
                                         }`}>
                                         
                                         {/* Statut badge */}
@@ -221,7 +221,7 @@ export default function ManageMessages() {
                                                 {msg.statut === 'non_lu' ? (
                                                     <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" title="Non lu" />
                                                 ) : (
-                                                    <span className="w-2.5 h-2.5 bg-slate-300 rounded-full" title="Lu" />
+                                                    <span className="w-2.5 h-2.5 bg-slate-300 dark:bg-white/15 rounded-full" title="Lu" />
                                                 )}
                                             </div>
                                         </td>
@@ -274,7 +274,7 @@ export default function ManageMessages() {
                             
                             <button 
                                 onClick={() => setActiveMessage(null)}
-                                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors">
+                                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-full transition-colors">
                                 <X size={16} />
                             </button>
 
@@ -322,7 +322,7 @@ export default function ManageMessages() {
                             <div className="flex justify-between items-center gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
                                 <button
                                     onClick={() => setConfirmDelId(activeMessage.id)}
-                                    className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border border-red-100">
+                                    className="bg-red-50 dark:bg-red-500/10 hover:bg-red-100 text-red-600 dark:text-red-300 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border border-red-100 dark:border-red-500/20">
                                     <Trash2 size={14} /> Supprimer
                                 </button>
                                 <button
@@ -345,13 +345,13 @@ export default function ManageMessages() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-100 dark:border-white/10 text-center">
-                            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                            <AlertCircle className="w-12 h-12 text-red-500 dark:text-red-300 mx-auto mb-4" />
                             <h3 className="text-base font-black text-[#003058] dark:text-white mb-2">Supprimer ce message ?</h3>
                             <p className="text-xs text-slate-400 leading-relaxed mb-6">Cette action est irréversible. Le message sera définitivement retiré de la base de données.</p>
                             <div className="flex gap-3 justify-center">
                                 <button
                                     onClick={() => setConfirmDelId(null)}
-                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex-1">
+                                    className="bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex-1">
                                     Annuler
                                 </button>
                                 <button

@@ -244,7 +244,7 @@ export default function Evenements() {
                                     {editingId ? "Modifier l'événement" : 'Nouvel événement'}
                                 </h2>
                                 <button onClick={fermerFormulaire}
-                                    className="text-slate-400 hover:text-slate-600 p-1.5 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors">
+                                    className="text-slate-400 hover:text-slate-600 p-1.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-full transition-colors">
                                     <X size={16} />
                                 </button>
                             </div>
@@ -335,7 +335,7 @@ export default function Evenements() {
                                             : (editingId ? 'Enregistrer les modifications' : "Publier l'événement")}
                                     </button>
                                     <button type="button" onClick={fermerFormulaire}
-                                        className="px-6 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition-colors">
+                                        className="px-6 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-white/15 transition-colors">
                                         Annuler
                                     </button>
                                 </div>
@@ -358,7 +358,7 @@ export default function Evenements() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {evenements.map(ev => (
                         <div key={ev.id} className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col">
-                            <div className="h-40 bg-slate-100 relative">
+                            <div className="h-40 bg-slate-100 dark:bg-white/10 relative">
                                 {ev.images?.[0] ? (
                                     <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover" />
                                 ) : (
@@ -381,15 +381,15 @@ export default function Evenements() {
                                 </div>
                                 <h3 className="text-sm font-extrabold text-[#0a1628] mb-2">{ev.titre}</h3>
                                 <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 flex-1">{ev.descriptionText}</p>
-                                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-50">
+                                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-50 dark:border-white/5">
 
                                     <div className="flex items-center gap-2">
                                         <button onClick={() => ouvrirEdition(ev)}
-                                            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 dark:text-slate-300 transition-colors">
+                                            className="p-2 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-600 dark:text-slate-300 transition-colors">
                                             <Pencil size={14} />
                                         </button>
                                         <button onClick={() => handleDelete(ev)}
-                                            className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition-colors">
+                                            className="p-2 rounded-lg bg-red-50 dark:bg-red-500/10 hover:bg-red-100 text-red-500 dark:text-red-300 transition-colors">
                                             <Trash2 size={14} />
                                         </button>
                                     </div>

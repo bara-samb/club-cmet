@@ -141,8 +141,8 @@ export default function Bureau() {
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chargement des membres...</p>
                 </div>
             ) : error ? (
-                <div className="bg-red-50 border border-red-100 rounded-2xl p-6 text-center text-red-600">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500" />
+                <div className="bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-2xl p-6 text-center text-red-600 dark:text-red-300">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-red-500 dark:text-red-300" />
                     <p className="text-sm font-semibold">{error}</p>
                 </div>
             ) : activeTab === 'actuels' ? (
@@ -156,7 +156,7 @@ export default function Bureau() {
                         {membresActuels.map(m => (
                             <div key={m.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                 <div>
-                                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 dark:border-white/5 shadow-inner bg-slate-100 dark:bg-white/10 flex items-center justify-center">
                                         {m.imageUrl ? (
                                             <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                         ) : (
@@ -195,7 +195,7 @@ export default function Bureau() {
                                     {groupedAnciens[year].map(m => (
                                         <div key={m.id || m.nom} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                             <div>
-                                                <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 dark:border-white/5 shadow-inner bg-slate-100 dark:bg-white/10 flex items-center justify-center">
                                                     {m.imageUrl ? (
                                                         <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                                     ) : (

@@ -19,14 +19,20 @@ export default function Profile() {
         }
     }, [user]);
 
+    // Le garde de route ne vérifie que la session : si le chargement du profil
+    // a échoué, `user` peut être null alors qu'on est bien connecté. L'id de
+    // session est le même que celui de la table users.
+    const userId = user?.id || session?.user?.id;
+
     const handleUpload = async (event) => {
         try {
             setUploading(true);
             const file = event.target.files[0];
             if (!file) return;
+            if (!userId) throw new Error("Profil non chargé. Rechargez la page puis réessayez.");
 
             const fileExt = file.name.split('.').pop();
-            const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+            const fileName = `${userId}-${Date.now()}.${fileExt}`;
             const filePath = `avatars/${fileName}`;
 
             const { error: uploadError } = await supabase.storage
@@ -40,7 +46,7 @@ export default function Profile() {
             const { error: updateError } = await supabase
                 .from('users')
                 .update({ avatar_url: publicUrl })
-                .eq('id', user.id);
+                .eq('id', userId);
 
             if (updateError) throw updateError;
 
@@ -55,10 +61,11 @@ export default function Profile() {
 
     const handleUpdateProfile = async () => {
         try {
+            if (!userId) throw new Error("Profil non chargé. Rechargez la page puis réessayez.");
             const { error } = await supabase
                 .from('users')
                 .update({ nom, prenom, niveau })
-                .eq('id', user.id);
+                .eq('id', userId);
 
             if (error) throw error;
             await refreshProfile();
@@ -81,7 +88,7 @@ export default function Profile() {
         <div className="anim-fade-up p-4 md:p-6 max-w-2xl mx-auto space-y-8">
             {/* En-tête */}
             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center shrink-0">
                     <User className="text-[#003058] dark:text-white" size={22} />
                 </div>
                 <div>

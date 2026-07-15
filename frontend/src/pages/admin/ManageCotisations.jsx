@@ -197,13 +197,13 @@ export default function ManageCotisations() {
             {confirmDel && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
-                        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <AlertTriangle className="w-8 h-8 text-red-500" />
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <AlertTriangle className="w-8 h-8 text-red-500 dark:text-red-300" />
                         </div>
                         <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Rejeter ce paiement ?</h3>
                         <p className="text-sm text-slate-500 mb-8">La déclaration de <strong>{confirmDel.nom}</strong> sera définitivement supprimée.</p>
                         <div className="flex gap-4">
-                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
+                            <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-xl py-3 text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">Annuler</button>
                             <button onClick={() => handleDelete(confirmDel.id)} className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl py-3 text-sm font-bold transition-colors shadow-sm">Supprimer</button>
                         </div>
                     </div>
@@ -356,7 +356,7 @@ export default function ManageCotisations() {
                                 </thead>
                                 <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                                     {cotisations.map(c => (
-                                        <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
                                             <td className="py-4 px-4">
                                                 <div className="font-bold text-[#003058] dark:text-white">{c.nom}</div>
                                                 <div className="text-[10px] text-slate-400 font-medium">{c.classe}</div>
@@ -372,11 +372,11 @@ export default function ManageCotisations() {
                                             </td>
                                             <td className="py-4 px-4">
                                                 {c.statut === 'valide' ? (
-                                                    <span className="inline-flex items-center gap-1 text-[9px] font-black text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                                    <span className="inline-flex items-center gap-1 text-[9px] font-black text-green-600 dark:text-emerald-300 bg-green-50 dark:bg-emerald-500/10 border border-green-200 dark:border-emerald-500/20 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                                         <CheckCircle size={10} /> Validé
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1 text-[9px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                                    <span className="inline-flex items-center gap-1 text-[9px] font-black text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                                         <Clock size={10} /> En attente
                                                     </span>
                                                 )}

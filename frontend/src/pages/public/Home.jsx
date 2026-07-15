@@ -188,7 +188,7 @@ export default function Home() {
                     </p>
                     <div className="anim-btns flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a href="https://ucak.edu.sn" target="_blank" rel="noopener noreferrer"
-                            className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white dark:bg-ucak-dark-card text-[#187840] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 transition-all hover:scale-105 shadow-lg">
+                            className="flex items-center justify-center w-full sm:w-auto gap-2 bg-white dark:bg-ucak-dark-card text-[#187840] px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-slate-100 dark:hover:bg-white/15 transition-all hover:scale-105 shadow-lg">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582" />
                             </svg>
@@ -326,7 +326,7 @@ export default function Home() {
             <section id="fonctionnement" className="py-16 bg-[#f1f5f9] dark:bg-ucak-dark border-t border-b border-gray-100 dark:border-white/10 px-6 scroll-mt-20">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
-                        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 dark:bg-blue-500/10 px-3 py-1 rounded-full">Régime Interne</span>
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-300 uppercase tracking-widest bg-blue-50 dark:bg-blue-500/10 px-3 py-1 rounded-full">Régime Interne</span>
                         <h2 className="text-2xl font-bold text-[#003058] dark:text-white mt-3">Règles de Fonctionnement Exécutif</h2>
                     </div>
                     <div className="bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 rounded-2xl shadow-sm p-6 space-y-4">
@@ -334,7 +334,7 @@ export default function Home() {
                             {
                                 id: 'bureau-exec', label: 'Composition des Organes Légaux du Club',
                                 icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />,
-                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-white dark:bg-ucak-dark-card border-t border-gray-50 text-justify">
+                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-white dark:bg-ucak-dark-card border-t border-gray-50 dark:border-white/5 text-justify">
                                     <p>La direction s'organise autour de deux entités majeures :</p>
                                     <ul className="list-disc pl-5 space-y-1">
                                         <li><strong>Bureau Exécutif :</strong> Président, Vice-Président, Secrétaire Général.</li>
@@ -345,7 +345,7 @@ export default function Home() {
                             {
                                 id: 'nomination', label: 'Durée du Mandat et Obligations de Clôture',
                                 icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
-                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-ucak-dark-card border-t border-gray-50 text-justify">
+                                content: <div className="p-5 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-ucak-dark-card border-t border-gray-50 dark:border-white/5 text-justify">
                                     Les membres effectuent un mandat d'un an non renouvelable immédiatement sans élection générale. La transmission des charges et documents comptables est obligatoire en fin d'exercice.
                                 </div>
                             },
@@ -446,7 +446,7 @@ export default function Home() {
                                             transition={{ duration: 0.3 }}
                                             className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-white/10 flex flex-col justify-between group transition-all duration-300">
                                             <div>
-                                                <div className="h-48 overflow-hidden relative bg-slate-100">
+                                                <div className="h-48 overflow-hidden relative bg-slate-100 dark:bg-white/10">
                                                     <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
                                                     {ev.images?.[0] ? (
                                                         <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -502,7 +502,7 @@ export default function Home() {
                                     {medias.map((m) => (
                                         <div key={m.id}
                                             onClick={() => setLightboxImage(m)}
-                                            className="group relative h-48 bg-slate-100 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-lg transition-all duration-300">
+                                            className="group relative h-48 bg-slate-100 dark:bg-white/10 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-lg transition-all duration-300">
                                             <img src={m.url} alt={m.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-[#187840] mb-1">{m.type}</span>
@@ -542,7 +542,7 @@ export default function Home() {
                             onClick={e => e.stopPropagation()}
                             className="bg-white dark:bg-ucak-dark-card rounded-3xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden relative text-slate-800 dark:text-slate-100">
                             <button onClick={() => setInscrireModal(null)}
-                                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors z-10">
+                                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 rounded-full transition-colors z-10">
                                 <X size={16} />
                             </button>
                             <span className="inline-block bg-[#187840]/10 text-[#187840] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-3">

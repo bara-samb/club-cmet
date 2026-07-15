@@ -27,12 +27,12 @@ export default function UfrMet() {
                             <span className="block text-3xl font-black text-[#003058] dark:text-white">2</span>
                             <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest">Départements actifs</span>
                         </div>
-                        <div className="hidden sm:block w-px h-10 bg-gray-300" />
+                        <div className="hidden sm:block w-px h-10 bg-gray-300 dark:bg-white/15" />
                         <div className="text-center">
                             <span className="block text-3xl font-black text-amber-500">3</span>
                             <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">En perspective</span>
                         </div>
-                        <div className="hidden sm:block w-px h-10 bg-gray-300" />
+                        <div className="hidden sm:block w-px h-10 bg-gray-300 dark:bg-white/15" />
                         <div className="text-center">
                             <span className="block text-3xl font-black text-[#003058] dark:text-white">5</span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Départements au total</span>
@@ -63,9 +63,9 @@ export default function UfrMet() {
                                 </div>
                             </div>
                         </div>
-                        <div className="px-6 py-3 flex flex-wrap gap-1.5 border-b border-gray-50">
+                        <div className="px-6 py-3 flex flex-wrap gap-1.5 border-b border-gray-50 dark:border-white/5">
                             {['Dev. Applications', 'Base de Données', 'Réseaux & Télécommunications', 'Admin Linux'].map(tag => (
-                                <span key={tag} className="text-[9px] font-bold text-[#003058] dark:text-white bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">{tag}</span>
+                                <span key={tag} className="text-[9px] font-bold text-[#003058] dark:text-white bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 px-2.5 py-1 rounded-full">{tag}</span>
                             ))}
                         </div>
                         <div className="px-6 py-5 flex-1">
@@ -103,9 +103,9 @@ export default function UfrMet() {
                                 </div>
                             </div>
                         </div>
-                        <div className="px-6 py-3 flex flex-wrap gap-1.5 border-b border-gray-50">
+                        <div className="px-6 py-3 flex flex-wrap gap-1.5 border-b border-gray-50 dark:border-white/5">
                             {['Finance', 'Comptabilité', 'Contrôle de gestion', 'Management', 'Audit financier'].map(tag => (
-                                <span key={tag} className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full">{tag}</span>
+                                <span key={tag} className="text-[9px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 px-2.5 py-1 rounded-full">{tag}</span>
                             ))}
                         </div>
                         <div className="px-6 py-5 flex-1">

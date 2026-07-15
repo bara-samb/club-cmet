@@ -83,7 +83,7 @@ export default function NotificationsHistory() {
         <div className="anim-fade-up p-4 md:p-6 max-w-3xl mx-auto">
             {/* ── En-tête ── */}
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center shrink-0">
                     <Bell className="text-blue-500" size={22} />
                 </div>
                 <div>
@@ -91,7 +91,7 @@ export default function NotificationsHistory() {
                     <p className="text-xs text-slate-400 mt-0.5">Tous les messages diffusés par le Club-MET</p>
                 </div>
                 {!loading && visibleNotifications.length > 0 && (
-                    <span className="ml-auto bg-blue-100 text-blue-600 text-xs font-black px-3 py-1 rounded-full">
+                    <span className="ml-auto bg-blue-100 text-blue-600 dark:text-blue-300 text-xs font-black px-3 py-1 rounded-full">
                         {visibleNotifications.length} message{visibleNotifications.length > 1 ? 's' : ''}
                     </span>
                 )}
@@ -141,7 +141,7 @@ export default function NotificationsHistory() {
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
                                             <span className="text-xs font-bold text-[#003058] dark:text-white">Information Club-MET</span>
                                             {idx === 0 && (
-                                                <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                                <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-100 dark:border-blue-500/20">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse inline-block" />
                                                     Dernière
                                                 </span>
@@ -185,7 +185,7 @@ export default function NotificationsHistory() {
                                         transition={{ duration: 0.2 }}
                                         className="overflow-hidden"
                                     >
-                                        <div className="px-5 pb-5 border-t border-slate-50 pt-4 space-y-4">
+                                        <div className="px-5 pb-5 border-t border-slate-50 dark:border-white/5 pt-4 space-y-4">
                                             {/* Date complète */}
                                             <p className="text-[10px] text-slate-400 font-medium">
                                                 Diffusé le {formatDateFull(notif.created_at)}

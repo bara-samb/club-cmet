@@ -218,7 +218,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                                 <ChevronLeft size={18} /> Retour au site
                             </Link>
                             <button onClick={signOut}
-                                className="flex w-full items-center gap-3 p-3 text-red-500 hover:bg-red-500/10 rounded-xl transition text-sm font-semibold">
+                                className="flex w-full items-center gap-3 p-3 text-red-500 dark:text-red-300 hover:bg-red-500/10 rounded-xl transition text-sm font-semibold">
                                 <LogOut size={18} /> Déconnexion
                             </button>
                         </div>

@@ -119,7 +119,7 @@ export default function BureauPublic() {
                                         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#187840] to-[#003058] opacity-50 group-hover:rotate-180 transition-transform duration-700 ease-out" style={{ padding: '2px' }}>
                                             <div className="w-full h-full bg-white dark:bg-ucak-dark-card rounded-full" />
                                         </div>
-                                        <div className="absolute inset-1.5 rounded-full overflow-hidden border-2 border-white shadow-inner bg-slate-100">
+                                        <div className="absolute inset-1.5 rounded-full overflow-hidden border-2 border-white shadow-inner bg-slate-100 dark:bg-white/10">
                                             {m.imageUrl ? (
                                                 <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                             ) : (
@@ -169,7 +169,7 @@ export default function BureauPublic() {
                             className="bg-white dark:bg-ucak-dark-card rounded-3xl max-w-3xl w-full max-h-[85vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative text-slate-800 dark:text-slate-100"
                             onClick={e => e.stopPropagation()}
                         >
-                            <button onClick={() => setIsAnciensOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-100 rounded-full">
+                            <button onClick={() => setIsAnciensOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-100 dark:hover:bg-white/15 rounded-full">
                                 <X size={20} />
                             </button>
                             <div className="text-center mb-6">
@@ -191,7 +191,7 @@ export default function BureauPublic() {
                                             {groupedAnciens[year].map((m) => (
                                                 <div key={m.id || m.nom} className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 text-center shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
                                                     <div>
-                                                        <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 dark:border-white/10 shadow-inner bg-slate-100 flex items-center justify-center">
+                                                        <div className="w-16 h-16 mx-auto mb-3 overflow-hidden rounded-full border-2 border-slate-200 dark:border-white/10 shadow-inner bg-slate-100 dark:bg-white/10 flex items-center justify-center">
                                                             {m.imageUrl ? (
                                                                 <img src={m.imageUrl} alt={m.nom} className="w-full h-full object-cover" />
                                                             ) : (
