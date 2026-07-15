@@ -6,8 +6,7 @@ export default function UfrMet() {
 
     return (
         <div className="bg-[#f8fafc] min-h-screen">
-            {/* Header Banner */}
-            <div className="bg-[#003058] text-white py-12 px-6 text-center">
+            <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">L'UFR Métiers & Technologies</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">
                     Découvrez les filières de pointe enseignées à l'UFR MET au sein de l'UCAK.

@@ -58,7 +58,7 @@ export default function Login() {
                 {/* Header */}
                 <div className="bg-[#003058] px-8 py-8 text-center border-b border-slate-700">
                     <img src="/images/logo-CMET.png" alt="Club-MET"
-                         className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-[#003058]/50 object-cover" />
+                         className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-white/20 object-cover" />
                     <p className="text-white font-extrabold text-base tracking-tight">CLUB-MET</p>
                     <p className="text-slate-400 text-[11px] mt-0.5">UFR Métiers & Technologies · UCAK</p>
                 </div>

@@ -92,8 +92,8 @@ export default function BureauPublic() {
     return (
         <div className="bg-white min-h-screen">
             {/* Header Banner */}
-            <div className="bg-[#003058] text-white py-12 px-6 text-center">
-                <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>
+            <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">Le Bureau du Club-MET</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">
                     Découvrez l'équipe dirigeante élue pour l'exercice en cours, ainsi que les promotions précédentes.
                 </p>
