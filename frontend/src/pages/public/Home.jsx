@@ -95,6 +95,7 @@ export default function Home() {
     const [inscrireModal, setInscrireModal] = useState(null);
     const [nomInscrit, setNomInscrit] = useState('');
     const [emailInscrit, setEmailInscrit] = useState('');
+    const [inscriptionSubmitting, setInscriptionSubmitting] = useState(false);
 
     /* ── State Formulaire de Contact ── */
     const [nomContact, setNomContact] = useState('');
@@ -279,13 +280,32 @@ export default function Home() {
         setEmailInscrit('');
     };
 
-    const gererInscription = (e) => {
+    const gererInscription = async (e) => {
         e.preventDefault();
-        if (!nomInscrit || !emailInscrit) return;
-        setInscriptions(prev => ({ ...prev, [inscrireModal.id]: true }));
-        setToastMessage(`Félicitations ! Vous êtes inscrit à l'activité : ${inscrireModal.titre}`);
-        setInscrireModal(null);
-        setTimeout(() => setToastMessage(null), 4000);
+        if (!nomInscrit.trim() || !emailInscrit.trim()) return;
+
+        setInscriptionSubmitting(true);
+        try {
+            const { error } = await supabase.from('inscriptions').insert([
+                {
+                    nom: nomInscrit.trim(),
+                    email: emailInscrit.trim(),
+                    activite_id: inscrireModal.id
+                }
+            ]);
+            if (error) throw error;
+
+            setInscriptions(prev => ({ ...prev, [inscrireModal.id]: true }));
+            setToastMessage(`Félicitations ! Vous êtes inscrit à l'activité : ${inscrireModal.titre}`);
+            setInscrireModal(null);
+            setTimeout(() => setToastMessage(null), 4000);
+        } catch (err) {
+            console.error("Erreur d'inscription:", err);
+            setToastMessage("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+            setTimeout(() => setToastMessage(null), 4000);
+        } finally {
+            setInscriptionSubmitting(false);
+        }
     };
 
     const gererSoumissionContact = async (e) => {
@@ -1262,9 +1282,9 @@ export default function Home() {
                                         placeholder="Ex: fatou.diop@ucak.edu.sn"
                                         className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold" />
                                 </div>
-                                <button type="submit"
-                                    className="w-full bg-[#187840] hover:bg-green-600 text-white py-3.5 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-colors shadow-md mt-6 flex items-center justify-center gap-2">
-                                    Valider mon inscription
+                                <button type="submit" disabled={inscriptionSubmitting}
+                                    className="w-full bg-[#187840] hover:bg-green-600 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-colors shadow-md mt-6 flex items-center justify-center gap-2">
+                                    {inscriptionSubmitting ? "Inscription en cours..." : "Valider mon inscription"}
                                 </button>
                             </form>
                         </motion.div>
