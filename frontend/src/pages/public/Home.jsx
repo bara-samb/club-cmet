@@ -176,7 +176,7 @@ export default function Home() {
                         style={{ transformOrigin: 'center center' }} />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-[#003058]/60 via-[#003058]/40 to-[#003058]/80" />
-                <div className="relative max-w-5xl mx-auto text-center z-10">
+                <div className="relative max-w-6xl mx-auto text-center z-10">
                     <span className="anim-badge inline-block bg-[#002850] text-[#187840] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
                         Club de l'UFR Métiers et Technologies
                     </span>
@@ -203,7 +203,7 @@ export default function Home() {
             </section>
 
             {/* ── STATS SECTION ── */}
-            <section className="py-12 px-6 max-w-5xl mx-auto -mt-10 relative z-20">
+            <section className="py-12 px-6 max-w-7xl mx-auto -mt-10 relative z-20">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     {[
                         { label: "Tutorat & Partage", value: "Entraide académique continue", bg: "bg-emerald-50 text-emerald-800" },
@@ -220,7 +220,7 @@ export default function Home() {
             </section>
 
             {/* ── À PROPOS (Le Club) ── */}
-            <section id="about-club" className="py-16 px-6 max-w-5xl mx-auto scroll-mt-20">
+            <section id="about-club" className="py-16 px-6 max-w-7xl mx-auto scroll-mt-20">
                 <div className="mb-12">
                     <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] mb-6 text-center">
                         Le Club Métiers & Technologies
@@ -289,7 +289,7 @@ export default function Home() {
 
             {/* ── PARCOURS & HISTOIRE ── */}
             <section className="py-20 bg-gradient-to-b from-white to-[#f8fafc] px-6 border-t border-gray-100 overflow-hidden">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/25">
                             Notre Histoire
@@ -324,7 +324,7 @@ export default function Home() {
 
             {/* ── FONCTIONNEMENT ── */}
             <section id="fonctionnement" className="py-16 bg-[#f1f5f9] border-t border-b border-gray-100 px-6 scroll-mt-20">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Régime Interne</span>
                         <h2 className="text-2xl font-bold text-[#003058] mt-3">Règles de Fonctionnement Exécutif</h2>
@@ -392,7 +392,7 @@ export default function Home() {
 
             {/* ── ACTIVITÉS & MÉDIAS ── */}
             <section className="py-20 bg-[#f8fafc] border-t border-gray-100 px-6 overflow-hidden">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <h2 className="text-3xl md:text-4xl font-extrabold text-[#003058]">Actualités, Activités & Médias</h2>
                         <p className="text-slate-500 mt-4 max-w-2xl mx-auto text-sm leading-relaxed">Suivez nos événements, participez à nos ateliers et revivez en images les moments forts du club.</p>

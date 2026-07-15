@@ -13,7 +13,7 @@ export default function UfrMet() {
                 </p>
             </div>
 
-            <section className="py-16 px-6 max-w-5xl mx-auto">
+            <section className="py-16 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-12">
                     <span className="inline-block text-[10px] font-black text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/20 mb-4">
                         Filières de Formation
