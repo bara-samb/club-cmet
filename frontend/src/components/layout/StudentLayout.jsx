@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users, CreditCard } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FolderOpen, User, MessageSquare, Bell, LogOut, Menu, X, ChevronLeft, Users, CreditCard } from '../ui/Icons';
 import useAuth from '../../hooks/useAuth';
 import { supabase } from '../../config/supabaseClient';
 

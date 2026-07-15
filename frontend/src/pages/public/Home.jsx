@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, Home as HomeIcon, Image, ChevronDown, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Calendar, X, Check, Loader2, Users, Phone, Info, BookOpen, GraduationCap, FileText, Mail, HomeIcon, Image, ChevronDown, CheckCircle2, AlertTriangle } from '../../components/ui/Icons';
 
 /* ── Icônes réseaux sociaux ── */
 const FacebookIcon = () => (

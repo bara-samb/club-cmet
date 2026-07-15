@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from 'lucide-react';
+import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, LogOut, ChevronLeft, Menu, X, Mail, Bell, Calendar, Camera } from '../ui/Icons';
 import useAuth from '../../hooks/useAuth';
 
 export default function AdminLayout() {
