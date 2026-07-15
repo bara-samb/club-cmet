@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { HomeIcon, Users, GraduationCap, Mail } from '../ui/Icons';
+import { HomeIcon, Users, GraduationCap, Mail, Sun, Moon } from '../ui/Icons';
+import useTheme from '../../hooks/useTheme';
 
 const FacebookIcon = () => (
     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -26,6 +27,7 @@ const TikTokIcon = () => (
 export default function PublicLayout() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { theme, toggleTheme } = useTheme();
 
     const isActive = (path) => location.pathname === path;
 
@@ -37,15 +39,15 @@ export default function PublicLayout() {
     ];
 
     return (
-        <div className="min-h-screen bg-white flex flex-col justify-between antialiased text-slate-800">
+        <div className="min-h-screen bg-white dark:bg-ucak-dark flex flex-col justify-between antialiased text-slate-800 dark:text-slate-100 transition-colors">
             {/* ════════ HIGH-END INSTITUTIONAL NAVBAR ════════ */}
-            <nav className="bg-white text-slate-800 px-6 md:px-10 py-4 flex justify-between items-center border-b border-slate-200/80 fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-150">
+            <nav className="bg-white dark:bg-ucak-dark-card text-slate-800 dark:text-slate-100 px-6 md:px-10 py-4 flex justify-between items-center border-b border-slate-200/80 dark:border-white/10 fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-150">
                 <Link to="/" className="flex items-center gap-3 cursor-pointer">
                     <div className="relative w-11 h-11 md:w-12 md:h-12 shrink-0">
                         <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-full h-full rounded-full object-cover border border-slate-200" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-extrabold text-base md:text-lg tracking-wide leading-none text-[#003058]">CLUB-MET</span>
+                        <span className="font-extrabold text-base md:text-lg tracking-wide leading-none text-[#003058] dark:text-white">CLUB-MET</span>
                         <span className="text-[9px] md:text-[10px] text-slate-400 font-bold tracking-wider uppercase mt-1">UFR MET • UCAK</span>
                     </div>
                 </Link>
@@ -61,8 +63,8 @@ export default function PublicLayout() {
                                 to={link.path}
                                 className={`py-2 transition-colors duration-150 flex items-center gap-2 relative ${
                                     active 
-                                        ? 'text-[#003058] after:absolute after:bottom-[-20px] after:left-0 after:right-0 after:h-[3px] after:bg-[#187840]' 
-                                        : 'text-slate-500 hover:text-[#003058]'
+                                        ? 'text-[#003058] dark:text-white after:absolute after:bottom-[-20px] after:left-0 after:right-0 after:h-[3px] after:bg-[#187840]' 
+                                        : 'text-slate-500 hover:text-[#003058] dark:text-slate-400 dark:hover:text-white'
                                 }`}
                             >
                                 <IconComponent size={15} /> {link.label}
@@ -72,8 +74,15 @@ export default function PublicLayout() {
                 </div>
 
                 {/* Action Button */}
-                <div className="flex items-center gap-4 text-xs md:text-sm">
-                    <button 
+                <div className="flex items-center gap-3 text-xs md:text-sm">
+                    <button
+                        onClick={toggleTheme}
+                        title="Changer de thème"
+                        className="p-2.5 text-slate-500 dark:text-slate-300 hover:text-[#003058] dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl transition-colors"
+                    >
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
+                    <button
                         onClick={() => navigate('/login')}
                         className="bg-[#187840] hover:bg-[#125e31] text-white px-5 md:px-6 py-2.5 rounded-xl font-bold tracking-wider transition-colors duration-150 shadow-sm"
                     >
@@ -83,7 +92,7 @@ export default function PublicLayout() {
             </nav>
 
             {/* ════════ MOBILE BOTTOM NAVIGATION BAR ════════ */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 h-16 flex items-center justify-around text-slate-600 px-2 shadow-lg">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-ucak-dark-card border-t border-slate-200 dark:border-white/10 h-16 flex items-center justify-around text-slate-600 dark:text-slate-300 px-2 shadow-lg">
                 {navLinks.map((link) => {
                     const IconComponent = link.Icon;
                     const active = isActive(link.path);
@@ -109,7 +118,8 @@ export default function PublicLayout() {
             </main>
 
             {/* ════════ FOOTER ════════ */}
-            <footer className="bg-[#003058] text-white pt-10 pb-4 px-6 border-t border-slate-800 text-xs">
+            {/* pb-24 en mobile pour que la bottom-nav fixe ne recouvre pas le logo/copyright */}
+            <footer className="bg-[#003058] text-white pt-10 pb-24 md:pb-4 px-6 border-t border-slate-800 text-xs">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div className="space-y-3">
                         <h5 className="font-bold text-[#187840] uppercase tracking-wider">Contacts</h5>
@@ -118,13 +128,13 @@ export default function PublicLayout() {
                                 <svg className="w-4 h-4 text-[#187840] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 </svg>
-                                <span>Complexe Universitaire de Touba, Mbacké, Sénégal</span>
+                                <span>Complexe Universitaire de Touba, Sénégal</span>
                             </div>
                             <div className="flex items-center gap-2.5">
                                 <svg className="w-4 h-4 text-[#187840] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
-                                <a href="tel:+221338000000" className="hover:text-white underline">+221 33 800 00 00</a>
+                                <a href="tel:+221787941004" className="hover:text-white underline">+221 78 79 41 004</a>
                             </div>
                             <div className="flex items-center gap-2.5">
                                 <svg className="w-4 h-4 text-[#187840] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -152,7 +162,7 @@ export default function PublicLayout() {
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#1877F2]/20 flex items-center justify-center transition-colors shrink-0"><FacebookIcon /></span>
                                 <span>Facebook</span>
                             </a>
-                            <a href="https://www.instagram.com/cmet_officiel?igsh=c2hqN2EwaXgyazV5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#E1306C] transition-colors group">
+                            <a href="https://www.instagram.com/cmet_officiel/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 text-slate-400 hover:text-[#E1306C] transition-colors group">
                                 <span className="w-7 h-7 rounded-full bg-slate-800 group-hover:bg-[#E1306C]/20 flex items-center justify-center transition-colors shrink-0"><InstagramIcon /></span>
                                 <span>Instagram</span>
                             </a>

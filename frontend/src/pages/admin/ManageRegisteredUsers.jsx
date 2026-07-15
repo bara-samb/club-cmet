@@ -132,7 +132,7 @@ export default function ManageRegisteredUsers() {
     const studentCount = users.filter((u) => u.role === "student").length;
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-4 md:p-8">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark p-4 md:p-8">
             {/* Toast Alerts */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all transform translate-y-0 ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -145,9 +145,9 @@ export default function ManageRegisteredUsers() {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center">
                         <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                            <Shield className="w-8 h-8 text-[#003058]" />
+                            <Shield className="w-8 h-8 text-[#003058] dark:text-white" />
                         </div>
-                        <h3 className="font-black text-xl text-[#003058] mb-2">Modifier le rôle ?</h3>
+                        <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Modifier le rôle ?</h3>
                         <p className="text-sm text-slate-500 mb-6">
                             Voulez-vous vraiment changer le rôle de <strong>{confirmRoleUser.prenom} {confirmRoleUser.nom}</strong> en tant que{" "}
                             <span className="font-extrabold text-[#187840]">
@@ -193,26 +193,26 @@ export default function ManageRegisteredUsers() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-black text-[#003058] tracking-tight">Utilisateurs Inscrits</h1>
+                        <h1 className="text-3xl font-black text-[#003058] dark:text-white tracking-tight">Utilisateurs Inscrits</h1>
                         <p className="text-sm text-slate-500 mt-1 font-medium">Visualiser, filtrer et gérer les permissions des utilisateurs enregistrés sur la plateforme.</p>
                     </div>
-                    <button onClick={fetchUsers} className="self-start md:self-auto flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors">
+                    <button onClick={fetchUsers} className="self-start md:self-auto flex items-center gap-2 bg-white dark:bg-ucak-dark-card border border-slate-200 dark:border-white/10 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors">
                         <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Actualiser
                     </button>
                 </div>
 
                 {/* Stat Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                         <div>
                             <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Utilisateurs</span>
-                            <span className="block text-2xl font-black text-[#003058] mt-1">{totalCount}</span>
+                            <span className="block text-2xl font-black text-[#003058] dark:text-white mt-1">{totalCount}</span>
                         </div>
                         <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
                             <User size={22} />
                         </div>
                     </div>
-                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                         <div>
                             <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Administrateurs</span>
                             <span className="block text-2xl font-black text-[#187840] mt-1">{adminCount}</span>
@@ -221,19 +221,19 @@ export default function ManageRegisteredUsers() {
                             <Shield size={22} />
                         </div>
                     </div>
-                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                         <div>
                             <span className="block text-slate-400 text-[10px] font-black uppercase tracking-wider">Étudiants</span>
-                            <span className="block text-2xl font-black text-[#003058] mt-1">{studentCount}</span>
+                            <span className="block text-2xl font-black text-[#003058] dark:text-white mt-1">{studentCount}</span>
                         </div>
-                        <div className="w-12 h-12 bg-[#003058]/10 rounded-xl flex items-center justify-center text-[#003058]">
+                        <div className="w-12 h-12 bg-[#003058]/10 rounded-xl flex items-center justify-center text-[#003058] dark:text-white">
                             <GraduationCap size={22} />
                         </div>
                     </div>
                 </div>
 
                 {/* Filters Row */}
-                <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center">
+                <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center">
                     {/* Search */}
                     <div className="relative w-full md:flex-1">
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
@@ -279,7 +279,7 @@ export default function ManageRegisteredUsers() {
                 </div>
 
                 {/* Users List Container */}
-                <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+                <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm overflow-hidden">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-24 gap-3">
                             <Loader2 className="w-8 h-8 text-[#187840] animate-spin" />
@@ -312,7 +312,7 @@ export default function ManageRegisteredUsers() {
                                             <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black shadow-sm shrink-0 ${user.role === "admin" ? "bg-[#187840]/10 text-[#187840] border border-[#187840]/10" : "bg-[#003058]/10 text-[#003058] border border-[#003058]/10"}`}>
+                                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-black shadow-sm shrink-0 ${user.role === "admin" ? "bg-[#187840]/10 text-[#187840] border border-[#187840]/10" : "bg-[#003058]/10 text-[#003058] dark:text-white border border-[#003058]/10"}`}>
                                                             {user.avatar_url || user.profilePic ? (
                                                                 <img src={user.avatar_url || user.profilePic} alt="" className="w-full h-full object-cover rounded-xl" />
                                                             ) : (
@@ -320,7 +320,7 @@ export default function ManageRegisteredUsers() {
                                                             )}
                                                         </div>
                                                         <div>
-                                                            <div className="text-xs font-bold text-[#003058]">{user.prenom} {user.nom}</div>
+                                                            <div className="text-xs font-bold text-[#003058] dark:text-white">{user.prenom} {user.nom}</div>
                                                             <div className="text-[10px] text-slate-400 font-semibold mt-0.5">ID: {user.id.slice(0, 8)}...</div>
                                                         </div>
                                                     </div>
@@ -332,13 +332,13 @@ export default function ManageRegisteredUsers() {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#f1f5f9] border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
+                                                    <span className="text-[10px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark border border-slate-200/50 px-2.5 py-1.5 rounded-lg uppercase tracking-wider">
                                                         {user.niveau || "Non spécifié"}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex flex-col gap-1.5">
-                                                        <span className={user.role === "admin" ? "badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max" : "badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max"}>
+                                                        <span className={user.role === "admin" ? "badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max" : "badge bg-[#003058]/10 text-[#003058] dark:text-white border border-[#003058]/10 text-[9px] px-2.5 py-1 rounded-full uppercase font-black w-max"}>
                                                             {user.role === "admin" ? "Administrateur" : "Étudiant"}
                                                         </span>
                                                         {user.role === "admin" && (
@@ -368,7 +368,7 @@ export default function ManageRegisteredUsers() {
                                                                 <button
                                                                     onClick={() => setConfirmRoleUser(user)}
                                                                     title={user.role === "admin" ? "Rétrograder en Étudiant" : "Promouvoir en Administrateur"}
-                                                                    className="p-2 bg-slate-50 hover:bg-[#003058]/10 text-[#003058] border border-slate-200 hover:border-[#003058]/20 rounded-xl transition-all shadow-sm"
+                                                                    className="p-2 bg-slate-50 hover:bg-[#003058]/10 text-[#003058] dark:text-white border border-slate-200 hover:border-[#003058]/20 rounded-xl transition-all shadow-sm"
                                                                 >
                                                                     <Shield size={14} />
                                                                 </button>

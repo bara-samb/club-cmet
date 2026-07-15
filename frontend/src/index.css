@@ -42,6 +42,12 @@
     overflow-x: hidden;
     font-size: 1.125rem;
     line-height: 1.6;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  .dark body {
+    color: #e2e8f0;
+    background: #002850;
   }
 
   h1,
@@ -70,15 +76,15 @@
 
   /* Bouton secondaire */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-white text-[#003058] font-semibold text-sm px-5 py-2.5 rounded-xl border border-[#e2e8f0] transition-all duration-150 ease-out hover:-translate-y-px hover:border-slate-300 hover:bg-[#f1f5f9] active:translate-y-0 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 bg-white dark:bg-ucak-dark-card text-[#003058] dark:text-white font-semibold text-sm px-5 py-2.5 rounded-xl border border-[#e2e8f0] dark:border-white/10 transition-all duration-150 ease-out hover:-translate-y-px hover:border-slate-300 hover:bg-[#f1f5f9] dark:hover:bg-ucak-dark-hover active:translate-y-0 active:scale-[0.98];
     box-shadow: var(--shadow-sm);
   }
 
   /* Card premium */
   .card {
-    @apply bg-white rounded-2xl border border-slate-100;
+    @apply bg-white dark:bg-ucak-dark-card rounded-2xl border border-slate-100 dark:border-white/10;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow var(--transition-base), transform var(--transition-base);
+    transition: box-shadow var(--transition-base), transform var(--transition-base), background-color var(--transition-base);
   }
 
   .card:hover {
@@ -88,7 +94,7 @@
 
   /* Input professionnel */
   .input-field {
-    @apply w-full bg-white border border-[#e2e8f0] rounded-xl px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all duration-150 focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15;
+    @apply w-full bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-150 focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/15;
   }
 
   /* Badge */
@@ -97,15 +103,15 @@
   }
 
   .badge-green {
-    @apply badge bg-[#187840]/10 text-[#125e31] border border-[#187840]/20;
+    @apply badge bg-[#187840]/10 text-[#125e31] dark:text-[#5fd996] border border-[#187840]/20;
   }
 
   .badge-navy {
-    @apply badge bg-[#003058]/10 text-[#003058] border border-[#003058]/10;
+    @apply badge bg-[#003058]/10 text-[#003058] dark:text-slate-200 border border-[#003058]/10;
   }
 
   .badge-blue {
-    @apply badge bg-blue-50 text-blue-700 border border-blue-100;
+    @apply badge bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-500/20;
   }
 }
 

@@ -185,7 +185,7 @@ export default function ManageCotisations() {
     };
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-6">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark p-6">
             {/* Toast */}
             {toast && (
                 <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
@@ -200,7 +200,7 @@ export default function ManageCotisations() {
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
-                        <h3 className="font-black text-xl text-[#003058] mb-2">Rejeter ce paiement ?</h3>
+                        <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Rejeter ce paiement ?</h3>
                         <p className="text-sm text-slate-500 mb-8">La déclaration de <strong>{confirmDel.nom}</strong> sera définitivement supprimée.</p>
                         <div className="flex gap-4">
                             <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
@@ -212,15 +212,15 @@ export default function ManageCotisations() {
 
             <div className="max-w-5xl mx-auto space-y-8">
                 <div>
-                    <h1 className="text-3xl font-black text-[#003058] tracking-tight">Gestion des Cotisations</h1>
+                    <h1 className="text-3xl font-black text-[#003058] dark:text-white tracking-tight">Gestion des Cotisations</h1>
                     <p className="text-sm text-slate-500 mt-1 font-medium">Configurez le lien de paiement marchand Wave, validez les déclarations des étudiants ou saisissez des cotisations manuelles.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     {/* CONFIGURATION LIEN WAVE (1/3) */}
-                    <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 space-y-6">
-                        <h2 className="font-bold text-base text-[#003058] flex items-center gap-2">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 space-y-6">
+                        <h2 className="font-bold text-base text-[#003058] dark:text-white flex items-center gap-2">
                             <CreditCard className="text-[#187840]" size={18} /> Lien Wave Marchand
                         </h2>
                         <form onSubmit={handleSaveWaveLink} className="space-y-4">
@@ -243,8 +243,8 @@ export default function ManageCotisations() {
                     </div>
 
                     {/* ENREGISTRER UNE COTISATION MANUELLE (2/3) */}
-                    <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:col-span-2 space-y-6">
-                        <h2 className="font-bold text-base text-[#003058] flex items-center gap-2">
+                    <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:col-span-2 space-y-6">
+                        <h2 className="font-bold text-base text-[#003058] dark:text-white flex items-center gap-2">
                             <Plus className="text-[#187840]" size={18} /> Enregistrer une cotisation (Espèces / Wave direct)
                         </h2>
                         <form onSubmit={handleAddManualPayment} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -324,8 +324,8 @@ export default function ManageCotisations() {
                 </div>
 
                 {/* LISTE DES COTISATIONS SOUMISES */}
-                <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
-                    <h2 className="font-black text-xl text-[#003058] flex items-center gap-3 mb-8">
+                <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
+                    <h2 className="font-black text-xl text-[#003058] dark:text-white flex items-center gap-3 mb-8">
                         <Users className="text-[#187840]" size={24} />
                         Déclarations & Cotisations
                         <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{cotisations.length}</span>
@@ -337,7 +337,7 @@ export default function ManageCotisations() {
                             <p className="text-sm font-medium text-slate-500">Chargement des cotisations...</p>
                         </div>
                     ) : cotisations.length === 0 ? (
-                        <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
+                        <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
                             <CreditCard className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                             <p className="text-sm font-bold text-slate-500">Aucune cotisation enregistrée pour le moment.</p>
                         </div>
@@ -358,10 +358,10 @@ export default function ManageCotisations() {
                                     {cotisations.map(c => (
                                         <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
                                             <td className="py-4 px-4">
-                                                <div className="font-bold text-[#003058]">{c.nom}</div>
+                                                <div className="font-bold text-[#003058] dark:text-white">{c.nom}</div>
                                                 <div className="text-[10px] text-slate-400 font-medium">{c.classe}</div>
                                             </td>
-                                            <td className="py-4 px-4 font-extrabold text-[#003058]">
+                                            <td className="py-4 px-4 font-extrabold text-[#003058] dark:text-white">
                                                 {Number(c.montant).toLocaleString()} FCFA
                                             </td>
                                             <td className="py-4 px-4 text-slate-500 font-medium">

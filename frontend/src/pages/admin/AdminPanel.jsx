@@ -75,7 +75,7 @@ export default function AdminPanel() {
                         to={action.path}
                         className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#187840]/30 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden"
                     >
-                        <div className="w-14 h-14 bg-[#f1f5f9] rounded-2xl flex items-center justify-center mb-6 text-[#003058] group-hover:bg-[#187840] group-hover:text-white transition-colors duration-300 border border-slate-100 group-hover:border-[#187840]">
+                        <div className="w-14 h-14 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl flex items-center justify-center mb-6 text-[#003058] dark:text-white group-hover:bg-[#187840] group-hover:text-white transition-colors duration-300 border border-slate-100 group-hover:border-[#187840]">
                             <action.icon size={26} strokeWidth={2} />
                         </div>
                         {action.badge !== undefined && action.badge > 0 && (
@@ -83,7 +83,7 @@ export default function AdminPanel() {
                                 {action.badge} non lu{action.badge > 1 ? 's' : ''}
                             </span>
                         )}
-                        <h3 className="text-lg font-black text-[#003058] mb-2 tracking-tight leading-tight">{action.title}</h3>
+                        <h3 className="text-lg font-black text-[#003058] dark:text-white mb-2 tracking-tight leading-tight">{action.title}</h3>
                         <p className="text-sm text-slate-500 font-medium leading-relaxed">{action.desc}</p>
                     </Link>
                 ))}

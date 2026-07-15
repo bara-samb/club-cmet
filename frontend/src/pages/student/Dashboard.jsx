@@ -118,7 +118,7 @@ export default function Dashboard() {
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: s.accentBg }}>
                             <s.Icon size={18} style={{ color: s.accent }} />
                         </div>
-                        <p className="text-xl md:text-2xl font-bold text-[#003058] tracking-tight">{s.value}</p>
+                        <p className="text-xl md:text-2xl font-bold text-[#003058] dark:text-white tracking-tight">{s.value}</p>
                         <p className="text-[11px] font-semibold text-slate-400 mt-0.5 uppercase tracking-wide">{s.label}</p>
                     </div>
                 ))}
@@ -156,7 +156,7 @@ export default function Dashboard() {
                                     <div className="min-w-0">
                                         <p className="text-xs font-bold text-slate-700 truncate">{b.nom}</p>
                                         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                                            <span className="text-[9px] font-black text-[#003058] bg-[#003058]/5 px-1.5 py-0.5 rounded uppercase tracking-wider">{formatCategory(b.categorie)}</span>
+                                            <span className="text-[9px] font-black text-[#003058] dark:text-white bg-[#003058]/5 px-1.5 py-0.5 rounded uppercase tracking-wider">{formatCategory(b.categorie)}</span>
                                             <span className="text-[9px] font-bold text-slate-400">{b.niveau}</span>
                                         </div>
                                     </div>

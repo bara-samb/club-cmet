@@ -11,7 +11,7 @@ const ERRORS = {
 };
 
 export default function Register() {
-    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", role:"student", password:"", confirm:"" });
+    const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", password:"", confirm:"" });
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -48,41 +48,13 @@ export default function Register() {
                         prenom: form.prenom,
                         email: form.email,
                         niveau: form.niveau,
-                        role: form.role,
-                        approuve: form.role !== 'admin'
+                        role: 'student',
+                        approuve: true
                     });
                 if (insertErr) throw insertErr;
             }
-            
-            if (form.role === 'admin') {
-                // Fetch emails of all currently approved admins to notify them
-                try {
-                    const { data: admins } = await supabase
-                        .from('users')
-                        .select('email')
-                        .eq('role', 'admin')
-                        .eq('approuve', true);
 
-                    if (admins && admins.length > 0) {
-                        const adminEmails = admins.map(a => a.email);
-                        await supabase.functions.invoke('send-approval-email', {
-                            body: {
-                                prenom: form.prenom,
-                                nom: form.nom,
-                                email: form.email,
-                                adminEmails
-                            }
-                        });
-                    }
-                } catch (fnErr) {
-                    console.warn("Échec de l'envoi du mail de notification aux admins (l'Edge Function n'est peut-être pas déployée) :", fnErr);
-                }
-
-                await supabase.auth.signOut();
-                navigate("/login", { state: { info: "Votre inscription en tant qu'administrateur a été enregistrée. Elle doit être approuvée par un administrateur existant avant de pouvoir vous connecter." } });
-            } else {
-                navigate("/student/dashboard");
-            }
+            navigate("/student/dashboard");
         } catch (err) {
             setError(ERRORS[err.message] || err.message || "Erreur lors de l'inscription.");
         } finally {
@@ -91,7 +63,7 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark flex items-center justify-center px-4 py-10">
             <div className="anim-fade-up w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
@@ -104,7 +76,7 @@ export default function Register() {
 
                 {/* Body */}
                 <div className="px-8 py-8">
-                    <h2 className="text-[#003058] font-bold text-lg mb-1">Créer un compte</h2>
+                    <h2 className="text-[#003058] dark:text-white font-bold text-lg mb-1">Créer un compte</h2>
                     <p className="text-slate-400 text-xs mb-6">Rejoins la communauté Club-MET.</p>
 
                     {error && (
@@ -143,18 +115,6 @@ export default function Register() {
                                         className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
                                     <option value="">— Sélectionner votre niveau —</option>
                                     {NIVEAUX.map(n => <option key={n} value={n}>{n}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Rôle *</label>
-                            <div className="relative">
-                                <select required value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
-                                        className="input-field bg-white appearance-none pr-10 font-semibold cursor-pointer">
-                                    <option value="student">Étudiant (Espace Étudiant)</option>
-                                    <option value="admin">Administrateur (Espace Admin)</option>
                                 </select>
                                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                             </div>

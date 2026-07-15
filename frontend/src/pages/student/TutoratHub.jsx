@@ -113,7 +113,7 @@ export default function MessagesHub() {
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
                         <div>
-                            <h1 className="text-2xl font-black text-[#003058] flex items-center gap-3">
+                            <h1 className="text-2xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                                 <MessageSquare className="text-[#187840] w-7 h-7" />
                                 Envoyer un message
                             </h1>
@@ -138,7 +138,7 @@ export default function MessagesHub() {
                                     placeholder="Ex: Question sur l'inscription, Demande d'aide, Suggestion..."
                                     value={objet}
                                     onChange={(e) => setObjet(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
+                                    className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold"
                                 />
                             </div>
 
@@ -150,7 +150,7 @@ export default function MessagesHub() {
                                     placeholder="Rédigez votre message ici... Soyez le plus précis possible pour que le bureau puisse vous aider efficacement."
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
-                                    className="w-full px-4 py-3 bg-[#f1f5f9] border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold resize-none"
+                                    className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#187840] focus:ring-2 focus:ring-[#187840]/20 transition-all font-semibold resize-none"
                                 ></textarea>
                             </div>
 
@@ -173,7 +173,7 @@ export default function MessagesHub() {
                 <div className="space-y-6">
                     <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm overflow-hidden sticky top-6">
                         <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                            <div className="flex items-center gap-2 font-bold text-[#003058]">
+                            <div className="flex items-center gap-2 font-bold text-[#003058] dark:text-white">
                                 <Clock size={18} className="text-[#187840]" />
                                 <h2>Mes messages envoyés</h2>
                             </div>
@@ -196,9 +196,9 @@ export default function MessagesHub() {
                         ) : (
                             <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                                 {myMessages.map((msg) => (
-                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 bg-[#f1f5f9] text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
+                                    <div key={msg.id} className="p-4 rounded-xl border border-slate-100 bg-[#f1f5f9] dark:bg-ucak-dark text-xs space-y-2 hover:border-[#187840]/30 transition-colors">
                                         <div className="flex justify-between items-start gap-2">
-                                            <p className="font-bold text-[#003058] text-sm leading-tight line-clamp-2 flex-1">
+                                            <p className="font-bold text-[#003058] dark:text-white text-sm leading-tight line-clamp-2 flex-1">
                                                 {msg.message}
                                             </p>
                                             <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] shrink-0 border ${

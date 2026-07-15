@@ -183,7 +183,7 @@ export default function ManageUsers() {
     const resetForm = () => { setForm(VIDE); setEditId(null); setImageFile(null); setPreview(null); };
 
     return (
-        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] p-6">
+        <div className="anim-fade-up min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark p-6">
 
             {/* Toast */}
             {toast && (
@@ -199,7 +199,7 @@ export default function ManageUsers() {
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <AlertTriangle className="w-8 h-8 text-red-500" />
                         </div>
-                        <h3 className="font-black text-xl text-[#003058] mb-2">Supprimer ce membre ?</h3>
+                        <h3 className="font-black text-xl text-[#003058] dark:text-white mb-2">Supprimer ce membre ?</h3>
                         <p className="text-sm text-slate-500 mb-8"><strong>{confirmDel.nom}</strong> sera définitivement retiré du bureau.</p>
                         <div className="flex gap-4">
                             <button onClick={() => setConfirmDel(null)} className="flex-1 bg-slate-100 hover:bg-slate-200 rounded-xl py-3 text-sm font-bold text-slate-600 transition-colors">Annuler</button>
@@ -211,13 +211,13 @@ export default function ManageUsers() {
 
             <div className="max-w-5xl mx-auto space-y-8">
                 <div>
-                    <h1 className="text-3xl font-black text-[#003058] tracking-tight">Gestion du Bureau</h1>
+                    <h1 className="text-3xl font-black text-[#003058] dark:text-white tracking-tight">Gestion du Bureau</h1>
                     <p className="text-sm text-slate-500 mt-1 font-medium">Ajouter, modifier ou supprimer les membres officiels du bureau.</p>
                 </div>
 
                 {/* Formulaire */}
-                <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
-                    <h2 className="font-bold text-lg text-[#003058] mb-6 flex items-center gap-3">
+                <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
+                    <h2 className="font-bold text-lg text-[#003058] dark:text-white mb-6 flex items-center gap-3">
                         <span className="w-10 h-10 bg-[#187840]/10 rounded-2xl flex items-center justify-center">
                             {editId ? <Pencil className="w-5 h-5 text-[#187840]" /> : <UserPlus className="w-5 h-5 text-[#187840]" />}
                         </span>
@@ -227,7 +227,7 @@ export default function ManageUsers() {
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         {/* Photo */}
-                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] rounded-2xl border border-slate-100">
+                        <div className="md:col-span-2 flex items-center gap-6 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shrink-0 bg-slate-100 flex items-center justify-center">
                                 {preview
                                     ? <img src={preview} alt="preview" className="w-full h-full object-cover" />
@@ -303,8 +303,8 @@ export default function ManageUsers() {
                         )}
 
                         {uploading && (
-                            <div className="md:col-span-2 bg-[#f1f5f9] p-4 rounded-xl border border-slate-100">
-                                <div className="flex justify-between text-[11px] font-bold text-[#003058] mb-2">
+                            <div className="md:col-span-2 bg-[#f1f5f9] dark:bg-ucak-dark p-4 rounded-xl border border-slate-100">
+                                <div className="flex justify-between text-[11px] font-bold text-[#003058] dark:text-white mb-2">
                                     <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin text-[#187840]" /> Upload en cours...</span>
                                     <span className="text-[#187840]">{progress}%</span>
                                 </div>
@@ -331,16 +331,16 @@ export default function ManageUsers() {
                 </div>
 
                 {/* Liste */}
-                <div className="bg-white border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
+                <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-2 border-b border-slate-100">
-                        <h2 className="font-black text-xl text-[#003058] flex items-center gap-3">
+                        <h2 className="font-black text-xl text-[#003058] dark:text-white flex items-center gap-3">
                             <Users className="text-[#187840]" size={24} />
                             Membres enregistrés
                             <span className="bg-[#187840]/10 text-[#187840] text-sm px-3 py-1 rounded-full">{membres.length}</span>
                         </h2>
                         
                         {/* Onglets d'administration */}
-                        <div className="flex gap-2 bg-[#f1f5f9] p-1 rounded-xl border border-slate-200/50">
+                        <div className="flex gap-2 bg-[#f1f5f9] dark:bg-ucak-dark p-1 rounded-xl border border-slate-200/50">
                             <button type="button" onClick={() => setActiveTab('actuels')}
                                 className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'actuels' ? 'bg-white text-[#187840] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
                                 Actuels ({membresActuels.length})
@@ -359,14 +359,14 @@ export default function ManageUsers() {
                         </div>
                     ) : activeTab === 'actuels' ? (
                         membresActuels.length === 0 ? (
-                            <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun membre actuel enregistré.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 animate-in fade-in duration-300">
                                 {membresActuels.map(m => (
-                                    <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
+                                    <div key={m.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative">
                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                                                 className="w-7 h-7 bg-white border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-400 rounded-lg flex items-center justify-center transition-colors shadow-sm"
@@ -385,10 +385,10 @@ export default function ManageUsers() {
                                                 : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
                                             }
                                         </div>
-                                        <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                        <h4 className="font-bold text-sm text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                         <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                            <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -396,7 +396,7 @@ export default function ManageUsers() {
                         )
                     ) : (
                         membresAnciens.length === 0 ? (
-                            <div className="text-center py-20 bg-[#f1f5f9] rounded-2xl border border-slate-100 border-dashed">
+                            <div className="text-center py-20 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 border-dashed">
                                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                                 <p className="text-sm font-bold text-slate-500">Aucun ancien membre enregistré.</p>
                             </div>
@@ -410,7 +410,7 @@ export default function ManageUsers() {
                                         </h3>
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                             {groupedAnciens[year].map(m => (
-                                                <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative flex flex-col justify-between">
+                                                <div key={m.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md hover:border-[#187840]/30 transition-all group relative flex flex-col justify-between">
                                                     <div>
                                                         <div className="absolute top-2 right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                                             <button onClick={() => { setEditId(m.id); setForm({ nom: m.nom, poste: m.poste, classe: m.classe, imageUrl: m.imageUrl || "", estAncien: m.estAncien || false, annee: m.annee || "" }); setPreview(m.imageUrl || null); setImageFile(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}
@@ -430,11 +430,11 @@ export default function ManageUsers() {
                                                                 : <div className="w-full h-full bg-[#003058] flex items-center justify-center text-[#187840] text-2xl font-black">{m.nom?.[0]}</div>
                                                             }
                                                         </div>
-                                                        <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                                        <h4 className="font-bold text-sm text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                                         <p className="text-xs text-[#187840] font-semibold mt-1 leading-tight">{m.poste}</p>
                                                     </div>
                                                     <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
+                                                        <span className="text-[9px] font-bold text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark py-0.5 px-2 rounded border border-slate-100 uppercase tracking-wider">{m.classe}</span>
                                                     </div>
                                                 </div>
                                             ))}

@@ -128,7 +128,7 @@ export default function ManageMessages() {
             {/* Header */}
             <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-[#003058] flex items-center gap-3">
+                    <h1 className="text-3xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                         <Mail className="text-[#187840] w-8 h-8" /> Messages de Contact
                     </h1>
                     <p className="text-sm text-slate-500 mt-2">
@@ -156,7 +156,7 @@ export default function ManageMessages() {
 
             {/* Barre de Filtres */}
             <div className="bg-white p-5 rounded-2xl border border-gray-200/60 shadow-sm mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-[#003058] font-bold text-sm">
+                <div className="flex items-center gap-2 text-[#003058] dark:text-white font-bold text-sm">
                     <Filter size={16} className="text-[#187840]" /> Filtres rapides :
                 </div>
                 <div className="flex gap-2 flex-wrap">
@@ -171,7 +171,7 @@ export default function ManageMessages() {
                             className={`px-4 py-1.5 rounded-full text-[11px] font-bold border transition-all ${
                                 filtreStatut === f.id
                                     ? 'bg-[#003058] text-white border-[#003058] shadow-sm'
-                                    : 'bg-[#f1f5f9] text-slate-600 border-[#e2e8f0]/50 hover:border-[#003058] hover:text-[#003058]'
+                                    : 'bg-[#f1f5f9] dark:bg-ucak-dark text-slate-600 dark:text-slate-400 border-[#e2e8f0]/50 hover:border-[#003058] hover:text-[#003058] dark:hover:text-white'
                             }`}>
                             {f.label}
                         </button>
@@ -198,7 +198,7 @@ export default function ManageMessages() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse text-xs">
                             <thead>
-                                <tr className="bg-slate-50 border-b border-gray-100 text-[#003058] font-bold uppercase tracking-wider">
+                                <tr className="bg-slate-50 border-b border-gray-100 text-[#003058] dark:text-white font-bold uppercase tracking-wider">
                                     <th className="p-4 pl-6 w-16 text-center">Statut</th>
                                     <th className="p-4">Expéditeur</th>
                                     <th className="p-4">Message</th>
@@ -211,7 +211,7 @@ export default function ManageMessages() {
                                     <tr 
                                         key={msg.id} 
                                         onClick={() => lireMessage(msg)}
-                                        className={`hover:bg-[#f1f5f9]/50 transition-colors cursor-pointer ${
+                                        className={`hover:bg-[#f1f5f9] dark:hover:bg-ucak-dark/50 transition-colors cursor-pointer ${
                                             msg.statut === 'non_lu' ? 'font-bold bg-green-50/20' : 'text-slate-500'
                                         }`}>
                                         
@@ -283,24 +283,24 @@ export default function ManageMessages() {
                                     <MailOpen size={20} />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-black text-[#003058] uppercase tracking-wide">Lecture du message</h3>
+                                    <h3 className="text-sm font-black text-[#003058] dark:text-white uppercase tracking-wide">Lecture du message</h3>
                                     <p className="text-[10px] text-slate-400 font-semibold uppercase mt-0.5">Statut : Lu</p>
                                 </div>
                             </div>
 
                             {/* Contenu Expéditeur */}
-                            <div className="bg-[#f1f5f9]/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100">
+                            <div className="bg-[#f1f5f9] dark:bg-ucak-dark/50 rounded-2xl p-4 space-y-2.5 mb-6 border border-gray-100">
                                 <div className="flex items-center gap-2 text-xs">
-                                    <User size={14} className="text-[#003058]" />
+                                    <User size={14} className="text-[#003058] dark:text-white" />
                                     <span className="font-bold text-slate-700">{activeMessage.nom}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-xs">
-                                    <Mail size={14} className="text-[#003058]" />
+                                    <Mail size={14} className="text-[#003058] dark:text-white" />
                                     <a href={`mailto:${activeMessage.email}`} className="text-[#187840] font-bold hover:underline">{activeMessage.email}</a>
                                 </div>
                                 {activeMessage.telephone && (
                                     <div className="flex items-center gap-2 text-xs">
-                                        <Phone size={14} className="text-[#003058]" />
+                                        <Phone size={14} className="text-[#003058] dark:text-white" />
                                         <a href={`tel:${activeMessage.telephone}`} className="text-slate-600 font-bold hover:underline">{activeMessage.telephone}</a>
                                     </div>
                                 )}
@@ -346,7 +346,7 @@ export default function ManageMessages() {
                             exit={{ opacity: 0, scale: 0.95 }}
                             className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-gray-100 text-center">
                             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-                            <h3 className="text-base font-black text-[#003058] mb-2">Supprimer ce message ?</h3>
+                            <h3 className="text-base font-black text-[#003058] dark:text-white mb-2">Supprimer ce message ?</h3>
                             <p className="text-xs text-slate-400 leading-relaxed mb-6">Cette action est irréversible. Le message sera définitivement retiré de la base de données.</p>
                             <div className="flex gap-3 justify-center">
                                 <button

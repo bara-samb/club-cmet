@@ -5,7 +5,7 @@ export default function UfrMet() {
     const navigate = useNavigate();
 
     return (
-        <div className="bg-[#f8fafc] min-h-screen">
+        <div className="bg-[#f8fafc] dark:bg-ucak-dark min-h-screen">
             <div className="bg-[#003058] text-white py-14 px-6 text-center border-b border-white/5">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">L'UFR Métiers & Technologies</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">
@@ -18,13 +18,13 @@ export default function UfrMet() {
                     <span className="inline-block text-[10px] font-black text-[#187840] uppercase tracking-widest bg-[#187840]/10 px-4 py-1.5 rounded-full border border-[#187840]/20 mb-4">
                         Filières de Formation
                     </span>
-                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] mb-4">Départements d'Étude</h2>
+                    <h2 className="text-2xl md:text-3xl font-extrabold text-[#003058] dark:text-white mb-4">Départements d'Étude</h2>
                     <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
                         L'UFR MET enseigne des métiers émergents dont le Sénégal et l'Afrique ont besoin pour soutenir leur développement économique, social et technologique.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-8">
                         <div className="text-center">
-                            <span className="block text-3xl font-black text-[#003058]">2</span>
+                            <span className="block text-3xl font-black text-[#003058] dark:text-white">2</span>
                             <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest">Départements actifs</span>
                         </div>
                         <div className="hidden sm:block w-px h-10 bg-gray-300" />
@@ -34,7 +34,7 @@ export default function UfrMet() {
                         </div>
                         <div className="hidden sm:block w-px h-10 bg-gray-300" />
                         <div className="text-center">
-                            <span className="block text-3xl font-black text-[#003058]">5</span>
+                            <span className="block text-3xl font-black text-[#003058] dark:text-white">5</span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Départements au total</span>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ export default function UfrMet() {
                         </div>
                         <div className="px-6 py-3 flex flex-wrap gap-1.5 border-b border-gray-50">
                             {['Dev. Applications', 'Base de Données', 'Réseaux & Télécommunications', 'Admin Linux'].map(tag => (
-                                <span key={tag} className="text-[9px] font-bold text-[#003058] bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">{tag}</span>
+                                <span key={tag} className="text-[9px] font-bold text-[#003058] dark:text-white bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">{tag}</span>
                             ))}
                         </div>
                         <div className="px-6 py-5 flex-1">
@@ -71,7 +71,7 @@ export default function UfrMet() {
                         </div>
                         <div className="border-t border-gray-100 px-6 py-4 text-center">
                             <button onClick={() => navigate('/login')}
-                                className="text-xs font-bold text-[#003058] hover:text-[#187840] transition-colors">
+                                className="text-xs font-bold text-[#003058] dark:text-white hover:text-[#187840] transition-colors">
                                 Se connecter pour accéder aux maquettes
                             </button>
                         </div>
@@ -107,7 +107,7 @@ export default function UfrMet() {
                         </div>
                         <div className="border-t border-gray-100 px-6 py-4 text-center">
                             <button onClick={() => navigate('/login')}
-                                className="text-xs font-bold text-[#003058] hover:text-[#187840] transition-colors">
+                                className="text-xs font-bold text-[#003058] dark:text-white hover:text-[#187840] transition-colors">
                                 Se connecter pour accéder aux maquettes
                             </button>
                         </div>

@@ -108,7 +108,7 @@ export default function Bureau() {
         <div className="anim-fade-up p-4 md:p-6 max-w-5xl mx-auto space-y-6">
             {/* Header */}
             <div>
-                <h1 className="text-2xl md:text-3xl font-black text-[#003058] flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                     <Users className="text-[#187840] w-8 h-8" /> Organes de Direction du Club
                 </h1>
                 <p className="text-sm text-slate-500 mt-2">
@@ -154,7 +154,7 @@ export default function Bureau() {
                 ) : (
                     <div className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-4 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-4 px-4 md:mx-0 md:px-0 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 animate-in fade-in duration-300">
                         {membresActuels.map(m => (
-                            <div key={m.id} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
+                            <div key={m.id} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                 <div>
                                     <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
                                         {m.imageUrl ? (
@@ -165,11 +165,11 @@ export default function Bureau() {
                                             </div>
                                         )}
                                     </div>
-                                    <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                    <h4 className="font-bold text-sm text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                     <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                 </div>
                                 <div className="mt-4">
-                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                    <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
                                         {m.classe}
                                     </span>
                                 </div>
@@ -193,7 +193,7 @@ export default function Bureau() {
                                 </h3>
                                 <div className="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none gap-4 pb-4 md:pb-0 scrollbar-none scroll-smooth shrink-0 -mx-4 px-4 md:mx-0 md:px-0 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                                     {groupedAnciens[year].map(m => (
-                                        <div key={m.id || m.nom} className="bg-white border border-slate-100 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
+                                        <div key={m.id || m.nom} className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between snap-start shrink-0 w-[200px] sm:w-[240px] md:w-auto">
                                             <div>
                                                 <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-full border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
                                                     {m.imageUrl ? (
@@ -204,11 +204,11 @@ export default function Bureau() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <h4 className="font-bold text-sm text-[#003058] truncate">{m.nom}</h4>
+                                                <h4 className="font-bold text-sm text-[#003058] dark:text-white truncate">{m.nom}</h4>
                                                 <p className="text-xs text-[#187840] font-bold mt-0.5 leading-tight">{m.poste}</p>
                                             </div>
                                             <div className="mt-4">
-                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
+                                                <span className="inline-block text-[9px] font-black text-slate-500 bg-[#f1f5f9] dark:bg-ucak-dark px-2.5 py-1 rounded border border-slate-200/50 uppercase tracking-wider">
                                                     {m.classe}
                                                 </span>
                                             </div>

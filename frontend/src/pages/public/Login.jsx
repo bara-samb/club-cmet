@@ -52,7 +52,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center px-4">
+        <div className="min-h-screen bg-[#f1f5f9] dark:bg-ucak-dark flex items-center justify-center px-4">
             <div className="anim-fade-up w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
 
                 {/* Header */}
@@ -65,7 +65,7 @@ export default function Login() {
 
                 {/* Body */}
                 <div className="px-8 py-8">
-                    <h2 className="text-[#003058] font-bold text-lg mb-1">Connexion</h2>
+                    <h2 className="text-[#003058] dark:text-white font-bold text-lg mb-1">Connexion</h2>
                     <p className="text-slate-400 text-xs mb-6">Accédez à votre espace personnel Club-MET.</p>
 
                     {infoMessage && (

@@ -159,7 +159,7 @@ export default function Library() {
         <div className="anim-fade-up p-6 max-w-6xl mx-auto">
             {/* Titre */}
             <div className="mb-8">
-                <h1 className="text-3xl font-black text-[#003058] flex items-center gap-3">
+                <h1 className="text-3xl font-black text-[#003058] dark:text-white flex items-center gap-3">
                     <BookOpen className="text-[#187840] w-8 h-8" /> Bibliothèque Académique
                 </h1>
                 <p className="text-sm text-slate-500 mt-2">
@@ -168,7 +168,7 @@ export default function Library() {
             </div>
 
             {/* Filters Row */}
-            <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center mb-8">
+            <div className="bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center mb-8">
                 {/* Search Bar */}
                 <div className="relative w-full md:flex-1">
                     <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
@@ -246,7 +246,7 @@ export default function Library() {
                                 className="w-full bg-white px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition-colors border-b border-gray-100">
                                 <div className="flex items-center gap-3">
                                     <span className="w-2.5 h-6 rounded-full" style={{ backgroundColor: group.color }} />
-                                    <h2 className="text-sm font-extrabold text-[#003058] tracking-wide uppercase">{group.label} ({group.docs.length})</h2>
+                                    <h2 className="text-sm font-extrabold text-[#003058] dark:text-white tracking-wide uppercase">{group.label} ({group.docs.length})</h2>
                                 </div>
                                 <span className="text-slate-400 p-1">
                                     {expandedLevels[group.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -261,7 +261,7 @@ export default function Library() {
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.3 }}
-                                        className="overflow-hidden bg-[#f1f5f9]/20">
+                                        className="overflow-hidden bg-[#f1f5f9] dark:bg-ucak-dark/20">
                                         
                                         {group.docs.length === 0 ? (
                                             <div className="p-6 text-center text-xs text-slate-400 italic">
@@ -274,11 +274,11 @@ export default function Library() {
                                                          className="bg-white border border-[#e2e8f0]/40 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-[#187840]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                                                         <div>
                                                             <div className="flex items-start gap-3 mb-3">
-                                                                <div className="w-10 h-10 bg-[#f1f5f9] rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
-                                                                    <FileText size={20} className="text-[#003058]" />
+                                                                <div className="w-10 h-10 bg-[#f1f5f9] dark:bg-ucak-dark rounded-xl flex items-center justify-center shrink-0 border border-slate-100">
+                                                                    <FileText size={20} className="text-[#003058] dark:text-white" />
                                                                 </div>
                                                                 <div className="flex-grow min-w-0">
-                                                                    <h3 className="text-xs font-bold text-[#003058] leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
+                                                                    <h3 className="text-xs font-bold text-[#003058] dark:text-white leading-tight mb-1.5 line-clamp-2" title={doc.nom}>
                                                                         {doc.nom}
                                                                     </h3>
                                                                     <div className="flex items-center gap-1.5 flex-wrap">

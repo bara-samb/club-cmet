@@ -55,7 +55,10 @@ import {
   AdminPanelSettings,
   Check as MuiCheck,
   Home as MuiHome,
-  Info as MuiInfo
+  Info as MuiInfo,
+  LightMode,
+  DarkMode,
+  SwapHoriz
 } from '@mui/icons-material';
 
 // Helper wrapper to map 'size' prop to 'sx={{ fontSize: size }}'
@@ -139,3 +142,6 @@ export const Check = wrapIcon(MuiCheck);
 export const Home = wrapIcon(MuiHome);
 export const HomeIcon = wrapIcon(MuiHome);
 export const Info = wrapIcon(MuiInfo);
+export const Sun = wrapIcon(LightMode);
+export const Moon = wrapIcon(DarkMode);
+export const SwitchView = wrapIcon(SwapHoriz);
