@@ -184,9 +184,9 @@ export default function Home() {
                             </svg>
                             Découvrir l'UCAK
                         </a>
-                        <button onClick={() => navigate('/register')}
+                        <button onClick={() => navigate('/login')}
                             className="flex items-center justify-center w-full sm:w-auto gap-2 bg-[#187840] text-white px-6 py-3 rounded-xl font-bold text-xs tracking-wide hover:bg-green-600 transition-all hover:scale-105 shadow-lg">
-                            Rejoindre le Club-MET
+                            Espace Étudiant
                         </button>
                     </div>
                 </div>
