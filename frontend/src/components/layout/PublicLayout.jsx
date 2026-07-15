@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { HomeIcon, Users, GraduationCap, Mail } from '../ui/Icons';
 
@@ -38,16 +38,15 @@ export default function PublicLayout() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col justify-between antialiased text-slate-800">
-            {/* ════════ NAVBAR (Desktop & Mobile header) ════════ */}
-            <nav className="bg-[#003058]/95 text-white px-6 md:px-10 py-5 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-white/10 transition-all">
-                <Link to="/" className="flex items-center gap-3.5 cursor-pointer">
+            {/* ════════ HIGH-END INSTITUTIONAL NAVBAR ════════ */}
+            <nav className="bg-white text-slate-800 px-6 md:px-10 py-4 flex justify-between items-center border-b border-slate-200/80 fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-150">
+                <Link to="/" className="flex items-center gap-3 cursor-pointer">
                     <div className="relative w-11 h-11 md:w-12 md:h-12 shrink-0">
-                        <img src="/images/logo-CMET.png" alt="Logo Club-MET"
-                            className="w-full h-full rounded-full object-cover border-2 border-white/20" />
+                        <img src="/images/logo-CMET.png" alt="Logo Club-MET" className="w-full h-full rounded-full object-cover border border-slate-200" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-bold text-base md:text-lg tracking-wide leading-none">CLUB-MET</span>
-                        <span className="text-[10px] md:text-[11px] text-gray-400 tracking-wider mt-1">UFR MET • UCAK</span>
+                        <span className="font-extrabold text-base md:text-lg tracking-wide leading-none text-[#003058]">CLUB-MET</span>
+                        <span className="text-[9px] md:text-[10px] text-slate-400 font-bold tracking-wider uppercase mt-1">UFR MET • UCAK</span>
                     </div>
                 </Link>
 
@@ -60,27 +59,31 @@ export default function PublicLayout() {
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className={`hover:text-[#187840] transition-colors flex items-center gap-2 ${
-                                    active ? 'text-[#187840]' : 'text-slate-200'
+                                className={`py-2 transition-colors duration-150 flex items-center gap-2 relative ${
+                                    active 
+                                        ? 'text-[#003058] after:absolute after:bottom-[-20px] after:left-0 after:right-0 after:h-[3px] after:bg-[#187840]' 
+                                        : 'text-slate-500 hover:text-[#003058]'
                                 }`}
                             >
-                                <IconComponent size={16} /> {link.label}
+                                <IconComponent size={15} /> {link.label}
                             </Link>
                         );
                     })}
                 </div>
 
-                {/* Connexion Button */}
+                {/* Action Button */}
                 <div className="flex items-center gap-4 text-xs md:text-sm">
-                    <button onClick={() => navigate('/login')}
-                        className="bg-[#187840] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold tracking-wide hover:bg-green-600 transition-all hover:scale-105 shadow-md">
+                    <button 
+                        onClick={() => navigate('/login')}
+                        className="bg-[#187840] hover:bg-[#125e31] text-white px-5 md:px-6 py-2.5 rounded-xl font-bold tracking-wider transition-colors duration-150 shadow-sm"
+                    >
                         Espace Étudiant
                     </button>
                 </div>
             </nav>
 
             {/* ════════ MOBILE BOTTOM NAVIGATION BAR ════════ */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#003058]/95 backdrop-blur-lg border-t border-white/10 h-16 flex items-center justify-around text-white px-2 shadow-lg">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 h-16 flex items-center justify-around text-slate-600 px-2 shadow-lg">
                 {navLinks.map((link) => {
                     const IconComponent = link.Icon;
                     const active = isActive(link.path);
@@ -88,19 +91,20 @@ export default function PublicLayout() {
                         <Link
                             key={link.path}
                             to={link.path}
-                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-all ${
-                                active ? 'text-[#187840]' : 'text-slate-400'
+                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${
+                                active ? 'text-[#187840]' : 'text-slate-400 hover:text-slate-600'
                             }`}
                         >
-                            <IconComponent size={20} className={`mb-1 transition-transform duration-200 ${active ? 'scale-110' : ''}`} />
-                            <span className="text-[10px] font-bold tracking-wide">{link.label}</span>
+                            <IconComponent size={20} className="mb-0.5" />
+                            <span className="text-[9px] font-bold tracking-wide">{link.label}</span>
                         </Link>
                     );
                 })}
             </div>
 
-            {/* Added pb-16 on mobile to offset bottom navigation bar height, and pt-[84px]/[88px] to offset fixed top navbar */}
-            <main className="flex-grow pt-[84px] md:pt-[88px] pb-16 md:pb-0">
+            {/* ════════ MAIN CONTENT ════════ */}
+            {/* Offset fixed top navbar height (around 76px mobile, 80px desktop) */}
+            <main className="flex-grow pt-[76px] md:pt-[80px] pb-16 md:pb-0">
                 <Outlet />
             </main>
 
