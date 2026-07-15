@@ -8,7 +8,7 @@ export default function UfrMet() {
         <div className="bg-[#f8fafc] min-h-screen">
             {/* Header Banner */}
             <div className="bg-[#003058] text-white py-12 px-6 text-center">
-                <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">L'UFR Métiers & Technologies</h1>
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight">L'UFR Métiers & Technologies</h1>
                 <p className="text-slate-300 text-sm md:text-base mt-3 max-w-2xl mx-auto">
                     Découvrez les filières de pointe enseignées à l'UFR MET au sein de l'UCAK.
                 </p>
@@ -23,17 +23,17 @@ export default function UfrMet() {
                     <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
                         L'UFR MET enseigne des métiers émergents dont le Sénégal et l'Afrique ont besoin pour soutenir leur développement économique, social et technologique.
                     </p>
-                    <div className="flex items-center justify-center gap-8 mt-8">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-8">
                         <div className="text-center">
                             <span className="block text-3xl font-black text-[#003058]">2</span>
                             <span className="text-[10px] font-bold text-[#187840] uppercase tracking-widest">Départements actifs</span>
                         </div>
-                        <div className="w-px h-10 bg-gray-300" />
+                        <div className="hidden sm:block w-px h-10 bg-gray-300" />
                         <div className="text-center">
                             <span className="block text-3xl font-black text-amber-500">3</span>
                             <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">En perspective</span>
                         </div>
-                        <div className="w-px h-10 bg-gray-300" />
+                        <div className="hidden sm:block w-px h-10 bg-gray-300" />
                         <div className="text-center">
                             <span className="block text-3xl font-black text-[#003058]">5</span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Départements au total</span>
