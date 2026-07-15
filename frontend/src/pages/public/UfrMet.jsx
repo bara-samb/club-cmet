@@ -43,7 +43,11 @@ export default function UfrMet() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* IT */}
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col group hover:shadow-lg transition-all duration-300">
-                        <div className="bg-gradient-to-br from-[#003058] to-[#004a8c] px-6 pt-6 pb-8 relative overflow-hidden">
+                        <div className="px-6 pt-6 pb-8 relative overflow-hidden">
+                            {/* Photo de la filière, sous un voile navy pour la lisibilité */}
+                            <img src="/images/GEN_UCAK.jpg" alt="" aria-hidden="true"
+                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#003058]/95 via-[#003058]/85 to-[#004a8c]/80" />
                             <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-[#187840]/20 rounded-full" />
                             <div className="relative z-10 flex items-start justify-between gap-4">
@@ -79,7 +83,11 @@ export default function UfrMet() {
 
                     {/* HEC */}
                     <div className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 flex flex-col group hover:shadow-lg transition-all duration-300">
-                        <div className="bg-gradient-to-br from-amber-600 to-amber-800 px-6 pt-6 pb-8 relative overflow-hidden">
+                        <div className="px-6 pt-6 pb-8 relative overflow-hidden">
+                            {/* Photo de la filière, sous un voile ambré pour la lisibilité */}
+                            <img src="/images/GEH.jpg" alt="" aria-hidden="true"
+                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-700/95 via-amber-700/85 to-amber-900/80" />
                             <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full" />
                             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/10 rounded-full" />
                             <div className="relative z-10 flex items-start justify-between gap-4">
