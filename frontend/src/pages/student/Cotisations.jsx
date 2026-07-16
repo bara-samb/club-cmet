@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase, safeInsert } from '../../config/supabaseClient';
+import { supabase } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
 import { CreditCard, TrendingUp, CheckCircle, Loader2, ArrowUpRight, DollarSign, Calendar, Users, Clock } from 'lucide-react';
 
@@ -100,7 +100,7 @@ export default function Cotisations() {
                 enregistre_par: 'Déclaration Étudiant'
             };
 
-            const { error } = await safeInsert('cotisations', payload);
+            const { error } = await supabase.from('cotisations').insert([payload]);
             if (error) throw error;
 
             alert("Votre déclaration de cotisation a bien été transmise à l'administration pour validation.");

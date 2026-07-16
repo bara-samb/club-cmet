@@ -30,7 +30,6 @@ export default function Home() {
     /* ── Données Supabase ── */
     const [evenements, setEvenements] = useState([]);
     const [medias, setMedias] = useState([]);
-    const [mediasCasses, setMediasCasses] = useState(new Set()); // ids d'images introuvables, masquées de la galerie
     const [ressources, setRessources] = useState([]);
     const [loadingEvenements, setLoadingEvenements] = useState(true);
     const [loadingMedias, setLoadingMedias] = useState(true);
@@ -456,7 +455,7 @@ export default function Home() {
                                                             <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                                                         </div>
                                                     )}
-                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-sm">
+                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-sm">
                                                         {ev.type}
                                                     </span>
                                                 </div>
@@ -500,26 +499,11 @@ export default function Home() {
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                    {medias.filter(m => !mediasCasses.has(m.id)).map((m) => (
+                                    {medias.map((m) => (
                                         <div key={m.id}
                                             onClick={() => setLightboxImage(m)}
                                             className="group relative h-48 bg-slate-100 dark:bg-white/10 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-lg transition-all duration-300">
-                                            {m.type === 'Vidéo' ? (
-                                                <video src={m.url} muted playsInline preload="metadata"
-                                                    onError={() => setMediasCasses(prev => new Set(prev).add(m.id))}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                            ) : (
-                                                <img src={m.url} alt={m.titre}
-                                                    onError={() => setMediasCasses(prev => new Set(prev).add(m.id))}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                            )}
-                                            {m.type === 'Vidéo' && (
-                                                <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                                    <span className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-                                                        <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                                    </span>
-                                                </span>
-                                            )}
+                                            <img src={m.url} alt={m.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                                                 <span className="text-[9px] font-black uppercase tracking-widest text-[#187840] mb-1">{m.type}</span>
                                                 <h4 className="font-bold text-xs truncate leading-snug">{m.titre}</h4>
@@ -604,11 +588,7 @@ export default function Home() {
                             exit={{ opacity: 0, scale: 0.95 }}
                             onClick={e => e.stopPropagation()}
                             className="max-w-4xl w-full flex flex-col items-center select-none cursor-default">
-                            {lightboxImage.type === 'Vidéo' ? (
-                                <video src={lightboxImage.url} controls autoPlay playsInline className="max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
-                            ) : (
-                                <img src={lightboxImage.url} alt={lightboxImage.titre} className="max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
-                            )}
+                            <img src={lightboxImage.url} alt={lightboxImage.titre} className="max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
                             <div className="text-center mt-5 text-white">
                                 <span className="inline-block bg-[#187840] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
                                     {lightboxImage.type}
