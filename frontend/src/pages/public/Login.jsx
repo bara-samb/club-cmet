@@ -46,7 +46,7 @@ export default function Login() {
                 .from('users')
                 .select('role, approuve')
                 .eq('id', data.user.id)
-                .single();
+                .maybeSingle();
 
             if (profile?.role === 'admin' && profile?.approuve === false) {
                 await supabase.auth.signOut();
