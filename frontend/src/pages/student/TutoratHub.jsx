@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Send, CheckCircle2, MessageSquare, Clock, Loader2, Mail, MailOpen, RefreshCw } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
+import Toast from '../../components/ui/Toast';
 
 export default function MessagesHub() {
     const { user } = useAuth();
@@ -101,11 +102,7 @@ export default function MessagesHub() {
         <div className="anim-fade-up p-6 max-w-6xl mx-auto">
 
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 

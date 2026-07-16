@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Search, Shield, User, Trash2, ShieldAlert, Loader2, RefreshCw, GraduationCap, Mail, Check, ChevronDown } from "lucide-react";
+import Toast from '../../components/ui/Toast';
 
 import { NIVEAUX } from "../../config/constants";
 
@@ -134,11 +135,7 @@ export default function ManageRegisteredUsers() {
     return (
         <div className="anim-fade-up min-h-screen p-4 md:p-8">
             {/* Toast Alerts */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all transform translate-y-0 ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
 
             {/* Modal de confirmation de rôle */}
             {confirmRoleUser && (

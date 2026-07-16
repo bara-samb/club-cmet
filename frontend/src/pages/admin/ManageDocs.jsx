@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import { FolderOpen, Plus, Trash2, Eye, FileText, Loader2, AlertTriangle, Save, X, ChevronDown } from 'lucide-react';
+import Toast from '../../components/ui/Toast';
 
 const CATEGORIES = [
     { id: 'reglement', label: 'Règlement Intérieur (Espace Documents)' },
@@ -197,11 +198,7 @@ export default function ManageDocs() {
     return (
         <div className="anim-fade-up min-h-screen p-6">
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
 
             {/* Modal suppression */}
             {confirmDel && (

@@ -24,7 +24,7 @@ export async function safeInsert(table, payload) {
         const { data, error } = await supabase
             .from(table)
             .insert(isArray ? currentPayload : [currentPayload])
-            .select();
+            .select('id');
 
         if (error) {
             const errorMsg = error.message || "";

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
 import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus, ChevronDown } from 'lucide-react';
+import Toast from '../../components/ui/Toast';
 
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
@@ -156,6 +157,7 @@ export default function ManageCotisations() {
                 : (user?.email || 'Admin');
 
             const payload = {
+                user_id: userIdToInsert || null,
                 nom: finalNom,
                 classe: finalClasse,
                 montant: Number(manualMontant),
@@ -163,10 +165,6 @@ export default function ManageCotisations() {
                 statut: 'valide',
                 enregistre_par: adminName
             };
-
-            if (userIdToInsert) {
-                payload.user_id = userIdToInsert;
-            }
 
             const { error } = await safeInsert('cotisations', payload);
             if (error) throw error;
@@ -198,11 +196,7 @@ export default function ManageCotisations() {
     return (
         <div className="anim-fade-up min-h-screen p-6">
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
 
             {/* Modal Suppression */}
             {confirmDel && (

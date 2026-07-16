@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "../../config/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "../../components/ui/Icons";
+import Toast from '../../components/ui/Toast';
 import AuthShell from "../../components/layout/AuthShell";
 
 import { NIVEAUX } from "../../config/constants";
@@ -169,11 +170,7 @@ export default function Register() {
             </p>
 
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
         </AuthShell>
     );
 }

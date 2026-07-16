@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Send, Loader2, Image as ImageIcon, X, AlertTriangle, Trash2, Clock, Bell } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
+import Toast from '../../components/ui/Toast';
 
 export default function ManageNotifications() {
     const { user } = useAuth();
@@ -282,11 +283,7 @@ export default function ManageNotifications() {
             </div>
 
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
         </div>
     );
 }

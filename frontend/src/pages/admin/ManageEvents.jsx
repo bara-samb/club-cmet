@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Plus, Pencil, Trash2, X, Upload, Loader2, ImageOff, ChevronDown } from 'lucide-react';
+import Toast from '../../components/ui/Toast';
 
 /* ── Types d'activités gérés par le club ── */
 const TYPES_EVENEMENT = [
@@ -409,11 +410,7 @@ export default function Evenements() {
             )}
 
             {/* Toast */}
-            {toast && (
-                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
-                    {toast.msg}
-                </div>
-            )}
+            {toast && <Toast msg={toast.msg} type={toast.type} />}
         </div>
     );
 }

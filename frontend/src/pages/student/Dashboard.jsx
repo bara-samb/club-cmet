@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
-import { useNavigate } from 'react-router-dom';
-import { Box, Users, GraduationCap, BookOpen, User, Bell, MessageSquare, ChevronRight, FileText } from 'lucide-react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Box, Users, GraduationCap, BookOpen, User, Bell, MessageSquare, ChevronRight, FileText, Download } from 'lucide-react';
 import NotificationFeed from '../../components/ui/NotificationFeed';
 import useAuth from '../../hooks/useAuth';
 
 export default function Dashboard() {
     const { user } = useAuth();
+    const { isInstalled, handleInstallApp } = useOutletContext() || {};
     const [bureau, setBureau] = useState([]);
     const [bibliotheque, setBibliotheque] = useState([]);
     const [maquettes, setMaquettes] = useState([]);
@@ -73,6 +74,27 @@ export default function Dashboard() {
     return (
         <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
             <NotificationFeed />
+
+            {/* PWA Install Card — n'apparaît que si l'app n'est pas installée */}
+            {!isInstalled && handleInstallApp && (
+                <div className="anim-fade-up bg-gradient-to-r from-[#003058] to-[#004a8a] rounded-2xl p-5 flex items-center justify-between gap-4 shadow-lg shadow-[#003058]/20 border border-white/10">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                            <Download size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <p className="text-white font-extrabold text-sm leading-snug">Installer l'application Club-MET</p>
+                            <p className="text-white/60 text-xs mt-0.5">Accès rapide depuis votre écran d'accueil</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleInstallApp}
+                        className="shrink-0 bg-[#187840] hover:bg-[#125e31] text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm"
+                    >
+                        Télécharger
+                    </button>
+                </div>
+            )}
             
             {/* Hero Welcome Card */}
             <div className="anim-fade-up relative bg-[#003058] rounded-2xl p-6 md:p-8 overflow-hidden shadow-lg border border-white/5">

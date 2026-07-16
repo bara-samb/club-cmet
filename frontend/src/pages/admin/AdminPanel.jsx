@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, Mail, Bell, Calendar, Image } from '../../components/ui/Icons';
+import { Link, useOutletContext } from 'react-router-dom';
+import { Users, UserCheck, FileText, CreditCard, LayoutDashboard, Mail, Bell, Calendar, Image, Download } from '../../components/ui/Icons';
 import { supabase } from '../../config/supabaseClient';
 
 export default function AdminPanel() {
     const [unreadCount, setUnreadCount] = useState(0);
+    const { isInstalled, handleInstallApp } = useOutletContext() || {};
 
     useEffect(() => {
         const fetchUnreadCount = async () => {
@@ -44,6 +45,27 @@ export default function AdminPanel() {
 
     return (
         <div className="anim-fade-up space-y-8 max-w-5xl mx-auto p-4 md:p-6">
+
+            {/* PWA Install Card — n'apparaît que si l'app n'est pas installée */}
+            {!isInstalled && handleInstallApp && (
+                <div className="anim-fade-up bg-gradient-to-r from-[#003058] to-[#004a8a] rounded-2xl p-5 flex items-center justify-between gap-4 shadow-lg shadow-[#003058]/20 border border-white/10">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                            <Download size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <p className="text-white font-extrabold text-sm leading-snug">Installer l'application Club-MET</p>
+                            <p className="text-white/60 text-xs mt-0.5">Accès rapide depuis votre écran d'accueil</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleInstallApp}
+                        className="shrink-0 bg-[#187840] hover:bg-[#125e31] text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm"
+                    >
+                        Télécharger
+                    </button>
+                </div>
+            )}
             {/* Header Admin */}
             <div className="bg-[#003058] p-8 md:p-10 rounded-3xl text-white relative overflow-hidden shadow-lg shadow-[#003058]/10">
                 <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04]">

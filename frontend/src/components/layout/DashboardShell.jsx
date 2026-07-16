@@ -22,6 +22,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
     const [unreadCount, setUnreadCount] = useState(0);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+    const [unreadMessages, setUnreadMessages] = useState([]); // liste pour le dropdown cloche (admin)
 
     const primaryItems = mobilePrimary
         ? mobilePrimary.map(path => menuItems.find(i => i.path === path)).filter(Boolean)
@@ -35,7 +36,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
     );
     const [showBanner, setShowBanner] = useState(
         (!window.matchMedia('(display-mode: standalone)').matches && window.navigator.standalone !== true) &&
-        !localStorage.getItem('app_install_banner_dismissed')
+        !sessionStorage.getItem('app_install_banner_dismissed')
     );
     const [showInstallGuide, setShowInstallGuide] = useState(false);
     const [deviceType, setDeviceType] = useState('other');
@@ -109,15 +110,29 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         const fetchUnreadMessages = async () => {
             try {
                 if (user.role === 'admin') {
-                    const { count, error } = await supabase
+                    // Admin: fetch full list of unread messages for the bell dropdown
+                    const { data, error } = await supabase
                         .from('messages')
-                        .select('*', { count: 'exact', head: true })
-                        .eq('statut', 'non_lu');
-                    if (!error && count !== null && active) {
-                        setUnreadMessagesCount(count);
+                        .select('id, nom, email, message, created_at')
+                        .eq('statut', 'non_lu')
+                        .order('created_at', { ascending: false })
+                        .limit(10);
+                    if (!error && active) {
+                        setUnreadMessages(data || []);
+                        setUnreadMessagesCount((data || []).length);
                     }
                 } else {
-                    setUnreadMessagesCount(0);
+                    // Étudiant: filtrer par email (pas de colonne user_id dans messages)
+                    const { data, error } = await supabase
+                        .from('messages')
+                        .select('id, message, statut, created_at')
+                        .eq('email', user.email)
+                        .eq('statut', 'non_lu')
+                        .order('created_at', { ascending: false });
+                    if (!error && active) {
+                        setUnreadMessages(data || []);
+                        setUnreadMessagesCount((data || []).length);
+                    }
                 }
             } catch (err) {
                 console.error("Error fetching messages:", err);
@@ -157,6 +172,27 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
             setUnreadCount(0);
         }
     };
+
+    // Marquer un message comme lu depuis le dropdown de la cloche (admin seulement)
+    const markMessageAsRead = async (msgId) => {
+        try {
+            await supabase.from('messages').update({ statut: 'lu' }).eq('id', msgId);
+            setUnreadMessages(prev => prev.filter(m => m.id !== msgId));
+            setUnreadMessagesCount(prev => Math.max(0, prev - 1));
+        } catch (err) {
+            console.error('Erreur marquage message lu:', err);
+        }
+    };
+
+    // Auto-clear notification badge when on the notifications history page
+    useEffect(() => {
+        const isNotifPage = location.pathname.includes('notification');
+        if (isNotifPage && notifications.length > 0) {
+            const maxId = Math.max(...notifications.map(n => n.id));
+            localStorage.setItem('last_read_notif_id', maxId.toString());
+            setUnreadCount(0);
+        }
+    }, [location.pathname, notifications]);
 
     const handleInstallApp = async () => {
         if (deferredPrompt) {
@@ -201,9 +237,9 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     <div className="relative">
                         <button onClick={toggleNotifDropdown} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
                             <Bell size={20} />
-                            {unreadCount > 0 && (
+                            {(unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)) > 0 && (
                                 <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
-                                    {unreadCount}
+                                    {unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)}
                                 </span>
                             )}
                         </button>
@@ -215,13 +251,32 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
             {isNotifOpen && (
                 <div className="md:hidden fixed inset-0 z-50 flex justify-end p-4 pt-16" onClick={() => setIsNotifOpen(false)}>
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-                    <div className="relative w-80 bg-white dark:bg-ucak-dark-card rounded-2xl shadow-2xl p-4 flex flex-col max-h-[350px] z-50 text-slate-800 dark:text-slate-100" onClick={e => e.stopPropagation()}>
+                    <div className="relative w-80 bg-white dark:bg-ucak-dark-card rounded-2xl shadow-2xl p-4 flex flex-col max-h-[400px] z-50 text-slate-800 dark:text-slate-100" onClick={e => e.stopPropagation()}>
                         <div className="font-bold text-xs text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
-                            <span>Notifications</span>
+                            <span>Notifications & Messages</span>
                             <button onClick={() => setIsNotifOpen(false)} className="text-slate-400 hover:text-slate-600"><X size={16} /></button>
                         </div>
-                        <div className="overflow-y-auto flex-grow divide-y divide-slate-50 dark:divide-white/5 mt-2">
-                            {notifications.length === 0 ? (
+                        <div className="overflow-y-auto flex-grow mt-2 space-y-1">
+                            {/* Messages non lus — Admin uniquement */}
+                            {user?.role === 'admin' && unreadMessages.length > 0 && (
+                                <div className="mb-2">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider px-1 mb-1">📩 Messages en attente</p>
+                                    {unreadMessages.map(m => (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => { markMessageAsRead(m.id); setIsNotifOpen(false); }}
+                                            className="w-full text-left p-2.5 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-amber-100 dark:border-amber-500/10 mb-1 group transition-colors"
+                                        >
+                                            <p className="text-xs font-bold text-[#003058] dark:text-white truncate">{m.nom}</p>
+                                            <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5">{m.message}</p>
+                                            <p className="text-[9px] text-amber-500 font-bold mt-1 group-hover:underline">Cliquer pour marquer comme lu →</p>
+                                        </button>
+                                    ))}
+                                    <div className="border-t border-slate-100 dark:border-white/10 my-2" />
+                                </div>
+                            )}
+                            {/* Notifications broadcast */}
+                            {notifications.length === 0 && unreadMessages.length === 0 ? (
                                 <div className="text-center py-6 text-xs text-slate-400 italic">Aucune notification.</div>
                             ) : notifications.map(n => (
                                 <div key={n.id} className="py-2.5 flex items-start gap-2">
@@ -437,9 +492,10 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         <div className="relative">
                             <button onClick={toggleNotifDropdown} className="p-2 text-slate-500 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition relative">
                                 <Bell size={20} />
-                                {unreadCount > 0 && (
+                                {/* Badge = notifications non lues + messages non lus (admin) */}
+                                {(unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)) > 0 && (
                                     <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
-                                        {unreadCount}
+                                        {unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)}
                                     </span>
                                 )}
                             </button>
@@ -449,11 +505,30 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                                     <div className="fixed inset-0 z-40" onClick={() => setIsNotifOpen(false)} />
                                     <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-ucak-dark-card rounded-2xl shadow-xl border border-slate-100 dark:border-white/10 p-4 text-slate-800 dark:text-slate-100 z-50">
                                         <div className="font-bold text-xs text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
-                                            <span>Notifications</span>
+                                            <span>Notifications & Messages</span>
                                             <button onClick={() => setIsNotifOpen(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
                                         </div>
-                                        <div className="overflow-y-auto max-h-60 divide-y divide-slate-50 dark:divide-white/5 mt-2">
-                                            {notifications.length === 0 ? (
+                                        <div className="overflow-y-auto max-h-72 mt-2 space-y-1">
+                                            {/* Messages non lus — Admin uniquement */}
+                                            {user?.role === 'admin' && unreadMessages.length > 0 && (
+                                                <div className="mb-2">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider px-1 mb-1">📩 Messages en attente</p>
+                                                    {unreadMessages.map(m => (
+                                                        <button
+                                                            key={m.id}
+                                                            onClick={() => { markMessageAsRead(m.id); setIsNotifOpen(false); }}
+                                                            className="w-full text-left p-2.5 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-amber-100 dark:border-amber-500/10 mb-1 group transition-colors"
+                                                        >
+                                                            <p className="text-xs font-bold text-[#003058] dark:text-white truncate">{m.nom}</p>
+                                                            <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5">{m.message}</p>
+                                                            <p className="text-[9px] text-amber-500 font-bold mt-1 group-hover:underline">Cliquer pour marquer comme lu →</p>
+                                                        </button>
+                                                    ))}
+                                                    <div className="border-t border-slate-100 dark:border-white/10 my-2" />
+                                                </div>
+                                            )}
+                                            {/* Notifications broadcast */}
+                                            {notifications.length === 0 && unreadMessages.length === 0 ? (
                                                 <div className="text-center py-6 text-xs text-slate-400 italic">Aucune notification.</div>
                                             ) : notifications.map(n => (
                                                 <div key={n.id} className="py-2.5 flex items-start gap-2 text-left">
@@ -501,7 +576,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                             transition={{ duration: 0.25, ease: 'easeOut' }}
                             className="w-full"
                         >
-                            <Outlet />
+                            <Outlet context={{ isInstalled, handleInstallApp }} />
                         </motion.div>
                     </AnimatePresence>
                 </div>
@@ -525,7 +600,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         <button 
                             onClick={() => {
                                 setShowBanner(false);
-                                localStorage.setItem('app_install_banner_dismissed', 'true');
+                                sessionStorage.setItem('app_install_banner_dismissed', 'true');
                             }} 
                             className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-xs transition"
                         >
