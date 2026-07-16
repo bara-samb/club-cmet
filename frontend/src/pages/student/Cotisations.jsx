@@ -104,6 +104,15 @@ export default function Cotisations() {
             const { error } = await safeInsert('cotisations', payload);
             if (error) throw error;
 
+            // Envoyer un message système d'alerte pour l'admin
+            const notifPayload = {
+                nom: "Système de Cotisations",
+                email: user?.email || "system@cmet.sn",
+                message: `Nouvelle déclaration de cotisation en attente de validation : ${nomComplet} (${classeInfo}) - Montant : ${Number(montantDeclaration).toLocaleString()} FCFA.`,
+                statut: 'non_lu'
+            };
+            await safeInsert('messages', notifPayload);
+
             alert("Votre déclaration de cotisation a bien été transmise à l'administration pour validation.");
             setMontantDeclaration('');
             fetchData();

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Clock, AlertCircle, Image as ImageIcon, Loader2, ExternalLink, Trash2 } from 'lucide-react';
+import useAuth from '../../hooks/useAuth';
 
 const formatDate = (dateStr) => {
     if (!dateStr) return '';
@@ -29,6 +30,7 @@ const formatDateFull = (dateStr) => {
 };
 
 export default function NotificationsHistory() {
+    const { user } = useAuth();
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState(null);
@@ -50,34 +52,83 @@ export default function NotificationsHistory() {
 
     const visibleNotifications = notifications.filter(n => !hiddenIds.includes(n.id));
 
+    const handleExpand = async (item) => {
+        if (expandedId === item.id) {
+            setExpandedId(null);
+        } else {
+            setExpandedId(item.id);
+            if (item.isMessage && item.statut === 'non_lu') {
+                try {
+                    await supabase.from('messages').update({ statut: 'lu' }).eq('id', item.id);
+                    setNotifications(prev => prev.map(n => (n.isMessage && n.id === item.id) ? { ...n, statut: 'lu' } : n));
+                } catch (err) {
+                    console.error("Erreur de marquage lu:", err);
+                }
+            }
+        }
+    };
+
     useEffect(() => {
         let active = true;
 
         const fetchNotifications = async () => {
             setLoading(true);
-            const { data, error } = await supabase
+            
+            // 1. Charger les notifications globales
+            const { data: notifs, error: notifErr } = await supabase
                 .from('notifications')
                 .select('*')
                 .order('created_at', { ascending: false });
-            if (!error && data && active) setNotifications(data);
+
+            // 2. Charger les messages du bureau pour cet étudiant
+            let directMsgs = [];
+            if (user?.email) {
+                const { data: msgs, error: msgErr } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .eq('email', user.email)
+                    .order('created_at', { ascending: false });
+                if (!msgErr && msgs) {
+                    directMsgs = msgs.map(m => ({
+                        ...m,
+                        isMessage: true // Permet de différencier dans l'affichage
+                    }));
+                }
+            }
+
+            if (!notifErr && notifs && active) {
+                const merged = [
+                    ...notifs.map(n => ({ ...n, isMessage: false })),
+                    ...directMsgs
+                ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                setNotifications(merged);
+            }
             if (active) setLoading(false);
         };
 
         fetchNotifications();
 
-        // Realtime — nouvelles notifications
-        const channel = supabase
-            .channel('notifs-history')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
-                if (active) setNotifications(prev => [payload.new, ...prev]);
+        const channel1 = supabase
+            .channel('notifs-history-n')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications' }, () => {
+                fetchNotifications();
+            })
+            .subscribe();
+
+        const channel2 = supabase
+            .channel('notifs-history-m')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+                fetchNotifications();
             })
             .subscribe();
 
         return () => {
             active = false;
-            supabase.removeChannel(channel);
+            supabase.removeChannel(channel1);
+            supabase.removeChannel(channel2);
         };
-    }, []);
+    }, [user]);
 
     return (
         <div className="anim-fade-up p-4 md:p-6 max-w-3xl mx-auto">
@@ -128,19 +179,27 @@ export default function NotificationsHistory() {
                             {/* ── Header carte ── */}
                             <div className="flex items-center w-full">
                                 <button
-                                    onClick={() => setExpandedId(expandedId === notif.id ? null : notif.id)}
+                                    onClick={() => handleExpand(notif)}
                                     className="flex-grow text-left px-5 py-4 flex items-start gap-4"
                                 >
                                     {/* Icône */}
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
-                                        <AlertCircle size={16} className={idx === 0 ? 'text-blue-500' : 'text-slate-400'} />
+                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${notif.isMessage ? 'bg-emerald-50 border border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20' : (idx === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10')}`}>
+                                        <AlertCircle size={16} className={notif.isMessage ? 'text-emerald-600 dark:text-emerald-300' : (idx === 0 ? 'text-blue-500' : 'text-slate-400')} />
                                     </div>
 
                                     {/* Contenu principal */}
                                     <div className="flex-grow min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                                            <span className="text-xs font-bold text-[#003058] dark:text-white">Information Club-MET</span>
-                                            {idx === 0 && (
+                                            <span className="text-xs font-bold text-[#003058] dark:text-white">
+                                                {notif.isMessage ? "Message du Bureau" : "Information Club-MET"}
+                                            </span>
+                                            {notif.isMessage && notif.statut === 'non_lu' && (
+                                                <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-500/20">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                                                     Nouveau
+                                                </span>
+                                            )}
+                                            {!notif.isMessage && idx === 0 && (
                                                 <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-100 dark:border-blue-500/20">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse inline-block" />
                                                     Dernière
