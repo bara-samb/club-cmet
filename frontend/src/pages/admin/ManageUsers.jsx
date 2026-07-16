@@ -1,5 +1,5 @@
 // src/pages/admin/ManageUsers.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supabase, safeInsert, safeUpdate } from "../../config/supabaseClient";
 import { Pencil, Trash2, AlertTriangle, UserPlus, Image as ImageIcon, Save, Loader2, Users, ChevronDown } from "lucide-react";
 import Toast from '../../components/ui/Toast';
@@ -29,6 +29,7 @@ export default function ManageUsers() {
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState(null);
     const [confirmDel, setConfirmDel] = useState(null);
+    const fileInputRef = useRef(null);
     const [activeTab, setActiveTab] = useState('actuels');
 
     const membresActuels = membres.filter(m => !m.estAncien);
@@ -233,11 +234,15 @@ export default function ManageUsers() {
                             </div>
                             <div>
                                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Photo du membre</label>
-                                <label className="cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2">
+                                <button 
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm inline-flex items-center gap-2"
+                                >
                                     <ImageIcon size={16} />
                                     {imageFile ? imageFile.name : "Choisir une photo"}
-                                    <input type="file" accept="image/*" onChange={e => { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); }} className="hidden" />
-                                </label>
+                                    <input ref={fileInputRef} type="file" accept="image/*" onChange={e => { if (e.target.files[0]) { setImageFile(e.target.files[0]); setPreview(URL.createObjectURL(e.target.files[0])); } }} className="hidden" />
+                                </button>
                                 <p className="text-[10px] text-slate-400 mt-2 font-medium">JPG, PNG — max 5 MB</p>
                             </div>
                         </div>

@@ -308,7 +308,7 @@ export default function Evenements() {
                                         <Upload className="w-6 h-6 mx-auto mb-2 text-slate-400" />
                                         <p className="text-xs font-bold text-slate-500">Cliquez pour ajouter des images</p>
                                         <p className="text-[10px] text-slate-400 mt-1">PNG, JPG — plusieurs fichiers possibles</p>
-                                        <input ref={fileInputRef} type="file" accept="image/*" multiple hidden onChange={onFilesSelected} />
+                                        <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={onFilesSelected} style={{ display: 'block', width: 0, height: 0, opacity: 0, position: 'absolute', pointerEvents: 'none' }} />
                                     </div>
 
                                     {(existingImages.length > 0 || previews.length > 0) && (

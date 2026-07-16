@@ -4,6 +4,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Box, Users, GraduationCap, BookOpen, User, Bell, MessageSquare, ChevronRight, FileText, Download } from 'lucide-react';
 import NotificationFeed from '../../components/ui/NotificationFeed';
 import useAuth from '../../hooks/useAuth';
+import AnimatedNumber from '../../components/ui/AnimatedNumber';
 
 export default function Dashboard() {
     const { user } = useAuth();
@@ -140,7 +141,9 @@ export default function Dashboard() {
                         <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: s.accentBg }}>
                             <s.Icon size={18} style={{ color: s.accent }} />
                         </div>
-                        <p className="text-xl md:text-2xl font-bold text-[#003058] dark:text-white tracking-tight">{s.value}</p>
+                        <p className="text-xl md:text-2xl font-bold text-[#003058] dark:text-white tracking-tight">
+                            <AnimatedNumber value={s.value} />
+                        </p>
                         <p className="text-[11px] font-semibold text-slate-400 mt-0.5 uppercase tracking-wide">{s.label}</p>
                     </div>
                 ))}

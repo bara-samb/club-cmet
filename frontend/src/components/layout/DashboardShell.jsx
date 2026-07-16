@@ -227,23 +227,26 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     {/* Messages Icon Mobile */}
                     <Link to={user?.role === 'admin' ? '/admin/manage-messages' : '/student/tutorat'} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
                         {user?.role === 'admin' ? <Mail size={20} /> : <MessageSquare size={20} />}
-                        {unreadMessagesCount > 0 && (
+                        {user?.role === 'admin' && unreadMessagesCount > 0 && (
                             <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
                                 {unreadMessagesCount}
                             </span>
                         )}
                     </Link>
 
-                    <div className="relative">
-                        <button onClick={toggleNotifDropdown} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
-                            <Bell size={20} />
-                            {(unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)) > 0 && (
-                                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
-                                    {unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)}
-                                </span>
-                            )}
-                        </button>
-                    </div>
+                    {/* Notification Bell Mobile — Seulement pour l'étudiant */}
+                    {user?.role !== 'admin' && (
+                        <div className="relative">
+                            <button onClick={toggleNotifDropdown} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
+                                <Bell size={20} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -303,7 +306,9 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     {menuItems.map((item) => {
                         const isNotif = item.path.includes('notification');
                         const isMsg = item.path.includes('message') || item.path.includes('tutorat');
-                        const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+                        const count = isNotif 
+                            ? (user?.role === 'admin' ? 0 : unreadCount) 
+                            : (isMsg ? (user?.role === 'admin' ? unreadMessagesCount : 0) : 0);
 
                         return (
                             <Link key={item.path} to={item.path}
@@ -356,7 +361,9 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     const active = location.pathname === item.path;
                     const isNotif = item.path.includes('notification');
                     const isMsg = item.path.includes('message') || item.path.includes('tutorat');
-                    const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+                    const count = isNotif 
+                        ? (user?.role === 'admin' ? 0 : unreadCount) 
+                        : (isMsg ? (user?.role === 'admin' ? unreadMessagesCount : 0) : 0);
 
                     return (
                         <Link key={item.path} to={item.path}
@@ -381,7 +388,10 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                             const moreCount = moreItems.reduce((acc, item) => {
                                 const isNotif = item.path.includes('notification');
                                 const isMsg = item.path.includes('message') || item.path.includes('tutorat');
-                                return acc + (isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0));
+                                const itemVal = isNotif 
+                                    ? (user?.role === 'admin' ? 0 : unreadCount) 
+                                    : (isMsg ? (user?.role === 'admin' ? unreadMessagesCount : 0) : 0);
+                                return acc + itemVal;
                             }, 0);
                             return moreCount > 0 ? (
                                 <span className="absolute -top-1.5 -right-2 w-4 h-4 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center animate-pulse animate-duration-1000">
@@ -408,7 +418,9 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                             {moreItems.map(item => {
                                 const isNotif = item.path.includes('notification');
                                 const isMsg = item.path.includes('message') || item.path.includes('tutorat');
-                                const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+                                const count = isNotif 
+                                    ? (user?.role === 'admin' ? 0 : unreadCount) 
+                                    : (isMsg ? (user?.role === 'admin' ? unreadMessagesCount : 0) : 0);
 
                                 return (
                                     <Link key={item.path} to={item.path} onClick={() => setIsMoreOpen(false)}
@@ -481,69 +493,70 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         {/* Messages Icon Desktop */}
                         <Link to={user?.role === 'admin' ? '/admin/manage-messages' : '/student/tutorat'} title="Messages" className="p-2 text-slate-500 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition relative">
                             {user?.role === 'admin' ? <Mail size={20} /> : <MessageSquare size={20} />}
-                            {unreadMessagesCount > 0 && (
+                            {user?.role === 'admin' && unreadMessagesCount > 0 && (
                                 <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
                                     {unreadMessagesCount}
                                 </span>
                             )}
                         </Link>
 
-                        {/* Notification Bell Desktop */}
-                        <div className="relative">
-                            <button onClick={toggleNotifDropdown} className="p-2 text-slate-500 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition relative">
-                                <Bell size={20} />
-                                {/* Badge = notifications non lues + messages non lus (admin) */}
-                                {(unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)) > 0 && (
-                                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
-                                        {unreadCount + (user?.role === 'admin' ? unreadMessagesCount : 0)}
-                                    </span>
-                                )}
-                            </button>
+                        {/* Notification Bell Desktop — Seulement pour l'étudiant */}
+                        {user?.role !== 'admin' && (
+                            <div className="relative">
+                                <button onClick={toggleNotifDropdown} className="p-2 text-slate-500 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition relative">
+                                    <Bell size={20} />
+                                    {unreadCount > 0 && (
+                                        <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                                            {unreadCount}
+                                        </span>
+                                    )}
+                                </button>
 
-                            {isNotifOpen && (
-                                <>
-                                    <div className="fixed inset-0 z-40" onClick={() => setIsNotifOpen(false)} />
-                                    <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-ucak-dark-card rounded-2xl shadow-xl border border-slate-100 dark:border-white/10 p-4 text-slate-800 dark:text-slate-100 z-50">
-                                        <div className="font-bold text-xs text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
-                                            <span>Notifications & Messages</span>
-                                            <button onClick={() => setIsNotifOpen(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
+                                {isNotifOpen && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setIsNotifOpen(false)} />
+                                        <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-ucak-dark-card rounded-2xl shadow-xl border border-slate-100 dark:border-white/10 p-4 text-slate-800 dark:text-slate-100 z-50">
+                                            <div className="font-bold text-xs text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 dark:border-white/10 flex justify-between items-center">
+                                                <span>Notifications & Messages</span>
+                                                <button onClick={() => setIsNotifOpen(false)} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
+                                            </div>
+                                            <div className="overflow-y-auto max-h-72 mt-2 space-y-1">
+                                                {/* Messages non lus — Admin uniquement (gardé en fallback ou retiré) */}
+                                                {user?.role === 'admin' && unreadMessages.length > 0 && (
+                                                    <div className="mb-2">
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider px-1 mb-1">📩 Messages en attente</p>
+                                                        {unreadMessages.map(m => (
+                                                            <button
+                                                                key={m.id}
+                                                                onClick={() => { markMessageAsRead(m.id); setIsNotifOpen(false); }}
+                                                                className="w-full text-left p-2.5 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-amber-100 dark:border-amber-500/10 mb-1 group transition-colors"
+                                                            >
+                                                                <p className="text-xs font-bold text-[#003058] dark:text-white truncate">{m.nom}</p>
+                                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5">{m.message}</p>
+                                                                <p className="text-[9px] text-amber-500 font-bold mt-1 group-hover:underline">Cliquer pour marquer comme lu →</p>
+                                                            </button>
+                                                        ))}
+                                                        <div className="border-t border-slate-100 dark:border-white/10 my-2" />
+                                                    </div>
+                                                )}
+                                                {/* Notifications broadcast */}
+                                                {notifications.length === 0 && unreadMessages.length === 0 ? (
+                                                    <div className="text-center py-6 text-xs text-slate-400 italic">Aucune notification.</div>
+                                                ) : notifications.map(n => (
+                                                    <div key={n.id} className="py-2.5 flex items-start gap-2 text-left">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-[#187840] mt-1.5 shrink-0" />
+                                                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{n.message}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="pt-2 border-t border-slate-100 dark:border-white/10 text-center">
+                                                <Link to="/student/notifications" onClick={() => setIsNotifOpen(false)} className="text-[10px] font-bold text-[#187840] hover:underline">Voir l'historique complet</Link>
+                                            </div>
                                         </div>
-                                        <div className="overflow-y-auto max-h-72 mt-2 space-y-1">
-                                            {/* Messages non lus — Admin uniquement */}
-                                            {user?.role === 'admin' && unreadMessages.length > 0 && (
-                                                <div className="mb-2">
-                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider px-1 mb-1">📩 Messages en attente</p>
-                                                    {unreadMessages.map(m => (
-                                                        <button
-                                                            key={m.id}
-                                                            onClick={() => { markMessageAsRead(m.id); setIsNotifOpen(false); }}
-                                                            className="w-full text-left p-2.5 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-amber-100 dark:border-amber-500/10 mb-1 group transition-colors"
-                                                        >
-                                                            <p className="text-xs font-bold text-[#003058] dark:text-white truncate">{m.nom}</p>
-                                                            <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5">{m.message}</p>
-                                                            <p className="text-[9px] text-amber-500 font-bold mt-1 group-hover:underline">Cliquer pour marquer comme lu →</p>
-                                                        </button>
-                                                    ))}
-                                                    <div className="border-t border-slate-100 dark:border-white/10 my-2" />
-                                                </div>
-                                            )}
-                                            {/* Notifications broadcast */}
-                                            {notifications.length === 0 && unreadMessages.length === 0 ? (
-                                                <div className="text-center py-6 text-xs text-slate-400 italic">Aucune notification.</div>
-                                            ) : notifications.map(n => (
-                                                <div key={n.id} className="py-2.5 flex items-start gap-2 text-left">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-[#187840] mt-1.5 shrink-0" />
-                                                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{n.message}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="pt-2 border-t border-slate-100 dark:border-white/10 text-center">
-                                            <Link to="/student/notifications" onClick={() => setIsNotifOpen(false)} className="text-[10px] font-bold text-[#187840] hover:underline">Voir l'historique complet</Link>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
 
                         {/* User Profile Info */}
                         <div className="flex items-center gap-3 pl-4 border-l border-slate-100 dark:border-white/10">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase, safeInsert } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
 import { CreditCard, TrendingUp, CheckCircle, Loader2, ArrowUpRight, DollarSign, Calendar, Users, Clock } from 'lucide-react';
+import AnimatedNumber from '../../components/ui/AnimatedNumber';
 
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
@@ -148,7 +149,9 @@ export default function Cotisations() {
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cotisation Validée</p>
-                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">{monTotalValide.toLocaleString()} FCFA</p>
+                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">
+                                    <AnimatedNumber value={monTotalValide} formatter={val => `${val.toLocaleString()} FCFA`} />
+                                </p>
                             </div>
                         </div>
 
@@ -159,7 +162,9 @@ export default function Cotisations() {
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Collecte globale du Club</p>
-                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">{stats.totalCollecte.toLocaleString()} FCFA</p>
+                                <p className="text-xl font-black text-[#003058] dark:text-white mt-0.5">
+                                    <AnimatedNumber value={stats.totalCollecte} formatter={val => `${val.toLocaleString()} FCFA`} />
+                                </p>
                             </div>
                         </div>
 

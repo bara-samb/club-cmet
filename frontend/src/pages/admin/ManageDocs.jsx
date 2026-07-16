@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import { FolderOpen, Plus, Trash2, Eye, FileText, Loader2, AlertTriangle, Save, X, ChevronDown } from 'lucide-react';
 import Toast from '../../components/ui/Toast';
@@ -24,6 +24,7 @@ export default function ManageDocs() {
 
     const [form, setForm] = useState({ nom: "", url: "", categorie: "reglement", description: "", filiere: "IT", niveau: "L1IT" });
     const [docFile, setDocFile] = useState(null);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         let active = true;
@@ -237,11 +238,15 @@ export default function ManageDocs() {
                         <div className="space-y-1.5 md:col-span-2">
                             <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">Fichier du document</label>
                             <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#f1f5f9] dark:bg-ucak-dark rounded-2xl border border-slate-100 dark:border-white/10 w-full">
-                                <label className="w-full sm:w-auto text-center cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                                <button 
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="w-full sm:w-auto text-center cursor-pointer bg-white dark:bg-ucak-dark-card border border-[#e2e8f0] hover:border-[#187840] hover:text-[#187840] text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2"
+                                >
                                     <FolderOpen size={16} />
                                     {docFile ? docFile.name : "Choisir un fichier"}
-                                    <input type="file" onChange={e => { setDocFile(e.target.files[0]); if(e.target.files[0]) setForm({...form, url:""}); }} className="hidden" />
-                                </label>
+                                    <input ref={fileInputRef} type="file" onChange={e => { setDocFile(e.target.files[0]); if(e.target.files[0]) setForm({...form, url:""}); }} className="hidden" />
+                                </button>
                                 <span className="text-slate-400 text-xs">— OU —</span>
                                 <input 
                                     type="url" 

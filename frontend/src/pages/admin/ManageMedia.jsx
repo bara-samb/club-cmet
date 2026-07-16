@@ -221,7 +221,7 @@ export default function Medias() {
                                         <p className="text-[10px] text-slate-400 mt-1">
                                             {type === 'Photo' ? 'PNG, JPG, WEBP' : 'MP4, WEBM'}
                                         </p>
-                                        <input ref={fileInputRef} type="file" accept={type === 'Photo' ? 'image/*' : 'video/*'} hidden onChange={onFileSelected} />
+                                        <input ref={fileInputRef} type="file" accept={type === 'Photo' ? 'image/*' : 'video/*'} onChange={onFileSelected} style={{ display: 'block', width: 0, height: 0, opacity: 0, position: 'absolute', pointerEvents: 'none' }} />
                                     </div>
 
                                     {(preview || existingUrl) && (

@@ -214,7 +214,7 @@ export default function ManageNotifications() {
                         accept="image/*"
                         ref={fileInputRef}
                         onChange={handleImageChange}
-                        className="hidden"
+                        style={{ display: 'block', width: 0, height: 0, opacity: 0, position: 'absolute', pointerEvents: 'none' }}
                     />
                 </div>
 
