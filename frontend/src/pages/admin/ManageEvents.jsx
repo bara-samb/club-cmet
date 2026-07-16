@@ -219,7 +219,7 @@ export default function Evenements() {
             {/* ── En-tête ── */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-[#0a1628] dark:text-white">Événements & Activités</h1>
+                    <h1 className="text-2xl font-extrabold text-[#0a1628]">Événements & Activités</h1>
                     <p className="text-sm text-slate-400 mt-1">Gérez les activités affichées sur le site public.</p>
                 </div>
                 {!showForm && (
@@ -240,7 +240,7 @@ export default function Evenements() {
                         className="overflow-hidden mb-8">
                         <div className="bg-white dark:bg-ucak-dark-card border border-gray-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-base font-black text-[#0a1628] dark:text-white">
+                                <h2 className="text-base font-black text-[#0a1628]">
                                     {editingId ? "Modifier l'événement" : 'Nouvel événement'}
                                 </h2>
                                 <button onClick={fermerFormulaire}
@@ -379,7 +379,7 @@ export default function Evenements() {
                                 <div className="text-[10px] font-extrabold text-[#16a34a] mb-2 uppercase tracking-wide flex items-center gap-1.5">
                                     <Calendar size={12} /> {formatDate(ev.date)}
                                 </div>
-                                <h3 className="text-sm font-extrabold text-[#0a1628] dark:text-white mb-2">{ev.titre}</h3>
+                                <h3 className="text-sm font-extrabold text-[#0a1628] mb-2">{ev.titre}</h3>
                                 <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 flex-1">{ev.descriptionText}</p>
                                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-50 dark:border-white/5">
 
