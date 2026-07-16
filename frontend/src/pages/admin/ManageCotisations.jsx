@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../config/supabaseClient';
+import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
 import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus, ChevronDown } from 'lucide-react';
 
@@ -87,9 +87,23 @@ export default function ManageCotisations() {
 
         setUpdatingLink(true);
         try {
-            const { error } = await supabase
+            const { data: existing } = await supabase
                 .from('config')
-                .upsert({ cle: 'wave_link', valeur: waveLink }, { onConflict: 'cle' });
+                .select('id')
+                .eq('cle', 'wave_link')
+                .maybeSingle();
+
+            let error;
+            if (existing) {
+                ({ error } = await supabase
+                    .from('config')
+                    .update({ valeur: waveLink })
+                    .eq('cle', 'wave_link'));
+            } else {
+                ({ error } = await supabase
+                    .from('config')
+                    .insert({ cle: 'wave_link', valeur: waveLink }));
+            }
             
             if (error) throw error;
             showToast("Lien Wave marchand mis à jour.");
@@ -105,10 +119,7 @@ export default function ManageCotisations() {
             const adminName = user?.user_metadata?.prenom 
                 ? `${user.user_metadata.prenom} ${user.user_metadata.nom}` 
                 : (user?.email || 'Admin');
-            const { error } = await supabase
-                .from('cotisations')
-                .update({ statut: 'valide', enregistre_par: `${adminName} (Valide)` })
-                .eq('id', id);
+            const { error } = await safeUpdate('cotisations', { statut: 'valide', enregistre_par: `${adminName} (Valide)` }, q => q.eq('id', id));
             
             if (error) throw error;
             showToast("Cotisation validée.");
@@ -157,7 +168,7 @@ export default function ManageCotisations() {
                 payload.user_id = userIdToInsert;
             }
 
-            const { error } = await supabase.from('cotisations').insert(payload);
+            const { error } = await safeInsert('cotisations', payload);
             if (error) throw error;
 
             showToast("Cotisation enregistrée avec succès.");
@@ -188,7 +199,7 @@ export default function ManageCotisations() {
         <div className="anim-fade-up min-h-screen p-6">
             {/* Toast */}
             {toast && (
-                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
                     {toast.msg}
                 </div>
             )}

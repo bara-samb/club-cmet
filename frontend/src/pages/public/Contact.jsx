@@ -34,6 +34,13 @@ export default function Contact() {
     const [contactSubmitting, setContactSubmitting] = useState(false);
     const [contactStatus, setContactStatus] = useState(null);
 
+    React.useEffect(() => {
+        if (contactStatus) {
+            const timer = setTimeout(() => setContactStatus(null), 4500);
+            return () => clearTimeout(timer);
+        }
+    }, [contactStatus]);
+
     const gererSoumissionContact = async (e) => {
         e.preventDefault();
         setContactStatus(null);
@@ -279,6 +286,13 @@ export default function Contact() {
                     </div>
                 </div>
             </section>
+
+            {/* Toast */}
+            {contactStatus && (
+                <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${contactStatus.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
+                    {contactStatus.msg}
+                </div>
+            )}
         </div>
     );
 }

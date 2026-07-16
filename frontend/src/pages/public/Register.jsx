@@ -15,16 +15,37 @@ export default function Register() {
     const [form, setForm]       = useState({ prenom:"", nom:"", email:"", niveau:"", password:"", confirm:"" });
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
+    const [toast, setToast]     = useState(null);
     const navigate = useNavigate();
+
+    const showToast = (msg, type = "success") => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
 
     const F = key => ({ value: form[key], onChange: e => setForm({ ...form, [key]: e.target.value }) });
 
     const handle = async (e) => {
         e.preventDefault();
         setError("");
-        if (form.password !== form.confirm) { setError("Les mots de passe ne correspondent pas."); return; }
-        if (form.password.length < 6)       { setError("Mot de passe trop court (min. 6 caractères)."); return; }
-        if (!form.niveau)                    { setError("Veuillez sélectionner votre niveau."); return; }
+        if (form.password !== form.confirm) { 
+            const msg = "Les mots de passe ne correspondent pas.";
+            setError(msg); 
+            showToast(msg, "error");
+            return; 
+        }
+        if (form.password.length < 6) { 
+            const msg = "Mot de passe trop court (min. 6 caractères).";
+            setError(msg); 
+            showToast(msg, "error");
+            return; 
+        }
+        if (!form.niveau) { 
+            const msg = "Veuillez sélectionner votre niveau.";
+            setError(msg); 
+            showToast(msg, "error");
+            return; 
+        }
 
         setLoading(true);
         try {
@@ -57,7 +78,9 @@ export default function Register() {
 
             navigate("/student/dashboard");
         } catch (err) {
-            setError(ERRORS[err.message] || err.message || "Erreur lors de l'inscription.");
+            const msg = ERRORS[err.message] || err.message || "Erreur lors de l'inscription.";
+            setError(msg);
+            showToast(msg, "error");
         } finally {
             setLoading(false);
         }
@@ -144,6 +167,13 @@ export default function Register() {
                 Déjà inscrit ?{" "}
                 <Link to="/login" className="text-[#187840] dark:text-[#4ade80] font-bold hover:underline">Se connecter</Link>
             </p>
+
+            {/* Toast */}
+            {toast && (
+                <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                    {toast.msg}
+                </div>
+            )}
         </AuthShell>
     );
 }

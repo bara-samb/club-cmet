@@ -40,22 +40,22 @@ export default function ManageDocs() {
                     const rList = (ressourcesData.data || []).map(r => ({ 
                         ...r, 
                         sourceTable: 'ressources',
-                        createdAt: r.createdAt || r.created_at || new Date(0).toISOString()
+                        createdAt: r.createdAt || r.created_at || r.createdat || new Date(0).toISOString()
                     }));
                     const mList = (maquettesData.data || []).map(m => ({
                         ...m,
                         categorie: 'maquette',
                         description: `Filière: ${m.filiere}`,
                         sourceTable: 'maquettes',
-                        createdAt: m.createdAt || m.created_at || new Date(0).toISOString(),
-                        date: new Date(m.createdAt || m.created_at || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+                        createdAt: m.createdAt || m.created_at || m.createdat || new Date(0).toISOString(),
+                        date: new Date(m.createdAt || m.created_at || m.createdat || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
                         typeDoc: 'PDF'
                     }));
                     const bList = (biblioData.data || []).map(b => ({
                         ...b,
                         sourceTable: 'bibliotheque',
-                        createdAt: b.date_ajout || b.createdAt || new Date(0).toISOString(),
-                        date: new Date(b.date_ajout || b.createdAt || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
+                        createdAt: b.date_ajout || b.createdAt || b.created_at || b.createdat || new Date(0).toISOString(),
+                        date: new Date(b.date_ajout || b.createdAt || b.created_at || b.createdat || new Date()).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
                         typeDoc: 'PDF'
                     }));
 
@@ -198,7 +198,7 @@ export default function ManageDocs() {
         <div className="anim-fade-up min-h-screen p-6">
             {/* Toast */}
             {toast && (
-                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
                     {toast.msg}
                 </div>
             )}

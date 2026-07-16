@@ -102,7 +102,7 @@ export default function MessagesHub() {
 
             {/* Toast */}
             {toast && (
-                <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
                     {toast.msg}
                 </div>
             )}

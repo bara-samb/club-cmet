@@ -32,11 +32,14 @@ export default function Resources() {
                 if (maqData.error) throw maqData.error;
 
                 if (active) {
-                    const parsedDocs = docsData.data || [];
+                    const parsedDocs = (docsData.data || []).map(d => ({
+                        ...d,
+                        createdAt: d.createdAt || d.created_at || d.createdat || new Date(0).toISOString()
+                    }));
                     const parsedMaquettes = (maqData.data || []).map(m => ({
                         ...m,
                         categorie: 'maquette',
-                        createdAt: m.created_at || new Date(0).toISOString()
+                        createdAt: m.createdAt || m.created_at || m.createdat || new Date(0).toISOString()
                     }));
 
                     const merged = [...parsedDocs, ...parsedMaquettes].sort((a, b) => {

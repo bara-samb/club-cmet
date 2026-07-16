@@ -17,7 +17,13 @@ export default function Medias() {
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
+
+    const showToast = (msg, type = 'success') => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
 
     /* ── Champs du formulaire ── */
     const [type, setType] = useState('Photo');
@@ -61,7 +67,7 @@ export default function Medias() {
         setEditingId(m.id);
         setType(m.type || 'Photo');
         setTitre(m.titre || '');
-        setDescription('');
+        setDescription(m.description || '');
         setExistingUrl(m.url || '');
         if (preview) URL.revokeObjectURL(preview);
         setFile(null);
@@ -98,7 +104,7 @@ export default function Medias() {
                 const { data } = supabase.storage.from('club-met-storage').getPublicUrl(filePath);
                 url = data.publicUrl;
             }
-            const payload = { type, titre: titre.trim(), url };
+            const payload = { type, titre: titre.trim(), description: description.trim(), url };
             let error;
             if (editingId) {
                 ({ error } = await supabase.from('medias').update(payload).eq('id', editingId));
@@ -108,9 +114,10 @@ export default function Medias() {
             if (error) throw error;
             await fetchMedias();
             fermerFormulaire();
+            showToast("Média enregistré avec succès !");
         } catch (err) {
             console.error("Erreur lors de l'enregistrement du média :", err);
-            alert("Une erreur est survenue lors de l'enregistrement : " + (err.message || JSON.stringify(err)));
+            showToast("Une erreur est survenue lors de l'enregistrement : " + (err.message || JSON.stringify(err)), "error");
         } finally {
             setSubmitting(false);
         }
@@ -124,9 +131,10 @@ export default function Medias() {
             const chemin = extraireCheminStockage(m.url, 'club-met-storage');
             if (chemin) await supabase.storage.from('club-met-storage').remove([chemin]);
             setMedias(prev => prev.filter(x => x.id !== m.id));
+            showToast("Média supprimé avec succès !");
         } catch (err) {
             console.error('Erreur lors de la suppression :', err);
-            alert('Impossible de supprimer ce média.');
+            showToast('Impossible de supprimer ce média.', "error");
         }
     };
 
@@ -187,6 +195,16 @@ export default function Medias() {
                                     <input type="text" required value={titre} onChange={e => setTitre(e.target.value)}
                                         placeholder="Ex: Hackathon 2026 - Finale"
                                         className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold" />
+                                </div>
+
+                                <div>
+                                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                                        Description (optionnelle)
+                                    </label>
+                                    <textarea value={description} onChange={e => setDescription(e.target.value)}
+                                        placeholder="Ex: Séance de travail avec les tuteurs..."
+                                        rows="2"
+                                        className="w-full px-4 py-3 bg-[#f1f5f9] dark:bg-ucak-dark border border-[#e2e8f0]/60 rounded-xl text-xs focus:outline-none focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20 transition-all font-semibold resize-none" />
                                 </div>
 
                                 <div>
@@ -276,6 +294,13 @@ export default function Medias() {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Toast */}
+            {toast && (
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
+                    {toast.msg}
                 </div>
             )}
         </div>

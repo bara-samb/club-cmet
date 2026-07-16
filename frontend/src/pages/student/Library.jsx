@@ -70,7 +70,12 @@ export default function Library() {
                 return;
             }
             if (active) {
-                setBibliotheque(data || []);
+                const sorted = (data || []).sort((a, b) => {
+                    const dateA = new Date(a.date_ajout || a.createdAt || a.created_at || a.createdat || 0);
+                    const dateB = new Date(b.date_ajout || b.createdAt || b.created_at || b.createdat || 0);
+                    return dateB - dateA;
+                });
+                setBibliotheque(sorted);
                 setLoading(false);
             }
         };

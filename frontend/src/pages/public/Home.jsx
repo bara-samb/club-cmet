@@ -436,7 +436,7 @@ export default function Home() {
                                     {filtreAct === 'tous' ? "Aucun événement publié pour le moment." : `Aucun événement de type « ${filtreAct} » pour le moment.`}
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {evenements.filter(ev => filtreAct === 'tous' || ev.type === filtreAct).map((ev) => (
                                         <motion.div key={ev.id}
                                             layout
@@ -444,42 +444,28 @@ export default function Home() {
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.9 }}
                                             transition={{ duration: 0.3 }}
-                                            className="bg-white dark:bg-ucak-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-white/10 flex flex-col justify-between group transition-all duration-300">
-                                            <div>
-                                                <div className="h-48 overflow-hidden relative bg-slate-100 dark:bg-white/10">
-                                                    <div className="absolute inset-0 bg-[#003058]/20 group-hover:bg-transparent transition-colors z-10" />
-                                                    {ev.images?.[0] ? (
-                                                        <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-slate-300">
-                                                            <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
-                                                        </div>
-                                                    )}
-                                                    <span className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-sm">
-                                                        {ev.type}
-                                                    </span>
-                                                </div>
-                                                <div className="p-6">
-                                                    <div className="flex items-center gap-1.5 text-[#187840] text-[10px] font-black uppercase tracking-widest mb-3">
-                                                        <Calendar size={12} /> {formatDateEvenement(ev.date)}
-                                                    </div>
-                                                    <h3 className="font-extrabold text-base text-[#003058] dark:text-white mb-3 leading-snug group-hover:text-[#187840] transition-colors">{ev.titre}</h3>
-                                                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 text-justify">{ev.descriptionText}</p>
-                                                </div>
-                                            </div>
-                                            <div className="p-6 pt-0">
-                                                {inscriptions[ev.id] ? (
-                                                    <span className="w-full inline-flex items-center justify-center gap-1.5 bg-green-50 dark:bg-emerald-500/10 text-[#125e31] dark:text-emerald-300 py-3 rounded-xl font-bold text-xs border border-green-100 dark:border-emerald-500/20">
-                                                        <Check size={14} /> Vous êtes inscrit
-                                                    </span>
+                                            className="bg-white dark:bg-ucak-dark-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-slate-100 dark:border-white/10 flex flex-col group transition-all duration-300">
+                                            <div className="h-36 overflow-hidden relative bg-slate-100 dark:bg-white/10 shrink-0">
+                                                <div className="absolute inset-0 bg-[#003058]/10 group-hover:bg-transparent transition-colors z-10" />
+                                                {ev.images?.[0] ? (
+                                                    <img src={ev.images[0]} alt={ev.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                 ) : (
-                                                    <button
-                                                        onClick={() => inscrireActivite(ev)}
-                                                        className="w-full bg-[#f1f5f9] dark:bg-ucak-dark group-hover:bg-[#187840] text-slate-700 dark:text-slate-200 group-hover:text-white py-3 rounded-xl font-bold text-xs transition-colors"
-                                                    >
-                                                        S'inscrire à l'activité
-                                                    </button>
+                                                    <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                        <svg className="w-10 h-10" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                                                    </div>
                                                 )}
+                                                <span className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-sm text-[#003058] dark:text-white text-[8px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider border border-slate-100 dark:border-white/10 shadow-sm">
+                                                    {ev.type}
+                                                </span>
+                                            </div>
+                                            <div className="p-4 flex flex-col justify-between flex-grow">
+                                                <div>
+                                                    <div className="flex items-center gap-1.5 text-[#187840] text-[9px] font-black uppercase tracking-widest mb-2.5">
+                                                        <Calendar size={10} /> {formatDateEvenement(ev.date)}
+                                                    </div>
+                                                    <h3 className="font-extrabold text-sm text-[#003058] dark:text-white mb-2 leading-snug group-hover:text-[#187840] transition-colors line-clamp-1">{ev.titre}</h3>
+                                                    <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-3 text-justify">{ev.descriptionText}</p>
+                                                </div>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -502,11 +488,26 @@ export default function Home() {
                                     {medias.map((m) => (
                                         <div key={m.id}
                                             onClick={() => setLightboxImage(m)}
-                                            className="group relative h-48 bg-slate-100 dark:bg-white/10 rounded-2xl overflow-hidden cursor-zoom-in border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-lg transition-all duration-300">
-                                            <img src={m.url} alt={m.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
-                                                <span className="text-[9px] font-black uppercase tracking-widest text-[#187840] mb-1">{m.type}</span>
-                                                <h4 className="font-bold text-xs truncate leading-snug">{m.titre}</h4>
+                                            className="group bg-white dark:bg-ucak-dark-card rounded-2xl overflow-hidden cursor-zoom-in border border-slate-100 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
+                                            <div className="h-36 md:h-40 bg-slate-100 dark:bg-white/5 relative overflow-hidden shrink-0">
+                                                {m.type === 'Vidéo' ? (
+                                                    <video src={m.url} className="w-full h-full object-cover" muted preload="metadata" />
+                                                ) : (
+                                                    <img src={m.url} alt={m.titre} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                )}
+                                                <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[#003058] dark:text-white text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                                                    {m.type}
+                                                </span>
+                                            </div>
+                                            <div className="p-3.5 flex flex-col justify-between flex-grow">
+                                                <h4 className="font-extrabold text-xs text-[#003058] dark:text-white line-clamp-1 group-hover:text-[#187840] transition-colors" title={m.titre}>
+                                                    {m.titre}
+                                                </h4>
+                                                {m.description && (
+                                                    <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 italic leading-relaxed">
+                                                        {m.description}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
@@ -588,12 +589,21 @@ export default function Home() {
                             exit={{ opacity: 0, scale: 0.95 }}
                             onClick={e => e.stopPropagation()}
                             className="max-w-4xl w-full flex flex-col items-center select-none cursor-default">
-                            <img src={lightboxImage.url} alt={lightboxImage.titre} className="max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
+                            {lightboxImage.type === 'Vidéo' ? (
+                                <video src={lightboxImage.url} className="max-h-[70vh] w-full object-contain rounded-2xl shadow-2xl border border-white/10" controls autoPlay />
+                            ) : (
+                                <img src={lightboxImage.url} alt={lightboxImage.titre} className="max-h-[70vh] object-contain rounded-2xl shadow-2xl border border-white/10" />
+                            )}
                             <div className="text-center mt-5 text-white">
                                 <span className="inline-block bg-[#187840] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
                                     {lightboxImage.type}
                                 </span>
-                                <h3 className="text-base font-extrabold tracking-wide">{lightboxImage.titre}</h3>
+                                <h3 className="text-sm md:text-base font-extrabold tracking-wide">{lightboxImage.titre}</h3>
+                                {lightboxImage.description && (
+                                    <p className="text-xs text-slate-300 mt-2 max-w-xl mx-auto italic">
+                                        {lightboxImage.description}
+                                    </p>
+                                )}
                             </div>
                         </motion.div>
                     </div>

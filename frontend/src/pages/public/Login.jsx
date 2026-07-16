@@ -14,9 +14,21 @@ export default function Login() {
     const [form, setForm]       = useState({ email: "", password: "" });
     const [error, setError]     = useState("");
     const [loading, setLoading] = useState(false);
+    const [toast, setToast]     = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
     const infoMessage = location.state?.info;
+
+    const showToast = (msg, type = "success") => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
+
+    React.useEffect(() => {
+        if (infoMessage) {
+            showToast(infoMessage, "success");
+        }
+    }, [infoMessage]);
 
     const handle = async (e) => {
         e.preventDefault();
@@ -47,7 +59,9 @@ export default function Login() {
                 navigate("/student/dashboard");
             }
         } catch (err) {
-            setError(ERRORS[err.message] || err.message || "Erreur de connexion.");
+            const msg = ERRORS[err.message] || err.message || "Erreur de connexion.";
+            setError(msg);
+            showToast(msg, "error");
         } finally {
             setLoading(false);
         }
@@ -124,6 +138,13 @@ export default function Login() {
                 Pas encore de compte ?{" "}
                 <Link to="/register" className="text-[#187840] dark:text-[#4ade80] font-bold hover:underline">S'inscrire</Link>
             </p>
+
+            {/* Toast */}
+            {toast && (
+                <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                    {toast.msg}
+                </div>
+            )}
         </AuthShell>
     );
 }

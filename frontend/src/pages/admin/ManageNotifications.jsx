@@ -10,7 +10,13 @@ export default function ManageNotifications() {
     const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
+
+    const showToast = (msg, type = 'success') => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
 
     const [notifications, setNotifications] = useState([]);
     const [loadingList, setLoadingList] = useState(true);
@@ -54,8 +60,9 @@ export default function ManageNotifications() {
             
             setConfirmDel(null);
             fetchNotifications();
+            showToast("Notification supprimée avec succès.");
         } catch (err) {
-            alert(`Erreur de suppression : ${err.message}`);
+            showToast(`Erreur de suppression : ${err.message}`, "error");
         }
     };
 
@@ -64,6 +71,7 @@ export default function ManageNotifications() {
         if (file) {
             if (file.size > 2 * 1024 * 1024) {
                 setError("L'image est trop lourde (max 2Mo).");
+                showToast("L'image est trop lourde (max 2Mo).", "error");
                 return;
             }
             setImageFile(file);
@@ -116,7 +124,7 @@ export default function ManageNotifications() {
 
             if (insertError) throw insertError;
 
-            alert("Message diffusé avec succès.");
+            showToast("Message diffusé avec succès.");
             setMessage('');
             removeImage();
             fetchNotifications();
@@ -124,6 +132,7 @@ export default function ManageNotifications() {
         } catch (err) {
             console.error(err);
             setError(`Erreur : ${err.message || "Une erreur est survenue lors de l'envoi."}`);
+            showToast(`Erreur : ${err.message || "Une erreur est survenue lors de l'envoi."}`, "error");
         } finally {
             setLoading(false);
         }
@@ -271,6 +280,13 @@ export default function ManageNotifications() {
                     </div>
                 )}
             </div>
+
+            {/* Toast */}
+            {toast && (
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === "error" ? "bg-red-500" : "bg-[#187840]"}`}>
+                    {toast.msg}
+                </div>
+            )}
         </div>
     );
 }

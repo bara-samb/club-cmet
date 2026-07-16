@@ -35,7 +35,13 @@ export default function Evenements() {
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
+
+    const showToast = (msg, type = 'success') => {
+        setToast({ msg, type });
+        setTimeout(() => setToast(null), 3500);
+    };
 
     /* ── Champs du formulaire ── */
     const [titre, setTitre] = useState('');
@@ -192,9 +198,10 @@ export default function Evenements() {
             if (error) throw error;
             await fetchEvenements();
             fermerFormulaire();
+            showToast("Événement enregistré avec succès !");
         } catch (err) {
             console.error("Erreur lors de l'enregistrement de l'activité :", err);
-            alert("Une erreur est survenue lors de l'enregistrement : " + (err.message || JSON.stringify(err)));
+            showToast("Une erreur est survenue lors de l'enregistrement : " + (err.message || JSON.stringify(err)), "error");
         } finally {
             setSubmitting(false);
         }
@@ -208,9 +215,10 @@ export default function Evenements() {
             const chemins = (ev.images || []).map(u => extraireCheminStockage(u, 'club-met-storage')).filter(Boolean);
             if (chemins.length > 0) await supabase.storage.from('club-met-storage').remove(chemins);
             setEvenements(prev => prev.filter(e => e.id !== ev.id));
+            showToast("Événement supprimé avec succès !");
         } catch (err) {
             console.error('Erreur lors de la suppression :', err);
-            alert("Impossible de supprimer cet événement.");
+            showToast("Impossible de supprimer cet événement.", "error");
         }
     };
 
@@ -397,6 +405,13 @@ export default function Evenements() {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Toast */}
+            {toast && (
+                <div className={`fixed bottom-20 md:bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-white text-xs font-bold shadow-lg transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-[#187840]'}`}>
+                    {toast.msg}
                 </div>
             )}
         </div>

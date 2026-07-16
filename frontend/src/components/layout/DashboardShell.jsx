@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, LogOut, X, ChevronLeft, Sun, Moon, SwitchView, MoreHorizontal } from '../ui/Icons';
+import { Bell, LogOut, X, ChevronLeft, Sun, Moon, SwitchView, MoreHorizontal, Mail, MessageSquare, Download } from '../ui/Icons';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import { supabase } from '../../config/supabaseClient';
-import InstallAppButton from '../ui/InstallAppButton';
 
 /**
  * Charpente commune aux espaces Admin et Étudiant : sidebar desktop, topbar
@@ -22,11 +21,54 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
+    const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
     const primaryItems = mobilePrimary
         ? mobilePrimary.map(path => menuItems.find(i => i.path === path)).filter(Boolean)
         : menuItems.slice(0, 4);
     const moreItems = menuItems.filter(item => !primaryItems.includes(item));
+
+    // PWA States
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [isInstalled, setIsInstalled] = useState(
+        window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+    );
+    const [showBanner, setShowBanner] = useState(
+        (!window.matchMedia('(display-mode: standalone)').matches && window.navigator.standalone !== true) &&
+        !localStorage.getItem('app_install_banner_dismissed')
+    );
+    const [showInstallGuide, setShowInstallGuide] = useState(false);
+    const [deviceType, setDeviceType] = useState('other');
+
+    useEffect(() => {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        if (/iphone|ipad|ipod/.test(userAgent)) {
+            setDeviceType('ios');
+        } else if (/android/.test(userAgent)) {
+            setDeviceType('android');
+        } else {
+            setDeviceType('desktop');
+        }
+
+        const handleBeforeInstall = (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        const handleAppInstalled = () => {
+            setIsInstalled(true);
+            setDeferredPrompt(null);
+            setShowBanner(false);
+        };
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+        window.addEventListener('appinstalled', handleAppInstalled);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+            window.removeEventListener('appinstalled', handleAppInstalled);
+        };
+    }, []);
 
     useEffect(() => {
         let active = true;
@@ -60,6 +102,42 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         };
     }, []);
 
+    useEffect(() => {
+        if (!user) return;
+        let active = true;
+
+        const fetchUnreadMessages = async () => {
+            try {
+                if (user.role === 'admin') {
+                    const { count, error } = await supabase
+                        .from('messages')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('statut', 'non_lu');
+                    if (!error && count !== null && active) {
+                        setUnreadMessagesCount(count);
+                    }
+                } else {
+                    setUnreadMessagesCount(0);
+                }
+            } catch (err) {
+                console.error("Error fetching messages:", err);
+            }
+        };
+
+        fetchUnreadMessages();
+
+        const channel = supabase.channel('layout-messages')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+                fetchUnreadMessages();
+            })
+            .subscribe();
+
+        return () => {
+            active = false;
+            supabase.removeChannel(channel);
+        };
+    }, [user]);
+
     // Badge sur l'icône de l'application (PWA installée) — reflète les
     // notifications non lues tant qu'un onglet/service worker est actif.
     useEffect(() => {
@@ -80,6 +158,20 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         }
     };
 
+    const handleInstallApp = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const choice = await deferredPrompt.userChoice;
+            if (choice.outcome === 'accepted') {
+                setIsInstalled(true);
+                setShowBanner(false);
+            }
+            setDeferredPrompt(null);
+        } else {
+            setShowInstallGuide(true);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#f1f5f9]/85 dark:bg-ucak-dark/90 flex flex-col md:flex-row transition-colors">
             {/* Mobile Header */}
@@ -95,6 +187,16 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     <button onClick={toggleTheme} title="Changer de thème" className="p-2 text-white/80 hover:text-white rounded-lg transition">
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
+
+                    {/* Messages Icon Mobile */}
+                    <Link to={user?.role === 'admin' ? '/admin/manage-messages' : '/student/tutorat'} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
+                        {user?.role === 'admin' ? <Mail size={20} /> : <MessageSquare size={20} />}
+                        {unreadMessagesCount > 0 && (
+                            <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                                {unreadMessagesCount}
+                            </span>
+                        )}
+                    </Link>
 
                     <div className="relative">
                         <button onClick={toggleNotifDropdown} className="p-2 text-white/80 hover:text-white rounded-lg transition relative">
@@ -143,16 +245,42 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                 </div>
 
                 <nav className="flex-grow space-y-2">
-                    {menuItems.map((item) => (
-                        <Link key={item.path} to={item.path}
-                            className={`flex items-center gap-3 p-3 rounded-xl transition ${location.pathname === item.path ? 'bg-[#187840] text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
-                            <item.Icon size={20} />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    ))}
+                    {menuItems.map((item) => {
+                        const isNotif = item.path.includes('notification');
+                        const isMsg = item.path.includes('message') || item.path.includes('tutorat');
+                        const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+
+                        return (
+                            <Link key={item.path} to={item.path}
+                                className={`flex items-center justify-between p-3 rounded-xl transition ${location.pathname === item.path ? 'bg-[#187840] text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}>
+                                <div className="flex items-center gap-3">
+                                    <item.Icon size={20} />
+                                    <span className="font-medium">{item.label}</span>
+                                </div>
+                                {count > 0 && (
+                                    <span className="w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse shrink-0">
+                                        {count}
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 <div className="mt-auto space-y-4 pt-6 border-t border-white/10">
+                    {!isInstalled && (
+                        <div className="bg-[#187840]/10 border border-[#187840]/25 rounded-2xl p-4 text-center">
+                            <p className="text-[11px] text-slate-300 font-medium mb-2.5 leading-relaxed">
+                                Installez l'application mobile pour une meilleure expérience.
+                            </p>
+                            <button 
+                                onClick={handleInstallApp} 
+                                className="w-full bg-[#187840] hover:bg-[#125e31] text-white text-[11px] font-bold py-2 rounded-xl transition shadow-sm flex items-center justify-center gap-1.5"
+                            >
+                                <Download size={14} /> Installer l'app
+                            </button>
+                        </div>
+                    )}
                     {crossNav && (
                         <Link to={crossNav.to} className="flex items-center gap-3 p-3 text-[#187840] bg-[#187840]/10 hover:bg-[#187840]/20 rounded-xl transition font-bold text-sm">
                             <SwitchView size={18} /> {crossNav.label}
@@ -171,17 +299,42 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
             <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-ucak-dark-card border-t border-slate-200 dark:border-white/10 h-16 flex items-center justify-around text-slate-500 dark:text-slate-400 px-1 shadow-lg">
                 {primaryItems.map((item) => {
                     const active = location.pathname === item.path;
+                    const isNotif = item.path.includes('notification');
+                    const isMsg = item.path.includes('message') || item.path.includes('tutorat');
+                    const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+
                     return (
                         <Link key={item.path} to={item.path}
-                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${active ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
-                            <item.Icon size={20} className="mb-0.5" />
+                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 relative ${active ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
+                            <div className="relative">
+                                <item.Icon size={20} className="mb-0.5" />
+                                {count > 0 && (
+                                    <span className="absolute -top-1.5 -right-2 w-4 h-4 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center animate-pulse animate-duration-1000">
+                                        {count}
+                                    </span>
+                                )}
+                            </div>
                             <span className="text-[9px] font-bold tracking-wide">{item.label}</span>
                         </Link>
                     );
                 })}
                 <button onClick={() => setIsMoreOpen(true)}
-                    className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 ${isMoreOpen ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
-                    <MoreHorizontal size={20} className="mb-0.5" />
+                    className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors duration-150 relative ${isMoreOpen ? 'text-[#187840]' : 'hover:text-slate-700 dark:hover:text-slate-200'}`}>
+                    <div className="relative">
+                        <MoreHorizontal size={20} className="mb-0.5" />
+                        {(() => {
+                            const moreCount = moreItems.reduce((acc, item) => {
+                                const isNotif = item.path.includes('notification');
+                                const isMsg = item.path.includes('message') || item.path.includes('tutorat');
+                                return acc + (isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0));
+                            }, 0);
+                            return moreCount > 0 ? (
+                                <span className="absolute -top-1.5 -right-2 w-4 h-4 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center animate-pulse animate-duration-1000">
+                                    {moreCount}
+                                </span>
+                            ) : null;
+                        })()}
+                    </div>
                     <span className="text-[9px] font-bold tracking-wide">Plus</span>
                 </button>
             </div>
@@ -197,16 +350,35 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         </div>
 
                         <div className="grid grid-cols-4 gap-3 mb-2">
-                            {moreItems.map(item => (
-                                <Link key={item.path} to={item.path} onClick={() => setIsMoreOpen(false)}
-                                    className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl text-center transition ${location.pathname === item.path ? 'bg-[#187840]/10 text-[#187840]' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5'}`}>
-                                    <item.Icon size={22} />
-                                    <span className="text-[10px] font-bold leading-tight">{item.label}</span>
-                                </Link>
-                            ))}
+                            {moreItems.map(item => {
+                                const isNotif = item.path.includes('notification');
+                                const isMsg = item.path.includes('message') || item.path.includes('tutorat');
+                                const count = isNotif ? unreadCount : (isMsg ? unreadMessagesCount : 0);
+
+                                return (
+                                    <Link key={item.path} to={item.path} onClick={() => setIsMoreOpen(false)}
+                                        className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl text-center transition relative ${location.pathname === item.path ? 'bg-[#187840]/10 text-[#187840]' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5'}`}>
+                                        <div className="relative">
+                                            <item.Icon size={22} />
+                                            {count > 0 && (
+                                                <span className="absolute -top-1 -right-2 w-4 h-4 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center animate-pulse animate-duration-1000">
+                                                    {count}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <span className="text-[10px] font-bold leading-tight">{item.label}</span>
+                                    </Link>
+                                );
+                            })}
                         </div>
 
                         <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/10 space-y-1">
+                            {!isInstalled && (
+                                <button onClick={() => { setIsMoreOpen(false); handleInstallApp(); }}
+                                    className="flex w-full items-center gap-3 p-3 text-[#187840] hover:bg-[#187840]/10 rounded-xl transition text-sm font-semibold mb-1">
+                                    <Download size={18} /> Télécharger l'application
+                                </button>
+                            )}
                             {crossNav && (
                                 <Link to={crossNav.to} onClick={() => setIsMoreOpen(false)}
                                     className="flex items-center gap-3 p-3 text-[#187840] bg-[#187840]/10 rounded-xl font-bold text-sm mb-1">
@@ -236,11 +408,30 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                         <span className="text-xs font-bold text-[#003058] dark:text-white">{location.pathname.split('/').pop().toUpperCase()}</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <InstallAppButton />
+                        {!isInstalled && (
+                            <button
+                                onClick={handleInstallApp}
+                                title="Installer l'application Club-MET"
+                                className="flex items-center gap-2 text-xs font-bold text-[#187840] hover:bg-[#187840]/10 px-3 py-2 rounded-xl transition-colors"
+                            >
+                                <Download size={16} />
+                                <span className="hidden sm:inline">Télécharger l'app</span>
+                            </button>
+                        )}
 
                         <button onClick={toggleTheme} title="Changer de thème" className="p-2 text-slate-400 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition">
                             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                         </button>
+
+                        {/* Messages Icon Desktop */}
+                        <Link to={user?.role === 'admin' ? '/admin/manage-messages' : '/student/tutorat'} title="Messages" className="p-2 text-slate-500 hover:text-[#003058] dark:hover:text-white rounded-xl hover:bg-slate-50 dark:hover:bg-white/5 transition relative">
+                            {user?.role === 'admin' ? <Mail size={20} /> : <MessageSquare size={20} />}
+                            {unreadMessagesCount > 0 && (
+                                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                                    {unreadMessagesCount}
+                                </span>
+                            )}
+                        </Link>
 
                         {/* Notification Bell Desktop */}
                         <div className="relative">
@@ -315,6 +506,102 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                     </AnimatePresence>
                 </div>
             </main>
+
+            {/* Bannière de bienvenue / installation PWA */}
+            {showBanner && (
+                <div className="fixed bottom-20 md:bottom-6 left-6 right-6 md:left-auto md:w-96 bg-white dark:bg-ucak-dark-card border border-slate-100 dark:border-white/10 p-5 rounded-3xl shadow-2xl z-40 flex flex-col gap-3 anim-fade-up text-slate-800 dark:text-white">
+                    <div className="flex gap-3 items-start">
+                        <div className="w-10 h-10 rounded-full bg-[#187840]/10 flex items-center justify-center text-[#187840] shrink-0">
+                            <Download size={20} />
+                        </div>
+                        <div className="text-left">
+                            <h4 className="font-extrabold text-sm text-[#003058] dark:text-white">Installer l'application Club-MET</h4>
+                            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                                Accédez plus rapidement à vos tutorats, documents et notifications en ajoutant l'application sur votre écran d'accueil.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 mt-1.5">
+                        <button 
+                            onClick={() => {
+                                setShowBanner(false);
+                                localStorage.setItem('app_install_banner_dismissed', 'true');
+                            }} 
+                            className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 font-bold rounded-xl text-xs transition"
+                        >
+                            Plus tard
+                        </button>
+                        <button 
+                            onClick={handleInstallApp} 
+                            className="flex-1 py-2 bg-[#187840] hover:bg-[#125e31] text-white font-bold rounded-xl text-xs transition shadow-sm"
+                        >
+                            Installer
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Guide d'installation PWA Modal */}
+            {showInstallGuide && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowInstallGuide(false)}>
+                    <div className="bg-white dark:bg-ucak-dark-card rounded-3xl p-6 max-w-sm w-full shadow-2xl relative text-slate-800 dark:text-white text-left" onClick={e => e.stopPropagation()}>
+                        <button onClick={() => setShowInstallGuide(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+                            <X size={20} />
+                        </button>
+                        
+                        <div className="flex flex-col items-center text-center mt-2">
+                            <div className="w-12 h-12 rounded-full bg-[#187840]/10 flex items-center justify-center text-[#187840] mb-4">
+                                <Download size={24} />
+                            </div>
+                            <h3 className="font-black text-lg text-[#003058] dark:text-white mb-2">Comment installer Club-MET</h3>
+                            <p className="text-xs text-slate-500 mb-6">
+                                Suivez ces étapes simples pour ajouter l'application sur votre écran d'accueil.
+                            </p>
+                        </div>
+
+                        <div className="space-y-4 text-xs">
+                            {deviceType === 'ios' ? (
+                                <>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Appuyez sur le bouton de partage <span className="font-bold">"Partager"</span> (icône avec une flèche vers le haut en bas de votre écran).</p>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Faites défiler le menu et sélectionnez l'option <span className="font-bold">"Sur l'écran d'accueil"</span>.</p>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Appuyez sur <span className="font-bold">"Ajouter"</span> dans le coin supérieur droit pour confirmer.</p>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Appuyez sur l'icône de menu du navigateur (les <span className="font-bold">trois points</span> verticaux en haut à droite).</p>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Sélectionnez <span className="font-bold">"Installer l'application"</span> ou <span className="font-bold">"Ajouter à l'écran d'accueil"</span>.</p>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
+                                        <p className="text-slate-600 dark:text-slate-300">Valisez l'installation en suivant les indications affichées par votre navigateur.</p>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        <button 
+                            onClick={() => setShowInstallGuide(false)}
+                            className="w-full mt-6 py-3 bg-[#003058] hover:bg-[#002850] text-white font-bold rounded-xl transition text-xs shadow-md"
+                        >
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
