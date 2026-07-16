@@ -6,7 +6,10 @@ import { CreditCard, TrendingUp, CheckCircle, Loader2, ArrowUpRight, DollarSign,
 const DEFAULT_WAVE_LINK = "https://pay.wave.com/m/M_sn_UGcGdaAUDasK/c/sn/";
 
 export default function Cotisations() {
-    const { user } = useAuth();
+    const { user, session } = useAuth();
+    // Le garde de route ne vérifie que la session : user peut être null si la
+    // ligne de profil manque encore. L'id de session est identique.
+    const userId = user?.id || session?.user?.id;
     const [waveLink, setWaveLink] = useState(DEFAULT_WAVE_LINK);
     const [mesCotisations, setMesCotisations] = useState([]);
     const [toutesCotisations, setToutesCotisations] = useState([]);
@@ -33,7 +36,7 @@ export default function Cotisations() {
             const { data: userCotisations } = await supabase
                 .from('cotisations')
                 .select('*')
-                .eq('user_id', user.id)
+                .eq('user_id', userId)
                 .order('created_at', { ascending: false });
             if (userCotisations) {
                 setMesCotisations(userCotisations);
@@ -63,6 +66,7 @@ export default function Cotisations() {
     };
 
     useEffect(() => {
+        if (!userId) return;
         fetchData();
 
         const channel = supabase.channel('student-cotisations-changes')
@@ -72,7 +76,7 @@ export default function Cotisations() {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [user.id]);
+    }, [userId]);
 
     const handleDeclareCotisation = async (e) => {
         e.preventDefault();
@@ -87,7 +91,7 @@ export default function Cotisations() {
             const classeInfo = user?.niveau || 'Licence';
 
             const payload = {
-                user_id: user.id,
+                user_id: userId,
                 nom: nomComplet,
                 classe: classeInfo,
                 montant: Number(montantDeclaration),

@@ -94,7 +94,7 @@ export default function ManageNotifications() {
             if (imageFile) {
                 const fileExt = imageFile.name.split('.').pop();
                 const fileName = `${Date.now()}.${fileExt}`;
-                const filePath = `notifs/${user.id}/${fileName}`;
+                const filePath = `notifs/${user?.id || 'admin'}/${fileName}`;
 
                 const { error: uploadError } = await supabase.storage
                     .from('notification-images')
