@@ -110,7 +110,10 @@ export default function Medias() {
             fermerFormulaire();
         } catch (err) {
             console.error("Erreur lors de l'enregistrement du média :", err);
-            alert("Une erreur est survenue lors de l'enregistrement : " + (err.message || JSON.stringify(err)));
+            const msg = (err.message === 'Failed to fetch')
+                ? "L'envoi a été interrompu (connexion instable ou fichier trop lourd). Vérifiez votre connexion et réessayez, si possible avec une image plus légère."
+                : (err.message || JSON.stringify(err));
+            alert("Une erreur est survenue lors de l'enregistrement : " + msg);
         } finally {
             setSubmitting(false);
         }
@@ -135,7 +138,7 @@ export default function Medias() {
             {/* ── En-tête ── */}
             <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-[#0a1628]">Galerie Médias</h1>
+                    <h1 className="text-2xl font-extrabold text-[#0a1628] dark:text-white">Galerie Médias</h1>
                     <p className="text-sm text-slate-400 mt-1">Gérez les photos et vidéos affichées dans la galerie du site.</p>
                 </div>
                 {!showForm && (
@@ -156,7 +159,7 @@ export default function Medias() {
                         className="overflow-hidden mb-8">
                         <div className="bg-white dark:bg-ucak-dark-card border border-gray-100 dark:border-white/10 rounded-3xl shadow-sm p-6 md:p-8">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-base font-black text-[#0a1628]">
+                                <h2 className="text-base font-black text-[#0a1628] dark:text-white">
                                     {editingId ? 'Modifier le média' : 'Nouveau média'}
                                 </h2>
                                 <button onClick={fermerFormulaire}
@@ -260,7 +263,7 @@ export default function Medias() {
                                 </div>
                             </div>
                             <div className="p-3 flex items-center justify-between gap-2 border-t border-slate-50 dark:border-white/5 bg-slate-50/20 dark:bg-white/[0.03]">
-                                <h4 className="text-xs font-extrabold text-[#0a1628] truncate flex-grow" title={m.titre}>{m.titre}</h4>
+                                <h4 className="text-xs font-extrabold text-[#0a1628] dark:text-white truncate flex-grow" title={m.titre}>{m.titre}</h4>
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     <button onClick={() => ouvrirEdition(m)}
                                         className="w-7 h-7 bg-white dark:bg-ucak-dark-card border border-[#e2e8f0]/60 hover:border-[#16a34a] hover:text-[#16a34a] text-slate-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"

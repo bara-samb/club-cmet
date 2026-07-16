@@ -43,7 +43,7 @@ export default function NotificationFeed() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-white border border-blue-100 rounded-3xl p-6 shadow-xl shadow-blue-500/5 relative overflow-hidden mb-8"
+                className="bg-white dark:bg-ucak-dark-card border border-blue-100 rounded-3xl p-6 shadow-xl shadow-blue-500/5 relative overflow-hidden mb-8"
             >
                 <div className="absolute top-4 right-16 flex items-center gap-1.5 bg-red-500/10 text-red-600 px-3 py-1 rounded-full border border-red-100">
                     <span className="relative flex h-2 w-2">
@@ -53,7 +53,7 @@ export default function NotificationFeed() {
                     <span className="text-[10px] font-bold uppercase tracking-wider">Message Live</span>
                 </div>
 
-                <button onClick={() => setIsVisible(false)} className="absolute top-4 right-4 p-1.5 bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 rounded-full transition">
+                <button onClick={() => setIsVisible(false)} className="absolute top-4 right-4 p-1.5 bg-slate-100 dark:bg-white/10 text-slate-400 hover:bg-slate-200 hover:text-slate-600 rounded-full transition">
                     <X size={16} />
                 </button>
 
@@ -64,18 +64,18 @@ export default function NotificationFeed() {
 
                     <div className="flex-grow space-y-4">
                         <div>
-                            <h3 className="text-lg font-bold text-[#003058] tracking-tight">Information importante du Club-MET</h3>
+                            <h3 className="text-lg font-bold text-[#003058] dark:text-white tracking-tight">Information importante du Club-MET</h3>
                             <p className="text-[11px] text-slate-400 mt-0.5">
                                 Diffusé le {new Date(notification.created_at).toLocaleDateString('fr-FR')}
                             </p>
                         </div>
 
-                        <p className="text-sm text-slate-600 leading-relaxed font-medium bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
                             {notification.message}
                         </p>
 
                         {notification.image_url && (
-                            <div className="mt-4 pt-4 border-t border-slate-100">
+                            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/10">
                                 <a href={notification.image_url} target="_blank" rel="noopener noreferrer" className="inline-block group relative overflow-hidden rounded-2xl border-4 border-white shadow-lg">
                                     <img src={notification.image_url} alt="Illustration du message" className="max-w-xs h-auto object-cover transition-transform duration-300 group-hover:scale-105" />
                                 </a>

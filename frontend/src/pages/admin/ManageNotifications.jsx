@@ -166,7 +166,7 @@ export default function ManageNotifications() {
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="w-full h-40 p-5 rounded-2xl border border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-[#187840]/30 focus:border-[#187840] outline-none transition-all resize-none text-sm leading-relaxed"
+                        className="w-full h-40 p-5 rounded-2xl bg-white dark:bg-ucak-dark text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-[#187840]/30 focus:border-[#187840] outline-none transition-all resize-none text-sm leading-relaxed"
                         placeholder="Tapez votre message ici... Soyez clair et concis."
                         required
                     />

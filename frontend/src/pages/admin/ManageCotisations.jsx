@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../config/supabaseClient';
+import { supabase, safeInsert, safeUpdate } from '../../config/supabaseClient';
 import useAuth from '../../hooks/useAuth';
 import { CreditCard, Save, Check, Trash2, Loader2, Users, CheckCircle, Clock, AlertTriangle, Plus, ChevronDown } from 'lucide-react';
 
@@ -105,10 +105,11 @@ export default function ManageCotisations() {
             const adminName = user?.user_metadata?.prenom 
                 ? `${user.user_metadata.prenom} ${user.user_metadata.nom}` 
                 : (user?.email || 'Admin');
-            const { error } = await supabase
-                .from('cotisations')
-                .update({ statut: 'valide', enregistre_par: `${adminName} (Valide)` })
-                .eq('id', id);
+            const { error } = await safeUpdate(
+                'cotisations',
+                { statut: 'valide', enregistre_par: `${adminName} (Valide)` },
+                q => q.eq('id', id)
+            );
             
             if (error) throw error;
             showToast("Cotisation validée.");
@@ -157,7 +158,7 @@ export default function ManageCotisations() {
                 payload.user_id = userIdToInsert;
             }
 
-            const { error } = await supabase.from('cotisations').insert(payload);
+            const { error } = await safeInsert('cotisations', payload);
             if (error) throw error;
 
             showToast("Cotisation enregistrée avec succès.");
