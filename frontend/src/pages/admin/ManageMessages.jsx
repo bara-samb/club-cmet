@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../config/supabaseClient';
 import { Mail, MailOpen, Trash2, Search, X, Filter, Calendar, User, Phone, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function ManageMessages() {
     const [messages, setMessages] = useState([]);
@@ -325,6 +326,15 @@ export default function ManageMessages() {
                                     className="bg-red-50 dark:bg-red-500/10 hover:bg-red-100 text-red-600 dark:text-red-300 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 border border-red-100 dark:border-red-500/20">
                                     <Trash2 size={14} /> Supprimer
                                 </button>
+                                {activeMessage.nom === "Système de Cotisations" && (
+                                    <Link
+                                        to="/admin/manage-cotisations"
+                                        onClick={() => setActiveMessage(null)}
+                                        className="bg-[#187840] hover:bg-[#125e31] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-sm inline-flex items-center gap-1.5"
+                                    >
+                                        Confirmer →
+                                    </Link>
+                                )}
                                 <button
                                     onClick={() => setActiveMessage(null)}
                                     className="bg-[#003058] hover:bg-[#002850] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-sm">

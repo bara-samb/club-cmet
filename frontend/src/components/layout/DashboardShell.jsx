@@ -72,6 +72,35 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         };
     }, []);
 
+    // Fonction utilitaire pour envoyer des notifications locales natives
+    const sendLocalNotification = (title, body) => {
+        if ('Notification' in window && Notification.permission === 'granted') {
+            try {
+                new Notification(title, {
+                    body,
+                    icon: '/images/logo-CMET.png',
+                    badge: '/icons/pwa-192.png'
+                });
+            } catch (err) {
+                // Fallback service worker notification
+                navigator.serviceWorker?.ready.then(registration => {
+                    registration.showNotification(title, {
+                        body,
+                        icon: '/images/logo-CMET.png',
+                        badge: '/icons/pwa-192.png'
+                    });
+                }).catch(e => console.error("SW notification error:", e));
+            }
+        }
+    };
+
+    // Demander la permission de notifications locales natives au chargement
+    useEffect(() => {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
+
     useEffect(() => {
         let active = true;
 
@@ -93,8 +122,12 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         fetchNotifications();
 
         const channel = supabase.channel('layout-notifications')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, () => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 fetchNotifications();
+                // Notifier l'étudiant
+                if (!isAdminPanel) {
+                    sendLocalNotification("Annonce officielle du Club-MET", payload.new.message);
+                }
             })
             .subscribe();
 
@@ -102,7 +135,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
             active = false;
             supabase.removeChannel(channel);
         };
-    }, []);
+    }, [isAdminPanel]);
 
     useEffect(() => {
         if (!user) return;
@@ -143,8 +176,15 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
         fetchUnreadMessages();
 
         const channel = supabase.channel('layout-messages')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
                 fetchUnreadMessages();
+                if (isAdminPanel) {
+                    sendLocalNotification(`Nouveau message de ${payload.new.nom}`, payload.new.message);
+                } else {
+                    if (payload.new.email === user.email) {
+                        sendLocalNotification("Réponse de l'administration", payload.new.message);
+                    }
+                }
             })
             .subscribe();
 
@@ -152,18 +192,18 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
             active = false;
             supabase.removeChannel(channel);
         };
-    }, [user]);
+    }, [user, isAdminPanel]);
 
-    // Badge sur l'icône de l'application (PWA installée) — reflète les
-    // notifications non lues tant qu'un onglet/service worker est actif.
+    // Badge sur l'icône de l'application (PWA installée)
     useEffect(() => {
         if (!('setAppBadge' in navigator)) return;
-        if (unreadCount > 0) {
-            navigator.setAppBadge(unreadCount).catch(() => {});
+        const total = isAdminPanel ? unreadMessagesCount : (unreadCount + unreadMessagesCount);
+        if (total > 0) {
+            navigator.setAppBadge(total).catch(() => {});
         } else {
             navigator.clearAppBadge().catch(() => {});
         }
-    }, [unreadCount]);
+    }, [unreadCount, unreadMessagesCount, isAdminPanel]);
 
     const toggleNotifDropdown = () => {
         setIsNotifOpen(!isNotifOpen);
@@ -676,7 +716,7 @@ export default function DashboardShell({ panelLabel, topbarContext, menuItems, m
                                     </div>
                                     <div className="flex gap-3 items-start">
                                         <span className="w-5 h-5 rounded-full bg-[#187840] text-white flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
-                                        <p className="text-slate-600 dark:text-slate-300">Valisez l'installation en suivant les indications affichées par votre navigateur.</p>
+                                        <p className="text-slate-600 dark:text-slate-300">Validez l'installation en suivant les indications affichées par votre navigateur.</p>
                                     </div>
                                 </>
                             )}
